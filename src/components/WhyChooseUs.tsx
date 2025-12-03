@@ -19,7 +19,7 @@ const reasons = [
   {
     icon: HeadphonesIcon,
     title: "Available 7 Days a Week",
-    description: "Questions at midnight? We're here. Real people, real answers, whenever you need them.",
+    description: "Questions? We're here. Real people, real answers, whenever you need them.",
   },
 ];
 
