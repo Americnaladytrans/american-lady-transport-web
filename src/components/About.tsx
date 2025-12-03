@@ -25,11 +25,11 @@ const About = () => {
             </h2>
             <div className="space-y-4 text-muted-foreground text-lg leading-relaxed">
               <p>
-                American Lady started in Ft Worth, Texas, in 1984 with a simple mission: provide honest, 
-                reliable freight brokerage services that shippers and carriers can count on.
+                American Lady started in Ft Worth, Texas, in 1984 and relocated to Willis, Texas, in 2024. 
+                Our mission remains simple: provide honest, reliable freight brokerage services that shippers and carriers can count on.
               </p>
               <p>
-                Based in Willis, Texas, we understand the heartbeat of American logistics. 
+                With over 40 years in the industry, we understand the heartbeat of American logistics. 
                 Every load matters, every deadline counts, and every relationship is built 
                 on trust. That's the American Lady way.
               </p>
