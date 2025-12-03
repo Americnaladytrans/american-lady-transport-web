@@ -15,13 +15,13 @@ const contactInfo = [
   {
     icon: Phone,
     label: "Phone",
-    value: "(936) 555-1234",
+    value: "(817) 249-2990",
     subtext: "Call or text anytime",
   },
   {
     icon: Mail,
     label: "Email",
-    value: "info@americanladytransport.com",
+    value: "info@usealt.com",
     subtext: "We respond within 24 hours",
   },
   {

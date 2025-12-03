@@ -46,9 +46,9 @@ const Header = () => {
 
           {/* CTA Button */}
           <div className="hidden md:flex items-center gap-4">
-            <a href="tel:+19365551234" className="flex items-center gap-2 text-primary-foreground/80 hover:text-primary-foreground transition-colors">
+            <a href="tel:+18172492990" className="flex items-center gap-2 text-primary-foreground/80 hover:text-primary-foreground transition-colors">
               <Phone className="w-4 h-4" />
-              <span className="font-medium">(936) 555-1234</span>
+              <span className="font-medium">(817) 249-2990</span>
             </a>
             <Button variant="hero" size="lg" asChild>
               <a href="#contact">Get a Quote</a>
@@ -79,9 +79,9 @@ const Header = () => {
                   {link.label}
                 </a>
               ))}
-              <a href="tel:+19365551234" className="flex items-center gap-2 text-primary-foreground/80 py-2">
+              <a href="tel:+18172492990" className="flex items-center gap-2 text-primary-foreground/80 py-2">
                 <Phone className="w-4 h-4" />
-                <span className="font-medium">(936) 555-1234</span>
+                <span className="font-medium">(817) 249-2990</span>
               </a>
               <Button variant="hero" size="lg" asChild className="mt-2">
                 <a href="#contact">Get a Quote</a>
