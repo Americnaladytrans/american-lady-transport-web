@@ -27,7 +27,7 @@ const contactInfo = [
   {
     icon: Clock,
     label: "Hours",
-    value: "24/7 Operations",
+    value: "7 Days a Week",
     subtext: "Always here when you need us",
   },
 ];
