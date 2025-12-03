@@ -1,4 +1,5 @@
 import { CheckCircle } from "lucide-react";
+import logoBadge from "@/assets/logo-badge.png";
 
 const features = [
   "Family-owned and operated in Willis, Texas",
@@ -48,8 +49,8 @@ const About = () => {
           {/* Visual Element */}
           <div className="relative">
             <div className="bg-primary rounded-2xl p-12 text-center">
-              <div className="w-32 h-32 mx-auto rounded-full bg-patriot-red flex items-center justify-center mb-8">
-                <span className="font-serif text-5xl font-bold text-accent-foreground">AL</span>
+              <div className="w-32 h-32 mx-auto rounded-full overflow-hidden mb-8">
+                <img src={logoBadge} alt="American Lady Transport logo" className="w-full h-full object-contain" />
               </div>
               <h3 className="font-serif text-2xl font-bold text-primary-foreground mb-4">
                 American Lady Transport
