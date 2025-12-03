@@ -1,4 +1,4 @@
-import { Truck, Package, Shield, Clock, MapPinned, FileCheck } from "lucide-react";
+import { Truck, Package, Shield, Clock, MapPinned, FileCheck, Maximize2 } from "lucide-react";
 
 const services = [
   {
@@ -30,6 +30,11 @@ const services = [
     icon: FileCheck,
     title: "Freight Management",
     description: "End-to-end logistics coordination. Real-time tracking and transparent communication.",
+  },
+  {
+    icon: Maximize2,
+    title: "Over-Dimensional Shipments",
+    description: "Specialized transport for oversized loads. Expert handling of heavy haul and wide load freight.",
   },
 ];
 
