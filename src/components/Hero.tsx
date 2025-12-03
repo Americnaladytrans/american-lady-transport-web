@@ -53,7 +53,7 @@ const Hero = () => {
             {[
               { value: "5000+", label: "Loads Delivered" },
               { value: "48 & Canada", label: "States Covered" },
-              { value: "24/7", label: "Support" },
+              { value: "7 Days a Week", label: "Support" },
               { value: "100%", label: "Commitment" },
             ].map((stat, index) => (
               <div key={index} className="text-center">
