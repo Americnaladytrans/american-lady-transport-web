@@ -86,12 +86,9 @@ const Footer = () => {
         </div>
 
         {/* Bottom Bar */}
-        <div className="border-t border-primary-foreground/10 mt-12 pt-8 flex flex-col md:flex-row justify-between items-center gap-4">
+        <div className="border-t border-primary-foreground/10 mt-12 pt-8 text-center">
           <p className="text-sm text-primary-foreground/60">
             © {currentYear} American Lady Transport. All rights reserved.
-          </p>
-          <p className="text-sm text-primary-foreground/60">
-            MC# XXXXXX | USDOT# XXXXXXX
           </p>
         </div>
       </div>
