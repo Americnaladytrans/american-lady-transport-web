@@ -52,7 +52,7 @@ const Hero = () => {
           <div className="mt-16 grid grid-cols-2 md:grid-cols-4 gap-8 animate-fade-up animation-delay-400">
             {[
               { value: "5000+", label: "Loads Delivered" },
-              { value: "48", label: "States Covered" },
+              { value: "48 & Canada", label: "States Covered" },
               { value: "24/7", label: "Support" },
               { value: "100%", label: "Commitment" },
             ].map((stat, index) => (
