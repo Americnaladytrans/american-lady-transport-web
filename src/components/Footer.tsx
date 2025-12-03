@@ -24,14 +24,14 @@ const Footer = () => {
             </p>
             <div className="flex gap-4">
               <a
-                href="tel:+19365551234"
+                href="tel:+18172492990"
                 className="w-10 h-10 rounded-full bg-primary-foreground/10 flex items-center justify-center hover:bg-patriot-red transition-colors"
                 aria-label="Call us"
               >
                 <Phone className="w-5 h-5" />
               </a>
               <a
-                href="mailto:info@americanladytransport.com"
+                href="mailto:info@usealt.com"
                 className="w-10 h-10 rounded-full bg-primary-foreground/10 flex items-center justify-center hover:bg-patriot-red transition-colors"
                 aria-label="Email us"
               >
@@ -72,14 +72,14 @@ const Footer = () => {
               </li>
               <li className="flex items-start gap-3">
                 <Phone className="w-5 h-5 text-patriot-red mt-0.5" />
-                <a href="tel:+19365551234" className="text-primary-foreground/70 hover:text-primary-foreground transition-colors">
-                  (936) 555-1234
+                <a href="tel:+18172492990" className="text-primary-foreground/70 hover:text-primary-foreground transition-colors">
+                  (817) 249-2990
                 </a>
               </li>
               <li className="flex items-start gap-3">
                 <Mail className="w-5 h-5 text-patriot-red mt-0.5" />
-                <a href="mailto:info@americanladytransport.com" className="text-primary-foreground/70 hover:text-primary-foreground transition-colors break-all">
-                  info@americanladytransport.com
+                <a href="mailto:info@usealt.com" className="text-primary-foreground/70 hover:text-primary-foreground transition-colors break-all">
+                  info@usealt.com
                 </a>
               </li>
             </ul>
