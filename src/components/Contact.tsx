@@ -10,7 +10,7 @@ const contactInfo = [
     icon: MapPin,
     label: "Location",
     value: "Willis, Texas",
-    subtext: "Serving all 48 states",
+    subtext: "Serving all 48 states & Canada",
   },
   {
     icon: Phone,
