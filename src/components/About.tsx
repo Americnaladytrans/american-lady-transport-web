@@ -25,7 +25,7 @@ const About = () => {
             </h2>
             <div className="space-y-4 text-muted-foreground text-lg leading-relaxed">
               <p>
-                American Lady Transport was founded with a simple mission: provide honest, 
+                American Lady started in Ft Worth, Texas, in 1984 with a simple mission: provide honest, 
                 reliable freight brokerage services that shippers and carriers can count on.
               </p>
               <p>
