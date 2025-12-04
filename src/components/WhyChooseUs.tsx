@@ -1,4 +1,4 @@
-import { Star, Handshake, TrendingUp, HeadphonesIcon, ShieldCheck, Wrench } from "lucide-react";
+import { Star, Handshake, TrendingUp, HeadphonesIcon, ShieldCheck, Wrench, Truck } from "lucide-react";
 const reasons = [{
   icon: Handshake,
   title: "Personal Touch",
@@ -23,6 +23,10 @@ const reasons = [{
   icon: Wrench,
   title: "Equipment Expertise",
   description: "Our management team's experience as drivers and owner-operators ensures the right equipment is used for your shipment. Unsure what you need? Reach out and one of our sales reps can guide you in the right direction."
+}, {
+  icon: Truck,
+  title: "Equipment Types",
+  description: "We handle sourcing for a wide range of equipment — and more. Whether you need dry vans, refrigerated units, box trucks, sprinter vans, flatbeds, stepdecks, double drops, removable goosenecks, or hotshots, we've got you covered. Our team can also assist with transloading operations and, when needed, coordinate wrecker services for safe and efficient offloading."
 }];
 const WhyChooseUs = () => {
   return <section id="why-us" className="py-24 bg-background">
