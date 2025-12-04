@@ -1,7 +1,4 @@
 import { serve } from "https://deno.land/std@0.190.0/http/server.ts";
-import { Resend } from "npm:resend@2.0.0";
-
-const resend = new Resend(Deno.env.get("RESEND_API_KEY"));
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -9,12 +6,50 @@ const corsHeaders = {
     "authorization, x-client-info, apikey, content-type",
 };
 
-interface ContactEmailRequest {
-  name: string;
-  email: string;
-  phone: string;
-  message: string;
-}
+// Input validation helpers
+const isValidEmail = (email: string): boolean => {
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  return emailRegex.test(email);
+};
+
+const sanitizeHtml = (str: string): string => {
+  return str
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#039;');
+};
+
+const validateInput = (data: Record<string, unknown>): { valid: boolean; errors: string[] } => {
+  const errors: string[] = [];
+  
+  if (typeof data.name !== 'string' || data.name.trim().length === 0) {
+    errors.push('Name is required');
+  } else if (data.name.length > 100) {
+    errors.push('Name must be less than 100 characters');
+  }
+  
+  if (typeof data.email !== 'string' || !isValidEmail(data.email)) {
+    errors.push('Valid email is required');
+  } else if (data.email.length > 255) {
+    errors.push('Email must be less than 255 characters');
+  }
+  
+  if (typeof data.phone !== 'string') {
+    errors.push('Phone is required');
+  } else if (data.phone.length > 20) {
+    errors.push('Phone must be less than 20 characters');
+  }
+  
+  if (typeof data.message !== 'string' || data.message.trim().length === 0) {
+    errors.push('Message is required');
+  } else if (data.message.length > 2000) {
+    errors.push('Message must be less than 2000 characters');
+  }
+  
+  return { valid: errors.length === 0, errors };
+};
 
 const handler = async (req: Request): Promise<Response> => {
   // Handle CORS preflight requests
@@ -23,9 +58,32 @@ const handler = async (req: Request): Promise<Response> => {
   }
 
   try {
-    const { name, email, phone, message }: ContactEmailRequest = await req.json();
+    const rawData = await req.json();
+    
+    // Validate input
+    const validation = validateInput(rawData);
+    if (!validation.valid) {
+      console.error("Validation failed:", validation.errors);
+      return new Response(
+        JSON.stringify({ error: "Validation failed", details: validation.errors }),
+        {
+          status: 400,
+          headers: { "Content-Type": "application/json", ...corsHeaders },
+        }
+      );
+    }
+    
+    // Sanitize inputs for HTML
+    const name = sanitizeHtml(rawData.name.trim());
+    const email = rawData.email.trim().toLowerCase();
+    const phone = sanitizeHtml(rawData.phone.trim());
+    const message = sanitizeHtml(rawData.message.trim());
 
     console.log("Sending contact email from:", name, email);
+    
+    // Dynamic import of Resend
+    const { Resend } = await import("https://esm.sh/resend@2.0.0");
+    const resend = new Resend(Deno.env.get("RESEND_API_KEY"));
 
     // Send notification email to business
     const businessEmailResponse = await resend.emails.send({
