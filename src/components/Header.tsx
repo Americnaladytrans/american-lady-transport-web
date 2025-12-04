@@ -19,7 +19,7 @@ const Header = () => {
         <div className="flex items-center justify-between h-28">
           {/* Logo */}
           <a href="#" className="flex items-center gap-3">
-            <img src={logo} alt="American Lady Transport LLC" className="h-20 w-auto" />
+            <img src={logo} alt="American Lady Transport LLC" className="h-24 w-auto" />
           </a>
 
           {/* Desktop Navigation */}
