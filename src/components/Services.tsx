@@ -40,7 +40,7 @@ const services = [
 
 const Services = () => {
   return (
-    <section id="services" className="pt-40 pb-24 bg-background">
+    <section id="services" className="pt-56 pb-24 bg-background">
       <div className="container mx-auto px-4">
         {/* Section Header */}
         <div className="text-center max-w-3xl mx-auto mb-16">
