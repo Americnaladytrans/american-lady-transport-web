@@ -1,5 +1,9 @@
 import { Truck, Package, Shield, Clock, MapPinned, FileCheck, Maximize2 } from "lucide-react";
 const services = [{
+  icon: MapPinned,
+  title: "Nationwide Coverage",
+  description: "From Texas to all 48 contiguous states. Our carrier network spans the entire country. We can source local and long-haul carriers."
+}, {
   icon: Truck,
   title: "Full Truckload (FTL)",
   description: "Dedicated trucks for your full shipments. Direct delivery with no stops, maximizing speed and security."
@@ -15,10 +19,6 @@ const services = [{
   icon: Clock,
   title: "Expedited Shipping",
   description: "Time-sensitive deliveries handled with urgency. When it has to be there fast, we deliver."
-}, {
-  icon: MapPinned,
-  title: "Nationwide Coverage",
-  description: "From Texas to all 48 contiguous states. Our carrier network spans the entire country. We can source local and long-haul carriers."
 }, {
   icon: FileCheck,
   title: "Freight Management",
