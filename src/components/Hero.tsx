@@ -1,21 +1,18 @@
 import { Button } from "@/components/ui/button";
 import { ArrowRight, MapPin } from "lucide-react";
 import heroBg from "@/assets/hero-bg.jpg";
-
 const Hero = () => {
-  return (
-    <section className="relative min-h-[130vh] flex items-center justify-center overflow-hidden">
+  return <section className="relative min-h-[130vh] flex items-center justify-center overflow-hidden">
       {/* Background Image */}
-      <div 
-        className="absolute inset-0 bg-cover bg-center bg-no-repeat"
-        style={{ backgroundImage: `url(${heroBg})` }}
-      />
+      <div className="absolute inset-0 bg-cover bg-center bg-no-repeat" style={{
+      backgroundImage: `url(${heroBg})`
+    }} />
       
       {/* Overlay */}
       <div className="absolute inset-0 bg-gradient-to-b from-primary/80 via-primary/60 to-primary/50" />
       
       {/* Content */}
-      <div className="container mx-auto px-4 relative z-10 pt-36">
+      <div className="container mx-auto px-4 relative z-10 pt-36 py-[145px]">
         <div className="max-w-4xl mx-auto text-center">
           {/* Location Badge */}
           <div className="inline-flex items-center gap-2 bg-cream/10 backdrop-blur-sm border border-cream/20 rounded-full px-4 py-2 mb-8 animate-fade-up">
@@ -50,25 +47,28 @@ const Hero = () => {
           
           {/* Trust Indicators */}
           <div className="mt-16 grid grid-cols-2 md:grid-cols-4 gap-8 animate-fade-up animation-delay-400">
-            {[
-              { value: "50,000+", label: "Loads Delivered" },
-              { value: "US & Canada", label: "Areas Covered" },
-              { value: "24/7", label: "Support" },
-              { value: "100%", label: "Commitment" },
-            ].map((stat, index) => (
-              <div key={index} className="text-center">
+            {[{
+            value: "50,000+",
+            label: "Loads Delivered"
+          }, {
+            value: "US & Canada",
+            label: "Areas Covered"
+          }, {
+            value: "24/7",
+            label: "Support"
+          }, {
+            value: "100%",
+            label: "Commitment"
+          }].map((stat, index) => <div key={index} className="text-center">
                 <div className="text-3xl md:text-4xl font-serif font-bold text-cream drop-shadow-lg">{stat.value}</div>
                 <div className="text-sm font-medium text-cream/80 mt-1">{stat.label}</div>
-              </div>
-            ))}
+              </div>)}
           </div>
         </div>
       </div>
       
       {/* Bottom Gradient */}
       <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-background to-transparent" />
-    </section>
-  );
+    </section>;
 };
-
 export default Hero;
