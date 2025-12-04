@@ -17,10 +17,8 @@ const Header = () => {
     <header className="fixed top-0 left-0 right-0 z-50 bg-primary/95 backdrop-blur-md border-b border-primary-foreground/10">
       <div className="container mx-auto px-4">
         <div className="flex items-center justify-between h-28">
-          {/* Logo */}
-          <a href="#" className="flex items-center gap-3">
-            <img src={logo} alt="American Lady Transport LLC" className="h-24 w-auto" />
-          </a>
+          {/* Spacer for layout balance */}
+          <div className="w-24"></div>
 
           {/* Desktop Navigation */}
           <nav className="hidden lg:flex items-center gap-8">
@@ -37,13 +35,14 @@ const Header = () => {
 
           {/* CTA Button */}
           <div className="hidden md:flex items-center gap-4">
+            <Button variant="hero" size="lg" asChild>
+              <a href="#contact">Contact Us</a>
+            </Button>
+            <img src={logo} alt="American Lady Transport LLC" className="h-24 w-auto" />
             <a href="tel:+18172492990" className="flex items-center gap-2 text-primary-foreground/80 hover:text-primary-foreground transition-colors">
               <Phone className="w-4 h-4" />
               <span className="font-medium">(817) 249-2990</span>
             </a>
-            <Button variant="hero" size="lg" asChild>
-              <a href="#contact">Contact Us</a>
-            </Button>
           </div>
 
           {/* Mobile Menu Button */}
