@@ -2,7 +2,7 @@ import { Star, Handshake, TrendingUp, HeadphonesIcon } from "lucide-react";
 const reasons = [{
   icon: Handshake,
   title: "Personal Touch",
-  description: "You're not just a number. We take the time to understand your needs and deliver solutions that work for you."
+  description: "You're not just a number. We take the time to understand your needs and deliver solutions that work for you. You have direct contact with our reps for a one-on-one experience."
 }, {
   icon: Star,
   title: "Vetted Carriers",
