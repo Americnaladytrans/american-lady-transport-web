@@ -1,6 +1,6 @@
 import { useState } from "react";
-import { Button } from "@/components/ui/button";
 import { Menu, X, Phone } from "lucide-react";
+import { Button } from "@/components/ui/button";
 import logo from "@/assets/logo.png";
 
 const Header = () => {
@@ -33,17 +33,10 @@ const Header = () => {
             ))}
           </nav>
 
-          {/* CTA Button */}
-          <div className="hidden md:flex items-center gap-4">
-            <Button variant="hero" size="lg" asChild>
-              <a href="#contact">Contact Us</a>
-            </Button>
+          {/* Logo */}
+          <a href="#" className="flex items-center">
             <img src={logo} alt="American Lady Transport LLC" className="h-24 w-auto" />
-            <a href="tel:+18172492990" className="flex items-center gap-2 text-primary-foreground/80 hover:text-primary-foreground transition-colors">
-              <Phone className="w-4 h-4" />
-              <span className="font-medium">(817) 249-2990</span>
-            </a>
-          </div>
+          </a>
 
           {/* Mobile Menu Button */}
           <button
