@@ -48,7 +48,7 @@ const Hero = () => {
             value: "US & Canada",
             label: "Areas Covered"
           }, {
-            value: "24/7",
+            value: "7 Days a Week",
             label: "Support"
           }, {
             value: "100%",
