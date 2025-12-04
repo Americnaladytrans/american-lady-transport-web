@@ -1,9 +1,5 @@
-import { Truck, Package, Shield, Clock, MapPinned, FileCheck, Maximize2, Route } from "lucide-react";
+import { Truck, Package, Shield, Clock, MapPinned, FileCheck, Maximize2 } from "lucide-react";
 const services = [{
-  icon: Route,
-  title: "Local & Long Haul",
-  description: "From cross-town deliveries to coast-to-coast shipments. Flexible solutions for any distance your freight needs to travel."
-}, {
   icon: Truck,
   title: "Full Truckload (FTL)",
   description: "Dedicated trucks for your full shipments. Direct delivery with no stops, maximizing speed and security."
