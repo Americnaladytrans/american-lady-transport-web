@@ -1,4 +1,4 @@
-import { Star, Handshake, TrendingUp, HeadphonesIcon, ShieldCheck } from "lucide-react";
+import { Star, Handshake, TrendingUp, HeadphonesIcon, ShieldCheck, Wrench } from "lucide-react";
 const reasons = [{
   icon: Handshake,
   title: "Personal Touch",
@@ -19,6 +19,10 @@ const reasons = [{
   icon: ShieldCheck,
   title: "Insurance Requirements",
   description: "All carriers must have a minimum of $1,000,000 in liability insurance and $100,000 in cargo insurance to work with us. If additional coverage is required, reach out to us and we can accommodate those needs."
+}, {
+  icon: Wrench,
+  title: "Equipment Expertise",
+  description: "Our management team's experience as drivers and owner-operators ensures the right equipment is used for your shipment. Unsure what you need? Reach out and one of our sales reps can guide you in the right direction."
 }];
 const WhyChooseUs = () => {
   return <section id="why-us" className="py-24 bg-background">
