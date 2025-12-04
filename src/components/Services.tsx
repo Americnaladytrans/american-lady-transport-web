@@ -27,6 +27,10 @@ const services = [{
   icon: Maximize2,
   title: "Over-Dimensional Shipments",
   description: "Specialized transport for oversized loads. Expert handling of heavy haul and wide load freight."
+}, {
+  icon: Truck,
+  title: "Power Only",
+  description: "Need a driver and tractor to move your trailer? Our power only service connects you with reliable carriers to haul your equipment."
 }];
 const Services = () => {
   return <section id="services" className="pt-20 pb-24 bg-background">
