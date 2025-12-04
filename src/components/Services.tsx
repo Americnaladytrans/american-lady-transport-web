@@ -1,5 +1,9 @@
 import { Truck, Package, Shield, Clock, MapPinned, FileCheck, Maximize2, Route } from "lucide-react";
 const services = [{
+  icon: Route,
+  title: "Local & Long Haul",
+  description: "From cross-town deliveries to coast-to-coast shipments. Flexible solutions for any distance your freight needs to travel."
+}, {
   icon: Truck,
   title: "Full Truckload (FTL)",
   description: "Dedicated trucks for your full shipments. Direct delivery with no stops, maximizing speed and security."
@@ -31,10 +35,6 @@ const services = [{
   icon: Truck,
   title: "Power Only",
   description: "Need a driver and tractor to move your trailer? Our power only service connects you with reliable carriers to haul your equipment."
-}, {
-  icon: Route,
-  title: "Local & Long Haul",
-  description: "From cross-town deliveries to coast-to-coast shipments. Flexible solutions for any distance your freight needs to travel."
 }];
 const Services = () => {
   return <section id="services" className="pt-20 pb-24 bg-background">
