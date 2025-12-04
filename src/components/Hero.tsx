@@ -15,7 +15,7 @@ const Hero = () => {
       <div className="absolute inset-0 bg-gradient-to-b from-primary/80 via-primary/70 to-primary/90" />
       
       {/* Content */}
-      <div className="container mx-auto px-4 relative z-10 pt-28">
+      <div className="container mx-auto px-4 relative z-10 pt-36">
         <div className="max-w-4xl mx-auto text-center">
           {/* Location Badge */}
           <div className="inline-flex items-center gap-2 bg-cream/10 backdrop-blur-sm border border-cream/20 rounded-full px-4 py-2 mb-8 animate-fade-up">
