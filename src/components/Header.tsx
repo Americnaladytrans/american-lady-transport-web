@@ -42,7 +42,7 @@ const Header = () => {
               <span className="font-medium">(817) 249-2990</span>
             </a>
             <Button variant="hero" size="lg" asChild>
-              <a href="#contact">Get a Quote</a>
+              <a href="#contact">Contact Us</a>
             </Button>
           </div>
 
@@ -75,7 +75,7 @@ const Header = () => {
                 <span className="font-medium">(817) 249-2990</span>
               </a>
               <Button variant="hero" size="lg" asChild className="mt-2">
-                <a href="#contact">Get a Quote</a>
+                <a href="#contact">Contact Us</a>
               </Button>
             </nav>
           </div>
