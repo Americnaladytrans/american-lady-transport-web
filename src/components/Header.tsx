@@ -16,12 +16,9 @@ const Header = () => {
   return (
     <header className="fixed top-0 left-0 right-0 z-50 bg-primary/95 backdrop-blur-md border-b border-primary-foreground/10">
       <div className="container mx-auto px-4">
-        <div className="flex items-center justify-between h-28">
-          {/* Spacer for layout balance */}
-          <div className="w-24"></div>
-
-          {/* Desktop Navigation */}
-          <nav className="hidden lg:flex items-center gap-8">
+        <div className="flex items-center justify-center h-28 relative">
+          {/* Desktop Navigation - Left */}
+          <nav className="hidden lg:flex items-center gap-8 absolute left-0">
             {navLinks.map((link) => (
               <a
                 key={link.href}
@@ -33,14 +30,14 @@ const Header = () => {
             ))}
           </nav>
 
-          {/* Logo */}
+          {/* Logo - Centered */}
           <a href="#" className="flex items-center">
             <img src={logo} alt="American Lady Transport LLC" className="h-24 w-auto" />
           </a>
 
-          {/* Mobile Menu Button */}
+          {/* Mobile Menu Button - Right */}
           <button
-            className="lg:hidden text-primary-foreground p-2"
+            className="lg:hidden text-primary-foreground p-2 absolute right-0"
             onClick={() => setIsMenuOpen(!isMenuOpen)}
             aria-label="Toggle menu"
           >
