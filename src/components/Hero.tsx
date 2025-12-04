@@ -39,7 +39,7 @@ const Hero = () => {
           <div className="flex flex-col sm:flex-row gap-4 justify-center items-center animate-fade-up animation-delay-300">
             <Button variant="hero" size="xl" asChild>
               <a href="#contact" className="group">
-                Request a Quote
+                Contact Us
                 <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
               </a>
             </Button>
