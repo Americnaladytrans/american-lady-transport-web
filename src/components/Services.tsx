@@ -22,7 +22,7 @@ const services = [{
 }, {
   icon: MapPinned,
   title: "Nationwide Coverage",
-  description: "From Texas to all 48 contiguous states. Our carrier network spans the entire country."
+  description: "From Texas to all 48 contiguous states. Our carrier network spans the entire country. We can source local and long-haul carriers."
 }, {
   icon: FileCheck,
   title: "Freight Management",
