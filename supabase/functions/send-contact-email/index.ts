@@ -140,7 +140,7 @@ const handler = async (req: Request): Promise<Response> => {
       to: ["info@usealt.com"],
       subject: `New Contact Request from ${name}`,
       html: `
-        <h1>New Quote Request</h1>
+        <h1>New Contact Request</h1>
         <p><strong>Name:</strong> ${name}</p>
         <p><strong>Email:</strong> ${email}</p>
         <p><strong>Phone:</strong> ${phone}</p>
