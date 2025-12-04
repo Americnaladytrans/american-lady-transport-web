@@ -53,12 +53,12 @@ const Hero = () => {
             {[
               { value: "50,000+", label: "Loads Delivered" },
               { value: "US & Canada", label: "Areas Covered" },
-              { value: "7 Days a Week", label: "Support" },
+              { value: "24/7", label: "Support" },
               { value: "100%", label: "Commitment" },
             ].map((stat, index) => (
               <div key={index} className="text-center">
-                <div className="text-3xl md:text-4xl font-serif font-bold text-cream">{stat.value}</div>
-                <div className="text-sm text-cream/60 mt-1">{stat.label}</div>
+                <div className="text-3xl md:text-4xl font-serif font-bold text-cream drop-shadow-lg">{stat.value}</div>
+                <div className="text-sm font-medium text-cream/80 mt-1">{stat.label}</div>
               </div>
             ))}
           </div>
