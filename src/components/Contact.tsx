@@ -42,20 +42,20 @@ const Contact = () => {
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    setIsSubmitting(true);
-
-    // Simulate form submission
-    await new Promise((resolve) => setTimeout(resolve, 1000));
-
+    
+    const subject = encodeURIComponent(`Quote Request from ${formData.name}`);
+    const body = encodeURIComponent(
+      `Name: ${formData.name}\nEmail: ${formData.email}\nPhone: ${formData.phone}\n\nMessage:\n${formData.message}`
+    );
+    
+    window.location.href = `mailto:info@usealt.com?subject=${subject}&body=${body}`;
+    
     toast({
-      title: "Message Sent!",
-      description: "Thank you for contacting American Lady Transport. We'll be in touch soon.",
+      title: "Opening Email Client",
+      description: "Your email client should open with the message ready to send.",
     });
-
-    setFormData({ name: "", email: "", phone: "", message: "" });
-    setIsSubmitting(false);
   };
 
   return (
