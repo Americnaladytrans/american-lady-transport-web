@@ -35,6 +35,10 @@ const services = [{
   icon: Truck,
   title: "Power Only",
   description: "Need a driver and tractor to move your trailer? Our power only service connects you with reliable carriers to haul your equipment."
+}, {
+  icon: Package,
+  title: "Equipment Types",
+  description: "We handle sourcing for a wide range of equipment — dry vans, refrigerated units, box trucks, sprinter vans, flatbeds, stepdecks, double drops, removable goosenecks, hotshots, and more. Our team can also assist with transloading operations and coordinate wrecker services when needed."
 }];
 const Services = () => {
   return <section id="services" className="pt-20 pb-24 bg-background">
