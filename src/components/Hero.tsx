@@ -4,7 +4,7 @@ import heroBg from "@/assets/hero-bg.jpg";
 
 const Hero = () => {
   return (
-    <section className="relative min-h-[110vh] flex items-center justify-center overflow-hidden">
+    <section className="relative min-h-[120vh] flex items-center justify-center overflow-hidden">
       {/* Background Image */}
       <div 
         className="absolute inset-0 bg-cover bg-center bg-no-repeat"
