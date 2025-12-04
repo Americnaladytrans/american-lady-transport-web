@@ -12,7 +12,7 @@ const Hero = () => {
       />
       
       {/* Overlay */}
-      <div className="absolute inset-0 bg-gradient-to-b from-primary/80 via-primary/70 to-primary/90" />
+      <div className="absolute inset-0 bg-gradient-to-b from-primary/80 via-primary/60 to-primary/50" />
       
       {/* Content */}
       <div className="container mx-auto px-4 relative z-10 pt-36">
