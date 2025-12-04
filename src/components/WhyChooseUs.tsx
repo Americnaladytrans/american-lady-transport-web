@@ -6,7 +6,7 @@ const reasons = [{
 }, {
   icon: Star,
   title: "Vetted Carriers",
-  description: "Every carrier in our network is thoroughly screened for safety, reliability, and professionalism."
+  description: "Every carrier in our network is thoroughly screened for safety, reliability, and professionalism. All carriers are required to have 1,000,000 in liability insurance and 100,000 in cargo insurance to work with us."
 }, {
   icon: TrendingUp,
   title: "Competitive Rates",
