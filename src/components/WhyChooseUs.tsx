@@ -35,10 +35,7 @@ const WhyChooseUs = () => {
           <h2 className="font-serif text-3xl md:text-4xl lg:text-5xl font-bold text-foreground mt-4 mb-6">
             The American Lady <span className="text-patriot-red">Difference</span>
           </h2>
-          <p className="text-muted-foreground text-lg">
-            In a world of automated systems and distant call centers, we offer something different—
-            genuine partnership and accountability.
-          </p>
+          <p className="text-muted-foreground text-lg">In a world of automated systems and distant call centers, we offer something different— genuine partnership, accountability, and human interaction.</p>
         </div>
 
         {/* Reasons Grid */}
