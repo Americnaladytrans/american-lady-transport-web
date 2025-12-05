@@ -17,7 +17,7 @@ const contactInfo = [{
   subtext: "Call or text anytime"
 }, {
   icon: Mail,
-  label: "Email - through our Contact Us link below.",
+  label: "Email - through our Contact Us link above.",
   value: "info@usealt.com",
   subtext: "We respond within 24 hours"
 }, {
