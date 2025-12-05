@@ -60,7 +60,7 @@ const WhyChooseUs = () => {
           <h3 className="font-serif text-2xl md:text-3xl font-bold text-primary-foreground mb-4">
             Ready to Experience the Difference?
           </h3>
-          <p className="text-primary-foreground/70 mb-8 max-w-2xl mx-auto">Let us show you what a true freight brokerage partnership looks like. Reach out and get a free quote today.</p>
+          <p className="text-primary-foreground/70 mb-8 max-w-2xl mx-auto">Let us show you what a true freight brokerage partnership looks like. Reach out to us today.</p>
           <a href="#contact" className="inline-flex items-center justify-center gap-2 bg-patriot-red text-accent-foreground px-8 py-4 rounded-md font-semibold text-lg hover:bg-patriot-red-light transition-colors shadow-lg">
             Contact Us  
           </a>
