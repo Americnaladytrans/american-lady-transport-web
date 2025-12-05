@@ -1,11 +1,8 @@
 import { Phone, Mail, MapPin } from "lucide-react";
 import logo from "@/assets/logo.png";
-
 const Footer = () => {
   const currentYear = new Date().getFullYear();
-
-  return (
-    <footer className="bg-primary text-primary-foreground">
+  return <footer className="bg-primary text-primary-foreground">
       <div className="container mx-auto px-4 py-16">
         <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-12">
           {/* Brand */}
@@ -22,18 +19,10 @@ const Footer = () => {
               Based in Willis, Texas, we deliver honest, dependable freight brokerage services.
             </p>
             <div className="flex gap-4">
-              <a
-                href="tel:+18172492990"
-                className="w-10 h-10 rounded-full bg-primary-foreground/10 flex items-center justify-center hover:bg-patriot-red transition-colors"
-                aria-label="Call us"
-              >
+              <a href="tel:+18172492990" className="w-10 h-10 rounded-full bg-primary-foreground/10 flex items-center justify-center hover:bg-patriot-red transition-colors" aria-label="Call us">
                 <Phone className="w-5 h-5" />
               </a>
-              <a
-                href="mailto:info@usealt.com"
-                className="w-10 h-10 rounded-full bg-primary-foreground/10 flex items-center justify-center hover:bg-patriot-red transition-colors"
-                aria-label="Email us"
-              >
+              <a href="mailto:info@usealt.com" className="w-10 h-10 rounded-full bg-primary-foreground/10 flex items-center justify-center hover:bg-patriot-red transition-colors" aria-label="Email us">
                 <Mail className="w-5 h-5" />
               </a>
             </div>
@@ -43,21 +32,23 @@ const Footer = () => {
           <div>
             <h4 className="font-serif text-lg font-bold mb-6">Quick Links</h4>
             <ul className="space-y-3">
-              {[
-                { href: "#services", label: "Services" },
-                { href: "#about", label: "About Us" },
-                { href: "#why-us", label: "Why Choose Us" },
-                { href: "#contact", label: "Contact" },
-              ].map((link) => (
-                <li key={link.href}>
-                  <a
-                    href={link.href}
-                    className="text-primary-foreground/70 hover:text-primary-foreground transition-colors"
-                  >
+              {[{
+              href: "#services",
+              label: "Services"
+            }, {
+              href: "#about",
+              label: "About Us"
+            }, {
+              href: "#why-us",
+              label: "Why Choose Us"
+            }, {
+              href: "#contact",
+              label: "Contact"
+            }].map(link => <li key={link.href}>
+                  <a href={link.href} className="text-primary-foreground/70 hover:text-primary-foreground transition-colors">
                     {link.label}
                   </a>
-                </li>
-              ))}
+                </li>)}
             </ul>
           </div>
 
@@ -76,10 +67,8 @@ const Footer = () => {
                 </a>
               </li>
               <li className="flex items-start gap-3">
-                <Mail className="w-5 h-5 text-patriot-red mt-0.5" />
-                <a href="mailto:info@usealt.com" className="text-primary-foreground/70 hover:text-primary-foreground transition-colors break-all">
-                  info@usealt.com
-                </a>
+                
+                
               </li>
             </ul>
           </div>
@@ -92,8 +81,6 @@ const Footer = () => {
           </p>
         </div>
       </div>
-    </footer>
-  );
+    </footer>;
 };
-
 export default Footer;

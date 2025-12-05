@@ -5,75 +5,70 @@ import { Textarea } from "@/components/ui/textarea";
 import { MapPin, Phone, Mail, Clock, Send } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
-
-const contactInfo = [
-  {
-    icon: MapPin,
-    label: "Location",
-    value: "Willis, Texas",
-    subtext: "Serving all 48 states & Canada",
-  },
-  {
-    icon: Phone,
-    label: "Phone",
-    value: "(817) 249-2990",
-    subtext: "Call or text anytime",
-  },
-  {
-    icon: Mail,
-    label: "Email",
-    value: "info@usealt.com",
-    subtext: "We respond within 24 hours",
-  },
-  {
-    icon: Clock,
-    label: "Hours",
-    value: "7 Days a Week",
-    subtext: "Always here when you need us",
-  },
-];
-
+const contactInfo = [{
+  icon: MapPin,
+  label: "Location",
+  value: "Willis, Texas",
+  subtext: "Serving all 48 states & Canada"
+}, {
+  icon: Phone,
+  label: "Phone",
+  value: "(817) 249-2990",
+  subtext: "Call or text anytime"
+}, {
+  icon: Mail,
+  label: "Email",
+  value: "info@usealt.com",
+  subtext: "We respond within 24 hours"
+}, {
+  icon: Clock,
+  label: "Hours",
+  value: "7 Days a Week",
+  subtext: "Always here when you need us"
+}];
 const Contact = () => {
-  const { toast } = useToast();
+  const {
+    toast
+  } = useToast();
   const [formData, setFormData] = useState({
     name: "",
     email: "",
     phone: "",
-    message: "",
+    message: ""
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
-
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
-
     try {
-      const { error } = await supabase.functions.invoke('send-contact-email', {
-        body: formData,
+      const {
+        error
+      } = await supabase.functions.invoke('send-contact-email', {
+        body: formData
       });
-
       if (error) throw error;
-
       toast({
         title: "Message Sent!",
-        description: "Thank you for contacting American Lady Transport. We'll be in touch soon.",
+        description: "Thank you for contacting American Lady Transport. We'll be in touch soon."
       });
-
-      setFormData({ name: "", email: "", phone: "", message: "" });
+      setFormData({
+        name: "",
+        email: "",
+        phone: "",
+        message: ""
+      });
     } catch (error: any) {
       console.error("Error sending message:", error);
       toast({
         title: "Error",
         description: "Failed to send message. Please try again or call us directly.",
-        variant: "destructive",
+        variant: "destructive"
       });
     } finally {
       setIsSubmitting(false);
     }
   };
-
-  return (
-    <section id="contact" className="py-24 bg-secondary">
+  return <section id="contact" className="py-24 bg-secondary">
       <div className="container mx-auto px-4">
         {/* Section Header */}
         <div className="text-center max-w-3xl mx-auto mb-16">
@@ -101,76 +96,44 @@ const Contact = () => {
                   <label htmlFor="name" className="block text-sm font-medium text-foreground mb-2">
                     Full Name *
                   </label>
-                  <Input
-                    id="name"
-                    type="text"
-                    required
-                    maxLength={100}
-                    value={formData.name}
-                    onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                    placeholder="John Smith"
-                    className="h-12"
-                  />
+                  <Input id="name" type="text" required maxLength={100} value={formData.name} onChange={e => setFormData({
+                  ...formData,
+                  name: e.target.value
+                })} placeholder="John Smith" className="h-12" />
                 </div>
                 <div>
                   <label htmlFor="phone" className="block text-sm font-medium text-foreground mb-2">
                     Phone Number
                   </label>
-                  <Input
-                    id="phone"
-                    type="tel"
-                    maxLength={20}
-                    value={formData.phone}
-                    onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-                    placeholder="(555) 123-4567"
-                    className="h-12"
-                  />
+                  <Input id="phone" type="tel" maxLength={20} value={formData.phone} onChange={e => setFormData({
+                  ...formData,
+                  phone: e.target.value
+                })} placeholder="(555) 123-4567" className="h-12" />
                 </div>
               </div>
               <div>
                 <label htmlFor="email" className="block text-sm font-medium text-foreground mb-2">
                   Email Address *
                 </label>
-                <Input
-                  id="email"
-                  type="email"
-                  required
-                  maxLength={255}
-                  value={formData.email}
-                  onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                  placeholder="john@company.com"
-                  className="h-12"
-                />
+                <Input id="email" type="email" required maxLength={255} value={formData.email} onChange={e => setFormData({
+                ...formData,
+                email: e.target.value
+              })} placeholder="john@company.com" className="h-12" />
               </div>
               <div>
                 <label htmlFor="message" className="block text-sm font-medium text-foreground mb-2">
                   Tell Us About Your Freight Needs *
                 </label>
-                <Textarea
-                  id="message"
-                  required
-                  maxLength={1000}
-                  value={formData.message}
-                  onChange={(e) => setFormData({ ...formData, message: e.target.value })}
-                  placeholder="Describe your shipment: origin, destination, type of freight, timeline, etc."
-                  className="min-h-[150px] resize-none"
-                />
+                <Textarea id="message" required maxLength={1000} value={formData.message} onChange={e => setFormData({
+                ...formData,
+                message: e.target.value
+              })} placeholder="Describe your shipment: origin, destination, type of freight, timeline, etc." className="min-h-[150px] resize-none" />
               </div>
-              <Button 
-                type="submit" 
-                variant="hero" 
-                size="xl" 
-                className="w-full"
-                disabled={isSubmitting}
-              >
-                {isSubmitting ? (
-                  "Sending..."
-                ) : (
-                  <>
+              <Button type="submit" variant="hero" size="xl" className="w-full" disabled={isSubmitting}>
+                {isSubmitting ? "Sending..." : <>
                     Send Message
                     <Send className="w-5 h-5" />
-                  </>
-                )}
+                  </>}
               </Button>
             </form>
           </div>
@@ -188,19 +151,14 @@ const Contact = () => {
             </div>
 
             <div className="grid sm:grid-cols-2 gap-6">
-              {contactInfo.map((info, index) => (
-                <div
-                  key={index}
-                  className="bg-card rounded-xl p-6 border border-border"
-                >
+              {contactInfo.map((info, index) => <div key={index} className="bg-card rounded-xl p-6 border border-border">
                   <div className="w-12 h-12 rounded-lg bg-primary/10 flex items-center justify-center mb-4">
                     <info.icon className="w-6 h-6 text-primary" />
                   </div>
                   <div className="text-sm text-muted-foreground mb-1">{info.label}</div>
-                  <div className="font-semibold text-foreground mb-1">{info.value}</div>
+                  
                   <div className="text-sm text-muted-foreground">{info.subtext}</div>
-                </div>
-              ))}
+                </div>)}
             </div>
 
             {/* Map Placeholder */}
@@ -216,8 +174,6 @@ const Contact = () => {
           </div>
         </div>
       </div>
-    </section>
-  );
+    </section>;
 };
-
 export default Contact;
