@@ -1,18 +1,8 @@
 import { CheckCircle } from "lucide-react";
 import logoBadge from "@/assets/logo-badge.png";
-
-const features = [
-  "Family-owned and operated in Willis, Texas",
-  "Deep roots in the Texas freight community",
-  "Personalized service with direct communication",
-  "Committed to honest, transparent business",
-  "Building long-term partnerships with clients",
-  "Supporting American truckers and businesses",
-];
-
+const features = ["Family-owned and operated in Willis, Texas", "Deep roots in the Texas freight community", "Personalized service with direct communication", "Committed to honest, transparent business", "Building long-term partnerships with clients", "Supporting American truckers and businesses"];
 const About = () => {
-  return (
-    <section id="about" className="py-24 bg-secondary">
+  return <section id="about" className="py-24 bg-secondary">
       <div className="container mx-auto px-4">
         <div className="grid lg:grid-cols-2 gap-16 items-center">
           {/* Content */}
@@ -25,8 +15,7 @@ const About = () => {
             </h2>
             <div className="space-y-4 text-muted-foreground text-lg leading-relaxed">
               <p>
-                American Lady started in Ft Worth, Texas, in 1984 and relocated to Willis, Texas, in 2024. 
-                Our mission remains simple: provide honest, reliable freight brokerage services that shippers and carriers can count on.
+                American Lady started in Ft Worth, Texas, in 1984 and relocated to Willis, Texas, in 2024. Our mission remains simple: provide honest, reliable freight brokerage services that shippers, receivers, and carriers can count on.
               </p>
               <p>
                 With over 40 years in the industry, we understand the heartbeat of American logistics. 
@@ -37,12 +26,10 @@ const About = () => {
 
             {/* Feature List */}
             <div className="grid sm:grid-cols-2 gap-4 mt-8">
-              {features.map((feature, index) => (
-                <div key={index} className="flex items-start gap-3">
+              {features.map((feature, index) => <div key={index} className="flex items-start gap-3">
                   <CheckCircle className="w-5 h-5 text-patriot-red mt-0.5 flex-shrink-0" />
                   <span className="text-foreground">{feature}</span>
-                </div>
-              ))}
+                </div>)}
             </div>
           </div>
 
@@ -74,8 +61,6 @@ const About = () => {
           </div>
         </div>
       </div>
-    </section>
-  );
+    </section>;
 };
-
 export default About;
