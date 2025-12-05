@@ -2,7 +2,7 @@ import { Truck, Package, Shield, Clock, MapPinned, FileCheck, Maximize2 } from "
 const services = [{
   icon: MapPinned,
   title: "Nationwide Coverage",
-  description: "From Texas to all 48 contiguous states. Our carrier network spans the entire country. We can source local and long-haul carriers."
+  description: "Shipping anywhere in the US and Canada. Our carrier network spans the entire continent. We can source local and long-haul carriers."
 }, {
   icon: Truck,
   title: "Full Truckload (FTL)",
