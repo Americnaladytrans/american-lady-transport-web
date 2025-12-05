@@ -6,7 +6,7 @@ const reasons = [{
 }, {
   icon: Star,
   title: "Vetted Carriers",
-  description: "Every carrier in our network is thoroughly screened for safety, reliability, and professionalism."
+  description: "Every carrier in our network is thoroughly screened through multiple vetting sites for safety, reliability, and professionalism."
 }, {
   icon: TrendingUp,
   title: "Competitive Rates",
