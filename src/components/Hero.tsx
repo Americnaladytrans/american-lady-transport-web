@@ -21,7 +21,7 @@ const Hero = () => {
           </h1>
           
           {/* Subheading */}
-          <p className="text-lg md:text-xl text-cream/80 mb-10 max-w-2xl mx-auto animate-fade-up animation-delay-200 leading-relaxed">Trusted freight brokerage services with 40 years of experience connecting shippers with reliable carriers. From Texas to every corner of the nation on time, every time.</p>
+          <p className="text-lg md:text-xl text-cream/80 mb-10 max-w-2xl mx-auto animate-fade-up animation-delay-200 leading-relaxed">Trusted freight brokerage services with 40 years of experience connecting shippers with reliable carriers. Shipping anywhere in the US and Canada, on time, every time.</p>
           
           {/* CTA Buttons */}
           <div className="flex flex-col sm:flex-row gap-4 justify-center items-center animate-fade-up animation-delay-300">
