@@ -52,9 +52,8 @@ const Hero = () => {
           <div className="mt-16 grid grid-cols-2 md:grid-cols-4 gap-8 animate-fade-up animation-delay-400">
             {[
               { value: "40+ Years", label: "In Business" },
-              { value: "U.S. & Canada", label: "Coverage" },
               { value: "7 Days a Week", label: "Support" },
-              { value: "MC170463", label: "Licensed & Bonded" },
+              { value: "MC 170463", label: "Licensed & Bonded" },
             ].map((stat, index) => (
               <div key={index} className="text-center">
                 <div className="text-3xl md:text-4xl font-serif font-bold text-cream drop-shadow-lg">
