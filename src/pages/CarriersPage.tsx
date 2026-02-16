@@ -7,6 +7,18 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
+import { z } from "zod";
+
+const carrierSchema = z.object({
+  name: z.string().trim().min(1, "Contact name is required").max(100),
+  email: z.string().trim().email("Invalid email address").max(255),
+  phone: z.string().trim().min(1, "Phone is required").max(20),
+  companyName: z.string().trim().min(1, "Company name is required").max(200),
+  mcDotNumber: z.string().trim().min(1, "MC/DOT number is required").max(50),
+  equipmentType: z.string().max(200).optional(),
+  preferredLanes: z.string().max(500).optional(),
+  insuranceDetails: z.string().max(1000).optional(),
+});
 
 const bullets = [
   "Consistent freight across the U.S. and on cross-border lanes to and from Canada",
@@ -28,10 +40,24 @@ const CarriersPage = () => {
     preferredLanes: "",
     insuranceDetails: "",
   });
+  const [honeypot, setHoneypot] = useState("");
+  const [errors, setErrors] = useState<Record<string, string>>({});
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setErrors({});
+
+    const result = carrierSchema.safeParse(formData);
+    if (!result.success) {
+      const fieldErrors: Record<string, string> = {};
+      result.error.errors.forEach((err) => {
+        if (err.path[0]) fieldErrors[err.path[0] as string] = err.message;
+      });
+      setErrors(fieldErrors);
+      return;
+    }
+
     setIsSubmitting(true);
     try {
       const message = `
@@ -50,6 +76,7 @@ Insurance: ${formData.insuranceDetails}
           email: formData.email,
           phone: formData.phone,
           message,
+          _honeypot: honeypot,
         },
       });
       if (error) throw error;
@@ -59,14 +86,8 @@ Insurance: ${formData.insuranceDetails}
         description: "Our team will review your information and reach out soon.",
       });
       setFormData({
-        name: "",
-        email: "",
-        phone: "",
-        companyName: "",
-        mcDotNumber: "",
-        equipmentType: "",
-        preferredLanes: "",
-        insuranceDetails: "",
+        name: "", email: "", phone: "", companyName: "", mcDotNumber: "",
+        equipmentType: "", preferredLanes: "", insuranceDetails: "",
       });
     } catch (error: any) {
       console.error("Error sending carrier signup:", error);
@@ -130,128 +151,55 @@ Insurance: ${formData.insuranceDetails}
                   Sign Up as a Carrier
                 </h3>
                 <form onSubmit={handleSubmit} className="space-y-5">
+                  {/* Honeypot */}
+                  <div className="absolute -left-[9999px]" aria-hidden="true">
+                    <label htmlFor="hp_url">Website</label>
+                    <input type="text" id="hp_url" name="hp_url" tabIndex={-1} autoComplete="off" value={honeypot} onChange={(e) => setHoneypot(e.target.value)} />
+                  </div>
+
                   <div className="grid sm:grid-cols-2 gap-4">
                     <div>
-                      <label className="block text-sm font-medium text-foreground mb-2">
-                        Contact Name *
-                      </label>
-                      <Input
-                        required
-                        maxLength={100}
-                        value={formData.name}
-                        onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                        placeholder="Jane Doe"
-                        className="h-12"
-                      />
+                      <label className="block text-sm font-medium text-foreground mb-2">Contact Name *</label>
+                      <Input maxLength={100} value={formData.name} onChange={(e) => setFormData({ ...formData, name: e.target.value })} placeholder="Jane Doe" className="h-12" />
+                      {errors.name && <p className="text-destructive text-sm mt-1">{errors.name}</p>}
                     </div>
                     <div>
-                      <label className="block text-sm font-medium text-foreground mb-2">
-                        Phone *
-                      </label>
-                      <Input
-                        required
-                        maxLength={20}
-                        value={formData.phone}
-                        onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-                        placeholder="(555) 123-4567"
-                        className="h-12"
-                      />
+                      <label className="block text-sm font-medium text-foreground mb-2">Phone *</label>
+                      <Input maxLength={20} value={formData.phone} onChange={(e) => setFormData({ ...formData, phone: e.target.value })} placeholder="(555) 123-4567" className="h-12" />
+                      {errors.phone && <p className="text-destructive text-sm mt-1">{errors.phone}</p>}
                     </div>
                   </div>
                   <div>
-                    <label className="block text-sm font-medium text-foreground mb-2">
-                      Email *
-                    </label>
-                    <Input
-                      type="email"
-                      required
-                      maxLength={255}
-                      value={formData.email}
-                      onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                      placeholder="dispatch@carrier.com"
-                      className="h-12"
-                    />
+                    <label className="block text-sm font-medium text-foreground mb-2">Email *</label>
+                    <Input type="email" maxLength={255} value={formData.email} onChange={(e) => setFormData({ ...formData, email: e.target.value })} placeholder="dispatch@carrier.com" className="h-12" />
+                    {errors.email && <p className="text-destructive text-sm mt-1">{errors.email}</p>}
                   </div>
                   <div className="grid sm:grid-cols-2 gap-4">
                     <div>
-                      <label className="block text-sm font-medium text-foreground mb-2">
-                        Company Name *
-                      </label>
-                      <Input
-                        required
-                        value={formData.companyName}
-                        onChange={(e) =>
-                          setFormData({ ...formData, companyName: e.target.value })
-                        }
-                        placeholder="ABC Trucking LLC"
-                        className="h-12"
-                      />
+                      <label className="block text-sm font-medium text-foreground mb-2">Company Name *</label>
+                      <Input value={formData.companyName} onChange={(e) => setFormData({ ...formData, companyName: e.target.value })} placeholder="ABC Trucking LLC" className="h-12" />
+                      {errors.companyName && <p className="text-destructive text-sm mt-1">{errors.companyName}</p>}
                     </div>
                     <div>
-                      <label className="block text-sm font-medium text-foreground mb-2">
-                        MC/DOT Number *
-                      </label>
-                      <Input
-                        required
-                        value={formData.mcDotNumber}
-                        onChange={(e) =>
-                          setFormData({ ...formData, mcDotNumber: e.target.value })
-                        }
-                        placeholder="MC-123456"
-                        className="h-12"
-                      />
+                      <label className="block text-sm font-medium text-foreground mb-2">MC/DOT Number *</label>
+                      <Input value={formData.mcDotNumber} onChange={(e) => setFormData({ ...formData, mcDotNumber: e.target.value })} placeholder="MC-123456" className="h-12" />
+                      {errors.mcDotNumber && <p className="text-destructive text-sm mt-1">{errors.mcDotNumber}</p>}
                     </div>
                   </div>
                   <div>
-                    <label className="block text-sm font-medium text-foreground mb-2">
-                      Equipment Type
-                    </label>
-                    <Input
-                      value={formData.equipmentType}
-                      onChange={(e) =>
-                        setFormData({ ...formData, equipmentType: e.target.value })
-                      }
-                      placeholder="Van, flatbed, step-deck, RGN, etc."
-                      className="h-12"
-                    />
+                    <label className="block text-sm font-medium text-foreground mb-2">Equipment Type</label>
+                    <Input value={formData.equipmentType} onChange={(e) => setFormData({ ...formData, equipmentType: e.target.value })} placeholder="Van, flatbed, step-deck, RGN, etc." className="h-12" />
                   </div>
                   <div>
-                    <label className="block text-sm font-medium text-foreground mb-2">
-                      Preferred Lanes & Regions
-                    </label>
-                    <Input
-                      value={formData.preferredLanes}
-                      onChange={(e) =>
-                        setFormData({ ...formData, preferredLanes: e.target.value })
-                      }
-                      placeholder="TX to Midwest, Southeast, cross-border, etc."
-                      className="h-12"
-                    />
+                    <label className="block text-sm font-medium text-foreground mb-2">Preferred Lanes & Regions</label>
+                    <Input value={formData.preferredLanes} onChange={(e) => setFormData({ ...formData, preferredLanes: e.target.value })} placeholder="TX to Midwest, Southeast, cross-border, etc." className="h-12" />
                   </div>
                   <div>
-                    <label className="block text-sm font-medium text-foreground mb-2">
-                      Insurance Details
-                    </label>
-                    <Textarea
-                      maxLength={1000}
-                      value={formData.insuranceDetails}
-                      onChange={(e) =>
-                        setFormData({ ...formData, insuranceDetails: e.target.value })
-                      }
-                      placeholder="Insurance provider, policy number, coverage amounts..."
-                      className="min-h-[100px] resize-none"
-                    />
+                    <label className="block text-sm font-medium text-foreground mb-2">Insurance Details</label>
+                    <Textarea maxLength={1000} value={formData.insuranceDetails} onChange={(e) => setFormData({ ...formData, insuranceDetails: e.target.value })} placeholder="Insurance provider, policy number, coverage amounts..." className="min-h-[100px] resize-none" />
                   </div>
-                  <Button
-                    type="submit"
-                    variant="hero"
-                    size="xl"
-                    className="w-full"
-                    disabled={isSubmitting}
-                  >
-                    {isSubmitting ? (
-                      "Sending..."
-                    ) : (
+                  <Button type="submit" variant="hero" size="xl" className="w-full" disabled={isSubmitting}>
+                    {isSubmitting ? "Sending..." : (
                       <>
                         Submit Carrier Application
                         <Send className="w-5 h-5" />

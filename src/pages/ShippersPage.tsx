@@ -7,6 +7,19 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
+import { z } from "zod";
+
+const quoteSchema = z.object({
+  name: z.string().trim().min(1, "Name is required").max(100),
+  email: z.string().trim().email("Invalid email address").max(255),
+  phone: z.string().trim().min(1, "Phone is required").max(20),
+  pickupLocation: z.string().trim().min(1, "Pickup location is required"),
+  deliveryLocation: z.string().trim().min(1, "Delivery location is required"),
+  freightType: z.string().max(200).optional(),
+  equipmentNeeded: z.string().max(200).optional(),
+  readyDate: z.string().optional(),
+  specialRequirements: z.string().max(1000).optional(),
+});
 
 const bullets = [
   "Single point of contact for all your lanes across the U.S. and into Canada",
@@ -28,10 +41,24 @@ const ShippersPage = () => {
     readyDate: "",
     specialRequirements: "",
   });
+  const [honeypot, setHoneypot] = useState("");
+  const [errors, setErrors] = useState<Record<string, string>>({});
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setErrors({});
+
+    const result = quoteSchema.safeParse(formData);
+    if (!result.success) {
+      const fieldErrors: Record<string, string> = {};
+      result.error.errors.forEach((err) => {
+        if (err.path[0]) fieldErrors[err.path[0] as string] = err.message;
+      });
+      setErrors(fieldErrors);
+      return;
+    }
+
     setIsSubmitting(true);
     try {
       const message = `
@@ -51,6 +78,7 @@ Special Requirements: ${formData.specialRequirements}
           email: formData.email,
           phone: formData.phone,
           message,
+          _honeypot: honeypot,
         },
       });
       if (error) throw error;
@@ -60,15 +88,8 @@ Special Requirements: ${formData.specialRequirements}
         description: "We'll review your freight details and get back to you shortly.",
       });
       setFormData({
-        name: "",
-        email: "",
-        phone: "",
-        pickupLocation: "",
-        deliveryLocation: "",
-        freightType: "",
-        equipmentNeeded: "",
-        readyDate: "",
-        specialRequirements: "",
+        name: "", email: "", phone: "", pickupLocation: "", deliveryLocation: "",
+        freightType: "", equipmentNeeded: "", readyDate: "", specialRequirements: "",
       });
     } catch (error: any) {
       console.error("Error sending quote request:", error);
@@ -133,139 +154,61 @@ Special Requirements: ${formData.specialRequirements}
                   Request a Freight Quote
                 </h3>
                 <form onSubmit={handleSubmit} className="space-y-5">
+                  {/* Honeypot */}
+                  <div className="absolute -left-[9999px]" aria-hidden="true">
+                    <label htmlFor="hp_website">Website</label>
+                    <input type="text" id="hp_website" name="hp_website" tabIndex={-1} autoComplete="off" value={honeypot} onChange={(e) => setHoneypot(e.target.value)} />
+                  </div>
+
                   <div className="grid sm:grid-cols-2 gap-4">
                     <div>
-                      <label className="block text-sm font-medium text-foreground mb-2">
-                        Full Name *
-                      </label>
-                      <Input
-                        required
-                        maxLength={100}
-                        value={formData.name}
-                        onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                        placeholder="John Smith"
-                        className="h-12"
-                      />
+                      <label className="block text-sm font-medium text-foreground mb-2">Full Name *</label>
+                      <Input maxLength={100} value={formData.name} onChange={(e) => setFormData({ ...formData, name: e.target.value })} placeholder="John Smith" className="h-12" />
+                      {errors.name && <p className="text-destructive text-sm mt-1">{errors.name}</p>}
                     </div>
                     <div>
-                      <label className="block text-sm font-medium text-foreground mb-2">
-                        Phone *
-                      </label>
-                      <Input
-                        required
-                        maxLength={20}
-                        value={formData.phone}
-                        onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-                        placeholder="(555) 123-4567"
-                        className="h-12"
-                      />
+                      <label className="block text-sm font-medium text-foreground mb-2">Phone *</label>
+                      <Input maxLength={20} value={formData.phone} onChange={(e) => setFormData({ ...formData, phone: e.target.value })} placeholder="(555) 123-4567" className="h-12" />
+                      {errors.phone && <p className="text-destructive text-sm mt-1">{errors.phone}</p>}
                     </div>
                   </div>
                   <div>
-                    <label className="block text-sm font-medium text-foreground mb-2">
-                      Email *
-                    </label>
-                    <Input
-                      type="email"
-                      required
-                      maxLength={255}
-                      value={formData.email}
-                      onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                      placeholder="john@company.com"
-                      className="h-12"
-                    />
+                    <label className="block text-sm font-medium text-foreground mb-2">Email *</label>
+                    <Input type="email" maxLength={255} value={formData.email} onChange={(e) => setFormData({ ...formData, email: e.target.value })} placeholder="john@company.com" className="h-12" />
+                    {errors.email && <p className="text-destructive text-sm mt-1">{errors.email}</p>}
                   </div>
                   <div className="grid sm:grid-cols-2 gap-4">
                     <div>
-                      <label className="block text-sm font-medium text-foreground mb-2">
-                        Pickup City/State/ZIP *
-                      </label>
-                      <Input
-                        required
-                        value={formData.pickupLocation}
-                        onChange={(e) =>
-                          setFormData({ ...formData, pickupLocation: e.target.value })
-                        }
-                        placeholder="Houston, TX 77001"
-                        className="h-12"
-                      />
+                      <label className="block text-sm font-medium text-foreground mb-2">Pickup City/State/ZIP *</label>
+                      <Input value={formData.pickupLocation} onChange={(e) => setFormData({ ...formData, pickupLocation: e.target.value })} placeholder="Houston, TX 77001" className="h-12" />
+                      {errors.pickupLocation && <p className="text-destructive text-sm mt-1">{errors.pickupLocation}</p>}
                     </div>
                     <div>
-                      <label className="block text-sm font-medium text-foreground mb-2">
-                        Delivery City/State/ZIP *
-                      </label>
-                      <Input
-                        required
-                        value={formData.deliveryLocation}
-                        onChange={(e) =>
-                          setFormData({ ...formData, deliveryLocation: e.target.value })
-                        }
-                        placeholder="Toronto, ON M5V"
-                        className="h-12"
-                      />
+                      <label className="block text-sm font-medium text-foreground mb-2">Delivery City/State/ZIP *</label>
+                      <Input value={formData.deliveryLocation} onChange={(e) => setFormData({ ...formData, deliveryLocation: e.target.value })} placeholder="Toronto, ON M5V" className="h-12" />
+                      {errors.deliveryLocation && <p className="text-destructive text-sm mt-1">{errors.deliveryLocation}</p>}
                     </div>
                   </div>
                   <div className="grid sm:grid-cols-2 gap-4">
                     <div>
-                      <label className="block text-sm font-medium text-foreground mb-2">
-                        Freight Type & Weight
-                      </label>
-                      <Input
-                        value={formData.freightType}
-                        onChange={(e) => setFormData({ ...formData, freightType: e.target.value })}
-                        placeholder="Construction machinery, 45,000 lbs"
-                        className="h-12"
-                      />
+                      <label className="block text-sm font-medium text-foreground mb-2">Freight Type & Weight</label>
+                      <Input value={formData.freightType} onChange={(e) => setFormData({ ...formData, freightType: e.target.value })} placeholder="Construction machinery, 45,000 lbs" className="h-12" />
                     </div>
                     <div>
-                      <label className="block text-sm font-medium text-foreground mb-2">
-                        Equipment Needed
-                      </label>
-                      <Input
-                        value={formData.equipmentNeeded}
-                        onChange={(e) =>
-                          setFormData({ ...formData, equipmentNeeded: e.target.value })
-                        }
-                        placeholder="Flatbed, step-deck, etc."
-                        className="h-12"
-                      />
+                      <label className="block text-sm font-medium text-foreground mb-2">Equipment Needed</label>
+                      <Input value={formData.equipmentNeeded} onChange={(e) => setFormData({ ...formData, equipmentNeeded: e.target.value })} placeholder="Flatbed, step-deck, etc." className="h-12" />
                     </div>
                   </div>
                   <div>
-                    <label className="block text-sm font-medium text-foreground mb-2">
-                      Ready Date
-                    </label>
-                    <Input
-                      type="date"
-                      value={formData.readyDate}
-                      onChange={(e) => setFormData({ ...formData, readyDate: e.target.value })}
-                      className="h-12"
-                    />
+                    <label className="block text-sm font-medium text-foreground mb-2">Ready Date</label>
+                    <Input type="date" value={formData.readyDate} onChange={(e) => setFormData({ ...formData, readyDate: e.target.value })} className="h-12" />
                   </div>
                   <div>
-                    <label className="block text-sm font-medium text-foreground mb-2">
-                      Special Requirements
-                    </label>
-                    <Textarea
-                      maxLength={1000}
-                      value={formData.specialRequirements}
-                      onChange={(e) =>
-                        setFormData({ ...formData, specialRequirements: e.target.value })
-                      }
-                      placeholder="Jobsite delivery, crane needed, limited access, etc."
-                      className="min-h-[100px] resize-none"
-                    />
+                    <label className="block text-sm font-medium text-foreground mb-2">Special Requirements</label>
+                    <Textarea maxLength={1000} value={formData.specialRequirements} onChange={(e) => setFormData({ ...formData, specialRequirements: e.target.value })} placeholder="Jobsite delivery, crane needed, limited access, etc." className="min-h-[100px] resize-none" />
                   </div>
-                  <Button
-                    type="submit"
-                    variant="hero"
-                    size="xl"
-                    className="w-full"
-                    disabled={isSubmitting}
-                  >
-                    {isSubmitting ? (
-                      "Sending..."
-                    ) : (
+                  <Button type="submit" variant="hero" size="xl" className="w-full" disabled={isSubmitting}>
+                    {isSubmitting ? "Sending..." : (
                       <>
                         Submit Quote Request
                         <Send className="w-5 h-5" />

@@ -3,16 +3,15 @@ import { serve } from "https://deno.land/std@0.190.0/http/server.ts";
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
   "Access-Control-Allow-Headers":
-    "authorization, x-client-info, apikey, content-type",
+    "authorization, x-client-info, apikey, content-type, x-supabase-client-platform, x-supabase-client-platform-version, x-supabase-client-runtime, x-supabase-client-runtime-version",
 };
 
 // Simple in-memory rate limiter
 const rateLimitMap = new Map<string, { count: number; resetTime: number }>();
-const RATE_LIMIT_WINDOW_MS = 60 * 1000; // 1 minute
-const MAX_REQUESTS_PER_WINDOW = 5; // 5 requests per minute per IP
+const RATE_LIMIT_WINDOW_MS = 60 * 1000;
+const MAX_REQUESTS_PER_WINDOW = 5;
 
 const getRateLimitKey = (req: Request): string => {
-  // Try to get client IP from various headers
   const forwarded = req.headers.get("x-forwarded-for");
   const realIp = req.headers.get("x-real-ip");
   return forwarded?.split(",")[0]?.trim() || realIp || "unknown";
@@ -22,7 +21,6 @@ const isRateLimited = (key: string): boolean => {
   const now = Date.now();
   const record = rateLimitMap.get(key);
   
-  // Clean up old entries periodically
   if (rateLimitMap.size > 10000) {
     for (const [k, v] of rateLimitMap.entries()) {
       if (v.resetTime < now) rateLimitMap.delete(k);
@@ -42,7 +40,6 @@ const isRateLimited = (key: string): boolean => {
   return false;
 };
 
-// Input validation helpers
 const isValidEmail = (email: string): boolean => {
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
   return emailRegex.test(email);
@@ -59,6 +56,12 @@ const sanitizeHtml = (str: string): string => {
 
 const validateInput = (data: Record<string, unknown>): { valid: boolean; errors: string[] } => {
   const errors: string[] = [];
+  
+  // Honeypot check — if filled, it's a bot
+  if (data._honeypot && typeof data._honeypot === 'string' && data._honeypot.trim().length > 0) {
+    // Silently reject but return success to not tip off bots
+    return { valid: false, errors: ['__honeypot__'] };
+  }
   
   if (typeof data.name !== 'string' || data.name.trim().length === 0) {
     errors.push('Name is required');
@@ -88,12 +91,10 @@ const validateInput = (data: Record<string, unknown>): { valid: boolean; errors:
 };
 
 const handler = async (req: Request): Promise<Response> => {
-  // Handle CORS preflight requests
   if (req.method === "OPTIONS") {
     return new Response(null, { headers: corsHeaders });
   }
 
-  // Rate limiting check
   const clientKey = getRateLimitKey(req);
   if (isRateLimited(clientKey)) {
     console.warn("Rate limit exceeded for:", clientKey);
@@ -109,8 +110,17 @@ const handler = async (req: Request): Promise<Response> => {
   try {
     const rawData = await req.json();
     
-    // Validate input
     const validation = validateInput(rawData);
+    
+    // Honeypot triggered — return fake success
+    if (!validation.valid && validation.errors.includes('__honeypot__')) {
+      console.warn("Honeypot triggered, rejecting silently");
+      return new Response(JSON.stringify({ success: true }), {
+        status: 200,
+        headers: { "Content-Type": "application/json", ...corsHeaders },
+      });
+    }
+    
     if (!validation.valid) {
       console.error("Validation failed:", validation.errors);
       return new Response(
@@ -122,7 +132,6 @@ const handler = async (req: Request): Promise<Response> => {
       );
     }
     
-    // Sanitize inputs for HTML
     const name = sanitizeHtml(rawData.name.trim());
     const email = rawData.email.trim().toLowerCase();
     const phone = sanitizeHtml(rawData.phone.trim());
@@ -130,11 +139,9 @@ const handler = async (req: Request): Promise<Response> => {
 
     console.log("Sending contact email from:", name, email);
     
-    // Dynamic import of Resend
     const { Resend } = await import("https://esm.sh/resend@2.0.0");
     const resend = new Resend(Deno.env.get("RESEND_API_KEY"));
 
-    // Send notification email to business
     const businessEmailResponse = await resend.emails.send({
       from: "American Lady Transport <noreply@usealt.com>",
       to: ["info@usealt.com"],
@@ -151,7 +158,6 @@ const handler = async (req: Request): Promise<Response> => {
 
     console.log("Business email sent:", businessEmailResponse);
 
-    // Send confirmation email to customer
     const customerEmailResponse = await resend.emails.send({
       from: "American Lady Transport <noreply@usealt.com>",
       to: [email],

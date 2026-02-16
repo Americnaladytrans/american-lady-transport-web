@@ -7,6 +7,15 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
+import { z } from "zod";
+
+const contactSchema = z.object({
+  name: z.string().trim().min(1, "Name is required").max(100, "Name must be less than 100 characters"),
+  company: z.string().max(100, "Company must be less than 100 characters").optional(),
+  email: z.string().trim().email("Invalid email address").max(255, "Email must be less than 255 characters"),
+  phone: z.string().max(20, "Phone must be less than 20 characters").optional(),
+  message: z.string().trim().min(1, "Message is required").max(2000, "Message must be less than 2000 characters"),
+});
 
 const contactInfo = [
   {
@@ -46,10 +55,24 @@ const ContactPage = () => {
     phone: "",
     message: "",
   });
+  const [honeypot, setHoneypot] = useState("");
+  const [errors, setErrors] = useState<Record<string, string>>({});
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setErrors({});
+
+    const result = contactSchema.safeParse(formData);
+    if (!result.success) {
+      const fieldErrors: Record<string, string> = {};
+      result.error.errors.forEach((err) => {
+        if (err.path[0]) fieldErrors[err.path[0] as string] = err.message;
+      });
+      setErrors(fieldErrors);
+      return;
+    }
+
     setIsSubmitting(true);
     try {
       const fullMessage = formData.company
@@ -60,16 +83,16 @@ const ContactPage = () => {
         body: {
           name: formData.name,
           email: formData.email,
-          phone: formData.phone,
+          phone: formData.phone || "",
           message: fullMessage,
+          _honeypot: honeypot,
         },
       });
       if (error) throw error;
 
       toast({
         title: "Message Sent!",
-        description:
-          "Thank you for contacting American Lady Transportation. We'll be in touch soon.",
+        description: "Thank you for contacting American Lady Transportation. We'll be in touch soon.",
       });
       setFormData({ name: "", company: "", email: "", phone: "", message: "" });
     } catch (error: any) {
@@ -99,8 +122,7 @@ const ContactPage = () => {
               <span className="text-patriot-red">Transportation</span>
             </h1>
             <p className="text-primary-foreground/70 text-lg max-w-3xl mx-auto">
-              Freight broker in Willis, TX. Reach out today for a free quote or to discuss your
-              freight needs.
+              Freight broker in Willis, TX. Reach out today for a free quote or to discuss your freight needs.
             </p>
           </div>
         </section>
@@ -115,24 +137,34 @@ const ContactPage = () => {
                   Send Us a Message
                 </h2>
                 <form onSubmit={handleSubmit} className="space-y-5">
+                  {/* Honeypot - hidden from real users */}
+                  <div className="absolute -left-[9999px]" aria-hidden="true">
+                    <label htmlFor="website_url">Website</label>
+                    <input
+                      type="text"
+                      id="website_url"
+                      name="website_url"
+                      tabIndex={-1}
+                      autoComplete="off"
+                      value={honeypot}
+                      onChange={(e) => setHoneypot(e.target.value)}
+                    />
+                  </div>
+
                   <div className="grid sm:grid-cols-2 gap-4">
                     <div>
-                      <label className="block text-sm font-medium text-foreground mb-2">
-                        Name *
-                      </label>
+                      <label className="block text-sm font-medium text-foreground mb-2">Name *</label>
                       <Input
-                        required
                         maxLength={100}
                         value={formData.name}
                         onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                         placeholder="John Smith"
                         className="h-12"
                       />
+                      {errors.name && <p className="text-destructive text-sm mt-1">{errors.name}</p>}
                     </div>
                     <div>
-                      <label className="block text-sm font-medium text-foreground mb-2">
-                        Company
-                      </label>
+                      <label className="block text-sm font-medium text-foreground mb-2">Company</label>
                       <Input
                         maxLength={100}
                         value={formData.company}
@@ -144,23 +176,19 @@ const ContactPage = () => {
                   </div>
                   <div className="grid sm:grid-cols-2 gap-4">
                     <div>
-                      <label className="block text-sm font-medium text-foreground mb-2">
-                        Email *
-                      </label>
+                      <label className="block text-sm font-medium text-foreground mb-2">Email *</label>
                       <Input
                         type="email"
-                        required
                         maxLength={255}
                         value={formData.email}
                         onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                         placeholder="john@company.com"
                         className="h-12"
                       />
+                      {errors.email && <p className="text-destructive text-sm mt-1">{errors.email}</p>}
                     </div>
                     <div>
-                      <label className="block text-sm font-medium text-foreground mb-2">
-                        Phone
-                      </label>
+                      <label className="block text-sm font-medium text-foreground mb-2">Phone</label>
                       <Input
                         maxLength={20}
                         value={formData.phone}
@@ -171,28 +199,18 @@ const ContactPage = () => {
                     </div>
                   </div>
                   <div>
-                    <label className="block text-sm font-medium text-foreground mb-2">
-                      Message *
-                    </label>
+                    <label className="block text-sm font-medium text-foreground mb-2">Message *</label>
                     <Textarea
-                      required
                       maxLength={2000}
                       value={formData.message}
                       onChange={(e) => setFormData({ ...formData, message: e.target.value })}
                       placeholder="Tell us about your freight needs..."
                       className="min-h-[150px] resize-none"
                     />
+                    {errors.message && <p className="text-destructive text-sm mt-1">{errors.message}</p>}
                   </div>
-                  <Button
-                    type="submit"
-                    variant="hero"
-                    size="xl"
-                    className="w-full"
-                    disabled={isSubmitting}
-                  >
-                    {isSubmitting ? (
-                      "Sending..."
-                    ) : (
+                  <Button type="submit" variant="hero" size="xl" className="w-full" disabled={isSubmitting}>
+                    {isSubmitting ? "Sending..." : (
                       <>
                         Send Message
                         <Send className="w-5 h-5" />
@@ -211,19 +229,13 @@ const ContactPage = () => {
                 </p>
                 <div className="grid sm:grid-cols-2 gap-6">
                   {contactInfo.map((info, index) => (
-                    <div
-                      key={index}
-                      className="bg-card rounded-xl p-6 border border-border"
-                    >
+                    <div key={index} className="bg-card rounded-xl p-6 border border-border">
                       <div className="w-12 h-12 rounded-lg bg-primary/10 flex items-center justify-center mb-4">
                         <info.icon className="w-6 h-6 text-primary" />
                       </div>
                       <div className="text-sm text-muted-foreground mb-1">{info.label}</div>
                       {info.href ? (
-                        <a
-                          href={info.href}
-                          className="font-semibold text-foreground hover:text-patriot-red transition-colors"
-                        >
+                        <a href={info.href} className="font-semibold text-foreground hover:text-patriot-red transition-colors">
                           {info.value}
                         </a>
                       ) : (
@@ -234,12 +246,9 @@ const ContactPage = () => {
                   ))}
                 </div>
 
-                {/* Map Placeholder */}
                 <div className="bg-primary rounded-xl p-8 text-center">
                   <MapPin className="w-12 h-12 text-patriot-red mx-auto mb-4" />
-                  <h4 className="font-serif text-xl font-bold text-primary-foreground mb-2">
-                    Willis, Texas
-                  </h4>
+                  <h4 className="font-serif text-xl font-bold text-primary-foreground mb-2">Willis, Texas</h4>
                   <p className="text-primary-foreground/70">
                     Proudly serving shippers and carriers across the United States and Canada.
                   </p>
