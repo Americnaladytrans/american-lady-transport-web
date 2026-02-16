@@ -1,16 +1,20 @@
 import { useState } from "react";
 import { Menu, X, Phone } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { Link, useLocation } from "react-router-dom";
 import logo from "@/assets/logo.png";
 
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const location = useLocation();
 
   const navLinks = [
-    { href: "#services", label: "Services" },
-    { href: "#about", label: "About Us" },
-    { href: "#why-us", label: "Why Choose Us" },
-    { href: "#contact", label: "Contact" },
+    { href: "/services", label: "Services" },
+    { href: "/us-canada-cross-border-freight", label: "Cross-Border" },
+    { href: "/shippers", label: "Shippers" },
+    { href: "/carriers", label: "Carriers" },
+    { href: "/about", label: "About" },
+    { href: "/contact", label: "Contact" },
   ];
 
   return (
@@ -18,22 +22,26 @@ const Header = () => {
       <div className="container mx-auto px-4">
         <div className="flex items-center justify-center h-28 relative">
           {/* Desktop Navigation - Left */}
-          <nav className="hidden lg:flex items-center gap-8 absolute left-0">
+          <nav className="hidden lg:flex items-center gap-6 absolute left-0">
             {navLinks.map((link) => (
-              <a
+              <Link
                 key={link.href}
-                href={link.href}
-                className="text-primary-foreground/80 hover:text-primary-foreground transition-colors font-medium"
+                to={link.href}
+                className={`text-sm font-medium transition-colors ${
+                  location.pathname === link.href
+                    ? "text-patriot-red"
+                    : "text-primary-foreground/80 hover:text-primary-foreground"
+                }`}
               >
                 {link.label}
-              </a>
+              </Link>
             ))}
           </nav>
 
           {/* Logo - Centered */}
-          <a href="#" className="flex items-center">
+          <Link to="/" className="flex items-center">
             <img src={logo} alt="American Lady Transport LLC" className="h-24 w-auto" />
-          </a>
+          </Link>
 
           {/* Mobile Menu Button - Right */}
           <button
@@ -50,22 +58,26 @@ const Header = () => {
           <div className="lg:hidden py-4 border-t border-primary-foreground/10 animate-fade-in">
             <nav className="flex flex-col gap-4">
               {navLinks.map((link) => (
-                <a
+                <Link
                   key={link.href}
-                  href={link.href}
-                  className="text-primary-foreground/80 hover:text-primary-foreground transition-colors font-medium py-2"
+                  to={link.href}
+                  className={`font-medium py-2 transition-colors ${
+                    location.pathname === link.href
+                      ? "text-patriot-red"
+                      : "text-primary-foreground/80 hover:text-primary-foreground"
+                  }`}
                   onClick={() => setIsMenuOpen(false)}
                 >
                   {link.label}
-                </a>
+                </Link>
               ))}
-              <a href="tel:+18172492990" className="flex items-center gap-2 text-primary-foreground/80 py-2">
+              <a
+                href="tel:+18172492990"
+                className="flex items-center gap-2 text-primary-foreground/80 py-2"
+              >
                 <Phone className="w-4 h-4" />
                 <span className="font-medium">(817) 249-2990</span>
               </a>
-              <Button variant="hero" size="lg" asChild className="mt-2">
-                <a href="#contact">Contact Us</a>
-              </Button>
             </nav>
           </div>
         )}
