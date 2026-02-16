@@ -27,9 +27,9 @@ const Header = () => {
               <img src={logo} alt="American Lady Transport LLC" className="h-20 w-auto" />
             </Link>
 
-            {/* Mobile Menu Button - Right */}
+            {/* Menu Button - Right (all screen sizes) */}
             <button
-              className="lg:hidden text-primary-foreground p-2 absolute right-0"
+              className="text-primary-foreground p-2 absolute right-0"
               onClick={() => setIsMenuOpen(!isMenuOpen)}
               aria-label="Toggle menu"
             >
@@ -39,30 +39,9 @@ const Header = () => {
         </div>
       </div>
 
-      {/* Desktop Navigation Bar - Below logo */}
-      <nav className="hidden lg:block bg-navy-dark/95 backdrop-blur-md border-b border-primary-foreground/10">
-        <div className="container mx-auto px-4">
-          <div className="flex items-center justify-center gap-8 h-11">
-            {navLinks.map((link) => (
-              <Link
-                key={link.href}
-                to={link.href}
-                className={`text-sm font-medium tracking-wide uppercase transition-colors ${
-                  location.pathname === link.href
-                    ? "text-patriot-red"
-                    : "text-primary-foreground/70 hover:text-primary-foreground"
-                }`}
-              >
-                {link.label}
-              </Link>
-            ))}
-          </div>
-        </div>
-      </nav>
-
-      {/* Mobile Navigation */}
+      {/* Dropdown Navigation (all screen sizes) */}
       {isMenuOpen && (
-        <div className="lg:hidden bg-primary/95 backdrop-blur-md py-4 border-b border-primary-foreground/10 animate-fade-in">
+        <div className="bg-primary/95 backdrop-blur-md py-4 border-b border-primary-foreground/10 animate-fade-in">
           <div className="container mx-auto px-4">
             <nav className="flex flex-col gap-4">
               {navLinks.map((link) => (
