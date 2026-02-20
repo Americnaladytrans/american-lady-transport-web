@@ -98,6 +98,11 @@ const WhyChooseUs = () => {
             <Button variant="hero-outline" size="xl" asChild>
               <Link to="/contact">Contact Us</Link>
             </Button>
+            <Button variant="hero-outline" size="xl" asChild>
+              <a href="https://partialtruckloadratingtool.com" target="_blank" rel="noopener noreferrer">
+                Partial Truckload Calculator
+              </a>
+            </Button>
           </div>
         </div>
       </div>
