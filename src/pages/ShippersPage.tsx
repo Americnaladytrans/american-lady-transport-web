@@ -1,6 +1,7 @@
 import { useState } from "react";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
+import SEOHead from "@/components/SEOHead";
 import { CheckCircle, Send } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -22,10 +23,12 @@ const quoteSchema = z.object({
 });
 
 const bullets = [
-  "Single point of contact for all your lanes across the U.S. and into Canada",
+  "Single point of contact for all your freight lanes across the U.S. and into Canada",
   "Real-time updates and proactive communication on every active load",
   "Flexible capacity for both spot shipments and ongoing commitments",
   "Access to a broad carrier network for construction machinery, construction materials, HVAC duct, sand blasters, and oilfield freight",
+  "Affordable freight solutions for small businesses and enterprise shippers",
+  "Competitive truck shipping rates with transparent pricing",
 ];
 
 const ShippersPage = () => {
@@ -105,21 +108,26 @@ Special Requirements: ${formData.specialRequirements}
 
   return (
     <div className="min-h-screen">
+      <SEOHead
+        title="Freight Solutions for Shippers | Get a Free Quote | American Lady Transport"
+        description="Get competitive freight shipping rates from a trusted Texas freight broker. FTL, LTL, flatbed, and expedited freight quotes. Free estimates for construction, oilfield, and industrial shipments nationwide."
+        canonicalPath="/shippers"
+      />
       <Header />
       <main>
         {/* Hero */}
         <section className="pt-40 pb-20 bg-primary">
           <div className="container mx-auto px-4 text-center">
             <span className="text-patriot-red font-semibold text-sm tracking-wider uppercase">
-              For Shippers
+              Freight Shipping for Shippers
             </span>
             <h1 className="font-serif text-4xl md:text-5xl lg:text-6xl font-bold text-primary-foreground mt-4 mb-6">
               Freight Solutions for <span className="text-patriot-red">Shippers</span>
             </h1>
             <p className="text-primary-foreground/70 text-lg max-w-3xl mx-auto">
-              As a licensed freight broker, American Lady Transportation matches your freight
-              profile with dependable carriers, negotiates competitive rates, and manages every
-              step from pickup to proof of delivery so you can focus on your business.
+              As a licensed freight broker and 3PL logistics provider, American Lady Transportation matches
+              your freight profile with dependable carriers, negotiates competitive rates, and manages every
+              step from pickup to proof of delivery — so you can focus on your business.
             </p>
           </div>
         </section>
@@ -131,7 +139,7 @@ Special Requirements: ${formData.specialRequirements}
               {/* Benefits */}
               <div>
                 <h2 className="font-serif text-3xl font-bold text-foreground mb-8">
-                  Why Ship with American Lady
+                  Why Ship with American Lady Transport
                 </h2>
                 <div className="space-y-5 mb-10">
                   {bullets.map((bullet, index) => (
@@ -139,19 +147,21 @@ Special Requirements: ${formData.specialRequirements}
                       <CheckCircle className="w-5 h-5 text-patriot-red mt-0.5 flex-shrink-0" />
                       <span className="text-foreground text-lg">{bullet}</span>
                     </div>
-                  ))}
+                  ))
+                  }
                 </div>
                 <p className="text-muted-foreground leading-relaxed">
-                  Whether you're a freight broker for construction materials, need HVAC duct
-                  shipping, or are looking for an oilfield equipment freight partner — we've got
-                  the capacity and the expertise.
+                  Whether you need a freight broker for construction materials, HVAC duct
+                  shipping, oilfield equipment freight, or any industrial load — we've got
+                  the capacity, the expertise, and the nationwide freight shipping solutions
+                  to get your freight delivered on time.
                 </p>
               </div>
 
               {/* Quote Form */}
               <div className="bg-card rounded-2xl p-8 shadow-elegant border border-border">
                 <h3 className="font-serif text-2xl font-bold text-foreground mb-6">
-                  Request a Freight Quote
+                  Request a Free Freight Quote
                 </h3>
                 <form onSubmit={handleSubmit} className="space-y-5">
                   {/* Honeypot */}

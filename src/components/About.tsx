@@ -66,7 +66,7 @@ const About = () => {
               <div className="w-32 h-32 mx-auto rounded-full overflow-hidden mb-8">
                 <img
                   src={logoBadge}
-                  alt="American Lady Transport logo"
+                  alt="American Lady Transport freight brokerage logo - Willis Texas"
                   className="w-full h-full object-contain"
                 />
               </div>

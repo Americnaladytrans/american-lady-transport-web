@@ -1,6 +1,7 @@
 import { useState } from "react";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
+import SEOHead from "@/components/SEOHead";
 import { MapPin, Phone, Mail, Clock, Send } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -109,20 +110,26 @@ const ContactPage = () => {
 
   return (
     <div className="min-h-screen">
+      <SEOHead
+        title="Contact American Lady Transport | Freight Broker Willis, TX"
+        description="Contact American Lady Transport for freight quotes, carrier partnerships, or logistics inquiries. Call (817) 249-2990 or send a message. Willis, TX freight broker serving the U.S. and Canada."
+        canonicalPath="/contact"
+      />
       <Header />
       <main>
         {/* Hero */}
         <section className="pt-40 pb-20 bg-primary">
           <div className="container mx-auto px-4 text-center">
             <span className="text-patriot-red font-semibold text-sm tracking-wider uppercase">
-              Contact Us
+              Contact Our Freight Brokerage
             </span>
             <h1 className="font-serif text-4xl md:text-5xl lg:text-6xl font-bold text-primary-foreground mt-4 mb-6">
               Contact American Lady{" "}
               <span className="text-patriot-red">Transportation</span>
             </h1>
             <p className="text-primary-foreground/70 text-lg max-w-3xl mx-auto">
-              Freight broker in Willis, TX. Reach out today for a free quote or to discuss your freight needs.
+              Freight broker in Willis, TX — serving shippers and carriers across the U.S. and Canada.
+              Reach out today for a free freight quote or to discuss your logistics needs.
             </p>
           </div>
         </section>
@@ -225,7 +232,8 @@ const ContactPage = () => {
                 <h2 className="font-serif text-2xl font-bold text-foreground">Get in Touch</h2>
                 <p className="text-muted-foreground">
                   Whether you're a shipper looking for reliable freight solutions or a carrier
-                  interested in partnership opportunities, we'd love to hear from you.
+                  interested in partnership opportunities, we'd love to hear from you. As a trusted
+                  logistics company near Willis, TX, we're here 7 days a week.
                 </p>
                 <div className="grid sm:grid-cols-2 gap-6">
                   {contactInfo.map((info, index) => (
@@ -250,7 +258,8 @@ const ContactPage = () => {
                   <MapPin className="w-12 h-12 text-patriot-red mx-auto mb-4" />
                   <h4 className="font-serif text-xl font-bold text-primary-foreground mb-2">Willis, Texas</h4>
                   <p className="text-primary-foreground/70">
-                    Proudly serving shippers and carriers across the United States and Canada.
+                    Proudly serving shippers and carriers across the United States and Canada from the
+                    Houston metro area.
                   </p>
                 </div>
               </div>

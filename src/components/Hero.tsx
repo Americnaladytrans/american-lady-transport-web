@@ -20,15 +20,15 @@ const Hero = () => {
         <div className="max-w-4xl mx-auto text-center">
           {/* Main Heading */}
           <h1 className="font-serif text-4xl md:text-5xl lg:text-7xl font-bold text-cream mb-6 animate-fade-up animation-delay-100 leading-tight">
-            Nationwide Freight Brokerage
+            Trusted Freight Brokerage & 3PL Logistics
             <span className="block text-patriot-red">Across the U.S. and Canada</span>
           </h1>
 
           {/* Subheading */}
           <p className="text-lg md:text-xl text-cream/80 mb-4 max-w-2xl mx-auto animate-fade-up animation-delay-200 leading-relaxed">
-            American Lady Transportation is a Texas-based freight brokerage that connects
-            shippers with vetted carriers for on-time, hassle-free delivery anywhere in the
-            continental U.S. and cross-border into Canada.
+            American Lady Transportation is a Texas-based freight brokerage and 3PL logistics
+            company connecting shippers with vetted carriers for on-time, hassle-free delivery
+            anywhere in the continental U.S. and cross-border into Canada.
           </p>
           <p className="text-base text-cream/60 mb-10 max-w-2xl mx-auto animate-fade-up animation-delay-200">
             We specialize in construction-related freight, oilfield freight, and other industrial

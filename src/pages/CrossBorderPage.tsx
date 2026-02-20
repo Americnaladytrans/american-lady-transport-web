@@ -1,5 +1,6 @@
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
+import SEOHead from "@/components/SEOHead";
 import { Globe, CheckCircle, ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
@@ -9,27 +10,33 @@ const bullets = [
   "Support with documentation details and coordination alongside your customs brokerage partners",
   "Options for both full truckload and LTL palletized freight",
   "Routing designed to minimize border wait times and service interruptions",
+  "Experience with construction materials, industrial equipment, and manufacturing freight",
 ];
 
 const CrossBorderPage = () => {
   return (
     <div className="min-h-screen">
+      <SEOHead
+        title="U.S.–Canada Cross-Border Freight Shipping | American Lady Transport"
+        description="Cross-border freight broker between the U.S. and Canada. FTL and LTL shipping with customs coordination, optimized border routing, and reliable transit times. Based in Willis, TX."
+        canonicalPath="/us-canada-cross-border-freight"
+      />
       <Header />
       <main>
         {/* Hero */}
         <section className="pt-40 pb-20 bg-primary">
           <div className="container mx-auto px-4 text-center">
             <span className="text-patriot-red font-semibold text-sm tracking-wider uppercase">
-              Cross-Border Freight
+              Cross-Border Freight Brokerage
             </span>
             <h1 className="font-serif text-4xl md:text-5xl lg:text-6xl font-bold text-primary-foreground mt-4 mb-6">
-              Cross-Border Shipping Between the{" "}
-              <span className="text-patriot-red">U.S. and Canada</span>
+              Cross-Border Freight Shipping:{" "}
+              <span className="text-patriot-red">U.S. to Canada & Canada to U.S.</span>
             </h1>
             <p className="text-primary-foreground/70 text-lg max-w-3xl mx-auto">
-              American Lady Transportation arranges cross-border truckload and LTL freight between
-              the U.S. and Canada, coordinating with your customs broker to keep freight moving
-              smoothly and reduce delays at the border.
+              American Lady Transportation is a cross-border freight broker arranging truckload and LTL
+              freight between the United States and Canada. We coordinate with your customs broker to keep
+              freight moving smoothly and reduce delays at the border.
             </p>
           </div>
         </section>
@@ -43,12 +50,14 @@ const CrossBorderPage = () => {
                   <Globe className="w-10 h-10 text-primary" />
                 </div>
                 <h2 className="font-serif text-3xl font-bold text-foreground mb-6">
-                  Shipping freight from the U.S. to Canada — and back
+                  Reliable Freight Shipping from the U.S. to Canada — and Back
                 </h2>
                 <p className="text-muted-foreground text-lg leading-relaxed mb-8">
                   As a Canada cross-border freight broker, we handle the logistics so you can focus
                   on your business. Our team coordinates documentation and works alongside your
-                  customs brokerage partners to keep your freight on schedule.
+                  customs brokerage partners to keep your freight on schedule. Whether you need
+                  nationwide freight shipping solutions that extend north of the border or regular
+                  cross-border lanes, we deliver.
                 </p>
                 <div className="space-y-4">
                   {bullets.map((bullet, index) => (
@@ -62,11 +71,12 @@ const CrossBorderPage = () => {
 
               <div className="bg-primary rounded-2xl p-10 text-center">
                 <h3 className="font-serif text-2xl font-bold text-primary-foreground mb-4">
-                  U.S.–Canada Coverage
+                  U.S.–Canada Freight Coverage
                 </h3>
                 <p className="text-primary-foreground/70 mb-8">
                   Full truckload and LTL freight between major markets in both countries with
-                  routing optimized for minimal border delays.
+                  routing optimized for minimal border delays. Serving Houston, Dallas, Toronto,
+                  Montreal, Vancouver, and all major corridors.
                 </p>
                 <Button variant="hero" size="xl" asChild>
                   <Link to="/shippers" className="group">

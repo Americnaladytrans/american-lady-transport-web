@@ -12,7 +12,7 @@ const Footer = () => {
           {/* Brand */}
           <div className="lg:col-span-2">
             <div className="flex items-center gap-4 mb-6">
-              <img src={logo} alt="American Lady Transport LLC" className="h-16 w-auto" />
+              <img src={logo} alt="American Lady Transport LLC - freight brokerage and 3PL logistics Willis Texas" className="h-16 w-auto" />
               <div>
                 <h3 className="font-serif text-xl font-bold">
                   American Lady Transportation
@@ -21,8 +21,8 @@ const Footer = () => {
               </div>
             </div>
             <p className="text-primary-foreground/70 max-w-md leading-relaxed mb-6">
-              Freight brokerage services across the United States and Canada. Willis, TX-based
-              licensed and bonded freight broker, MC170463.
+              Freight brokerage and 3PL logistics services across the United States and Canada.
+              Woman-owned, Willis, TX-based, licensed and bonded freight broker — MC170463.
             </p>
             <div className="flex gap-4">
               <a
