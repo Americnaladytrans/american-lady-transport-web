@@ -30,7 +30,7 @@ const AboutPage = () => {
             </span>
             <h1 className="font-serif text-4xl md:text-5xl lg:text-6xl font-bold text-primary-foreground mt-4 mb-6">
               About American Lady{" "}
-              <span className="text-patriot-red">Transportation</span>
+              <span className="text-patriot-red">Transport</span>
             </h1>
             <p className="text-primary-foreground/70 text-lg max-w-3xl mx-auto">
               Willis, TX-based freight brokerage and 3PL logistics company. Licensed, bonded, and serving shippers across North America since 1984.
@@ -48,7 +48,7 @@ const AboutPage = () => {
                 </h2>
                 <div className="space-y-4 text-muted-foreground text-lg leading-relaxed">
                   <p>
-                    American Lady Transportation is a Willis, TX-based, licensed and bonded freight
+                    American Lady Transport is a Willis, TX-based, licensed and bonded freight
                     broker coordinating shipments throughout the United States and Canada. As a leading
                     3PL logistics provider, we focus on construction machinery, construction materials,
                     HVAC duct, sand blasters, oilfield equipment, and other industrial freight that
@@ -93,7 +93,7 @@ const AboutPage = () => {
                     />
                   </div>
                   <h3 className="font-serif text-2xl font-bold text-primary-foreground mb-4">
-                    American Lady Transportation
+                    American Lady Transport
                   </h3>
                   <p className="text-primary-foreground/70 mb-2">Willis, Texas</p>
                   <p className="text-primary-foreground/50 text-sm mb-6">MC170463</p>

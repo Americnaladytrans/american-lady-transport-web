@@ -15,7 +15,7 @@ const Footer = () => {
               <img src={logo} alt="American Lady Transport LLC - freight brokerage and 3PL logistics Willis Texas" className="h-16 w-auto" />
               <div>
                 <h3 className="font-serif text-xl font-bold">
-                  American Lady Transportation
+                  American Lady Transport
                 </h3>
                 <p className="text-sm text-primary-foreground/70">Freight Brokerage</p>
               </div>
@@ -99,7 +99,7 @@ const Footer = () => {
         {/* Bottom Bar */}
         <div className="border-t border-primary-foreground/10 mt-12 pt-8 text-center">
           <p className="text-sm text-primary-foreground/60">
-            © {currentYear} American Lady Transportation. All rights reserved. MC170463.
+            © {currentYear} American Lady Transport. All rights reserved. MC170463.
           </p>
         </div>
       </div>
