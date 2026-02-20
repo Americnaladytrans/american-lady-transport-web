@@ -9,15 +9,15 @@ const trustPoints = [
   "Vetted carrier network with safety and compliance standards",
   "24/7 communication on active loads",
   "On-time performance and service reliability as our primary KPIs",
-  "Woman-owned freight brokerage — a unique differentiator in the logistics industry",
+  "Trusted freight brokerage — a proven partner in the logistics industry",
 ];
 
 const AboutPage = () => {
   return (
     <div className="min-h-screen">
       <SEOHead
-        title="About American Lady Transport | Woman-Owned Freight Broker | Willis, TX"
-        description="American Lady Transport is a woman-owned, licensed and bonded freight brokerage based in Willis, TX with 40+ years in the logistics industry. Trusted 3PL partner for shippers and carriers across the U.S. and Canada."
+        title="About American Lady Transport | Freight Broker | Willis, TX"
+        description="American Lady Transport is a licensed and bonded freight brokerage based in Willis, TX with 40+ years in the logistics industry. Trusted 3PL partner for shippers and carriers across the U.S. and Canada."
         canonicalPath="/about"
       />
       <Header />
@@ -33,7 +33,7 @@ const AboutPage = () => {
               <span className="text-patriot-red">Transportation</span>
             </h1>
             <p className="text-primary-foreground/70 text-lg max-w-3xl mx-auto">
-              Woman-owned, Willis, TX-based freight brokerage and 3PL logistics company. Licensed, bonded, and serving shippers across North America since 1984.
+              Willis, TX-based freight brokerage and 3PL logistics company. Licensed, bonded, and serving shippers across North America since 1984.
             </p>
           </div>
         </section>
@@ -56,7 +56,7 @@ const AboutPage = () => {
                   </p>
                   <p>
                     American Lady started in Ft Worth, Texas, in 1984 and relocated to Willis,
-                    Texas, in 2024. As a woman-owned freight brokerage, our mission remains simple:
+                    Texas, in 2024. Our mission remains simple:
                     provide honest, reliable logistics services that shippers, receivers, and carriers
                     can count on.
                   </p>
