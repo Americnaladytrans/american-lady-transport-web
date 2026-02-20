@@ -37,7 +37,7 @@ const benefits = [
   "Single point of contact from quote to proof of delivery",
   "Competitive pricing backed by a network of vetted carriers",
   "Flexible options for both spot and recurring freight",
-  "Woman-owned freight brokerage with 40+ years of industry experience",
+  "40+ years of freight brokerage experience across all 48 states",
   "Specialized capacity for construction, oilfield, and industrial freight",
 ];
 

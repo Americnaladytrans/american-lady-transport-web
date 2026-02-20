@@ -22,7 +22,7 @@ const Footer = () => {
             </div>
             <p className="text-primary-foreground/70 max-w-md leading-relaxed mb-6">
               Freight brokerage and 3PL logistics services across the United States and Canada.
-              Woman-owned, Willis, TX-based, licensed and bonded freight broker — MC170463.
+              Willis, TX-based, licensed and bonded freight broker — MC170463.
             </p>
             <div className="flex gap-4">
               <a
