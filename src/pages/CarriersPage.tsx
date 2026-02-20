@@ -1,6 +1,7 @@
 import { useState } from "react";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
+import SEOHead from "@/components/SEOHead";
 import { CheckCircle, Send } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -26,6 +27,7 @@ const bullets = [
   "Quick setup and streamlined digital onboarding",
   "Clear rate confirmations and fast access to dispatch support",
   "Opportunities for both one-off loads and regular lanes",
+  "Competitive trucking rates and on-time payment terms",
 ];
 
 const CarriersPage = () => {
@@ -103,21 +105,27 @@ Insurance: ${formData.insuranceDetails}
 
   return (
     <div className="min-h-screen">
+      <SEOHead
+        title="Carrier & Owner-Operator Freight Opportunities | American Lady Transport"
+        description="Join our carrier network for consistent freight opportunities. Flatbed, dry van, step-deck, and hotshot loads across the U.S. and Canada. Quick onboarding, competitive rates, and reliable payment."
+        canonicalPath="/carriers"
+      />
       <Header />
       <main>
         {/* Hero */}
         <section className="pt-40 pb-20 bg-primary">
           <div className="container mx-auto px-4 text-center">
             <span className="text-patriot-red font-semibold text-sm tracking-wider uppercase">
-              For Carriers
+              Carrier & Owner-Operator Freight
             </span>
             <h1 className="font-serif text-4xl md:text-5xl lg:text-6xl font-bold text-primary-foreground mt-4 mb-6">
               Freight Opportunities for{" "}
               <span className="text-patriot-red">Carriers & Owner-Operators</span>
             </h1>
             <p className="text-primary-foreground/70 text-lg max-w-3xl mx-auto">
-              We partner with professional carriers and owner-operators, offering quality freight,
-              clear communication, and on-time payment terms.
+              We partner with professional trucking companies, carriers, and owner-operators, offering
+              quality freight, clear communication, and on-time payment terms. Join our vetted carrier
+              network for consistent loads nationwide.
             </p>
           </div>
         </section>
@@ -129,7 +137,7 @@ Insurance: ${formData.insuranceDetails}
               {/* Benefits */}
               <div>
                 <h2 className="font-serif text-3xl font-bold text-foreground mb-8">
-                  Why Partner with American Lady
+                  Why Partner with American Lady Transport
                 </h2>
                 <div className="space-y-5 mb-10">
                   {bullets.map((bullet, index) => (
@@ -140,8 +148,9 @@ Insurance: ${formData.insuranceDetails}
                   ))}
                 </div>
                 <p className="text-muted-foreground leading-relaxed">
-                  Whether you're a flatbed carrier, truckload carrier, or owner-operator looking
-                  for consistent freight — our carrier onboarding is quick and straightforward.
+                  Whether you're a flatbed carrier, dry van trucking company, or owner-operator looking
+                  for consistent freight — our carrier onboarding is quick and straightforward. We value
+                  reliable carriers and build long-term logistics partnerships.
                 </p>
               </div>
 

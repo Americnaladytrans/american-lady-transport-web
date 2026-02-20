@@ -1,32 +1,39 @@
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
+import SEOHead from "@/components/SEOHead";
 import { CheckCircle } from "lucide-react";
 import logoBadge from "@/assets/logo-badge.png";
 
 const trustPoints = [
-  "Licensed freight broker operating under federal regulations",
+  "Licensed freight broker operating under federal regulations (MC 170463)",
   "Vetted carrier network with safety and compliance standards",
   "24/7 communication on active loads",
   "On-time performance and service reliability as our primary KPIs",
+  "Woman-owned freight brokerage — a unique differentiator in the logistics industry",
 ];
 
 const AboutPage = () => {
   return (
     <div className="min-h-screen">
+      <SEOHead
+        title="About American Lady Transport | Woman-Owned Freight Broker | Willis, TX"
+        description="American Lady Transport is a woman-owned, licensed and bonded freight brokerage based in Willis, TX with 40+ years in the logistics industry. Trusted 3PL partner for shippers and carriers across the U.S. and Canada."
+        canonicalPath="/about"
+      />
       <Header />
       <main>
         {/* Hero */}
         <section className="pt-40 pb-20 bg-primary">
           <div className="container mx-auto px-4 text-center">
             <span className="text-patriot-red font-semibold text-sm tracking-wider uppercase">
-              About Us
+              About Our Freight Brokerage
             </span>
             <h1 className="font-serif text-4xl md:text-5xl lg:text-6xl font-bold text-primary-foreground mt-4 mb-6">
               About American Lady{" "}
               <span className="text-patriot-red">Transportation</span>
             </h1>
             <p className="text-primary-foreground/70 text-lg max-w-3xl mx-auto">
-              Willis, TX-based licensed and bonded freight broker, serving shippers across North America.
+              Woman-owned, Willis, TX-based freight brokerage and 3PL logistics company. Licensed, bonded, and serving shippers across North America since 1984.
             </p>
           </div>
         </section>
@@ -42,27 +49,29 @@ const AboutPage = () => {
                 <div className="space-y-4 text-muted-foreground text-lg leading-relaxed">
                   <p>
                     American Lady Transportation is a Willis, TX-based, licensed and bonded freight
-                    broker coordinating shipments throughout the United States and Canada. We focus
-                    on construction machinery, construction materials, HVAC duct, sand blasters,
-                    oilfield equipment, and other industrial freight that demands reliable capacity
-                    and experienced handling.
+                    broker coordinating shipments throughout the United States and Canada. As a leading
+                    3PL logistics provider, we focus on construction machinery, construction materials,
+                    HVAC duct, sand blasters, oilfield equipment, and other industrial freight that
+                    demands reliable capacity and experienced handling.
                   </p>
                   <p>
                     American Lady started in Ft Worth, Texas, in 1984 and relocated to Willis,
-                    Texas, in 2024. Our mission remains simple: provide honest, reliable freight
-                    brokerage services that shippers, receivers, and carriers can count on.
+                    Texas, in 2024. As a woman-owned freight brokerage, our mission remains simple:
+                    provide honest, reliable logistics services that shippers, receivers, and carriers
+                    can count on.
                   </p>
                   <p>
-                    As a Texas-based freight brokerage with over 40 years in the industry, we
-                    understand the heartbeat of American logistics. Every load matters, every
-                    deadline counts, and every relationship is built on trust.
+                    With over 40 years as a Texas-based freight brokerage, we understand the heartbeat
+                    of American logistics. Every load matters, every deadline counts, and every
+                    relationship is built on trust. That's what makes us one of the best freight brokers
+                    for small business and enterprise shippers alike.
                   </p>
                 </div>
 
                 {/* Trust Points */}
                 <div className="mt-10 space-y-4">
                   <h3 className="font-serif text-xl font-bold text-foreground mb-4">
-                    Why Trust Us
+                    Why Trust Our Logistics Company
                   </h3>
                   {trustPoints.map((point, index) => (
                     <div key={index} className="flex items-start gap-3">
@@ -79,7 +88,7 @@ const AboutPage = () => {
                   <div className="w-32 h-32 mx-auto rounded-full overflow-hidden mb-8">
                     <img
                       src={logoBadge}
-                      alt="American Lady Transport logo"
+                      alt="American Lady Transport freight brokerage logo - Willis Texas"
                       className="w-full h-full object-contain"
                     />
                   </div>
