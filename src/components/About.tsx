@@ -24,11 +24,11 @@ const About = () => {
             </span>
             <h2 className="font-serif text-3xl md:text-4xl lg:text-5xl font-bold text-foreground mt-4 mb-6">
               About American Lady{" "}
-              <span className="text-patriot-red">Transportation</span>
+              <span className="text-patriot-red">Transport</span>
             </h2>
             <div className="space-y-4 text-muted-foreground text-lg leading-relaxed">
               <p>
-                American Lady Transportation is a Willis, TX-based, licensed and bonded freight
+                American Lady Transport is a Willis, TX-based, licensed and bonded freight
                 broker coordinating shipments throughout the United States and Canada. We focus
                 on construction machinery, construction materials, HVAC duct, sand blasters,
                 oilfield equipment, and other industrial freight.
@@ -71,7 +71,7 @@ const About = () => {
                 />
               </div>
               <h3 className="font-serif text-2xl font-bold text-primary-foreground mb-4">
-                American Lady Transportation
+                American Lady Transport
               </h3>
               <p className="text-primary-foreground/70 mb-2">Willis, Texas</p>
               <p className="text-primary-foreground/50 text-sm mb-6">MC170463</p>

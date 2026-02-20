@@ -26,7 +26,7 @@ const Hero = () => {
 
           {/* Subheading */}
           <p className="text-lg md:text-xl text-cream/80 mb-4 max-w-2xl mx-auto animate-fade-up animation-delay-200 leading-relaxed">
-            American Lady Transportation is a Texas-based freight brokerage and 3PL logistics
+            American Lady Transport is a Texas-based freight brokerage and 3PL logistics
             company connecting shippers with vetted carriers for on-time, hassle-free delivery
             anywhere in the continental U.S. and cross-border into Canada.
           </p>

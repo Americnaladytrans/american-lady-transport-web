@@ -93,7 +93,7 @@ const ContactPage = () => {
 
       toast({
         title: "Message Sent!",
-        description: "Thank you for contacting American Lady Transportation. We'll be in touch soon.",
+        description: "Thank you for contacting American Lady Transport. We'll be in touch soon.",
       });
       setFormData({ name: "", company: "", email: "", phone: "", message: "" });
     } catch (error: any) {
@@ -125,7 +125,7 @@ const ContactPage = () => {
             </span>
             <h1 className="font-serif text-4xl md:text-5xl lg:text-6xl font-bold text-primary-foreground mt-4 mb-6">
               Contact American Lady{" "}
-              <span className="text-patriot-red">Transportation</span>
+              <span className="text-patriot-red">Transport</span>
             </h1>
             <p className="text-primary-foreground/70 text-lg max-w-3xl mx-auto">
               Freight broker in Willis, TX — serving shippers and carriers across the U.S. and Canada.

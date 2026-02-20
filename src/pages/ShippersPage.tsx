@@ -125,7 +125,7 @@ Special Requirements: ${formData.specialRequirements}
               Freight Solutions for <span className="text-patriot-red">Shippers</span>
             </h1>
             <p className="text-primary-foreground/70 text-lg max-w-3xl mx-auto">
-              As a licensed freight broker and 3PL logistics provider, American Lady Transportation matches
+              As a licensed freight broker and 3PL logistics provider, American Lady Transport matches
               your freight profile with dependable carriers, negotiates competitive rates, and manages every
               step from pickup to proof of delivery — so you can focus on your business.
             </p>

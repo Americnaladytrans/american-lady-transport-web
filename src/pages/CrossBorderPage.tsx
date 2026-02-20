@@ -34,7 +34,7 @@ const CrossBorderPage = () => {
               <span className="text-patriot-red">U.S. to Canada & Canada to U.S.</span>
             </h1>
             <p className="text-primary-foreground/70 text-lg max-w-3xl mx-auto">
-              American Lady Transportation is a cross-border freight broker arranging truckload and LTL
+              American Lady Transport is a cross-border freight broker arranging truckload and LTL
               freight between the United States and Canada. We coordinate with your customs broker to keep
               freight moving smoothly and reduce delays at the border.
             </p>
