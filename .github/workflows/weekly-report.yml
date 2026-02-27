@@ -19,13 +19,11 @@ jobs:
           node-version: "20"
 
       - name: Install deps
-        run: |
-          npm install node-fetch@2
-          npm install typescript ts-node @types/node @types/node-fetch@2
+        run: npm install node-fetch@2 tsx @types/node @types/node-fetch@2
 
       - name: Run weekly report script
         env:
           BLOG_WEBHOOK_URL: ${{ secrets.BLOG_WEBHOOK_URL }}
           BLOG_WEBHOOK_SECRET: ${{ secrets.BLOG_WEBHOOK_SECRET }}
           PERPLEXITY_API_KEY: ${{ secrets.PERPLEXITY_API_KEY }}
-        run: npx ts-node weekly-report.ts
+        run: npx tsx weekly-report.ts
