@@ -1,0 +1,31 @@
+name: Weekly Freight Report
+
+on:
+  schedule:
+    # Every Friday at 18:00 UTC = 12:00 Central
+    - cron: "0 18 * * FRI"
+  workflow_dispatch:
+
+jobs:
+  post-weekly-report:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Install deps
+        run: |
+          npm install node-fetch@2
+          npm install typescript ts-node @types/node @types/node-fetch@2
+
+      - name: Run weekly report script
+        env:
+          BLOG_WEBHOOK_URL: ${{ secrets.BLOG_WEBHOOK_URL }}
+          BLOG_WEBHOOK_SECRET: ${{ secrets.BLOG_WEBHOOK_SECRET }}
+          PERPLEXITY_API_KEY: ${{ secrets.PERPLEXITY_API_KEY }}
+        run: npx ts-node weekly-report.ts
