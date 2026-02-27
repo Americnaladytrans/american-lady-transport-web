@@ -1,15 +1,15 @@
-// weekly-report.ts
+// weekly-report.mjs
 import fetch from "node-fetch";
 
-const WEBHOOK_URL = process.env.BLOG_WEBHOOK_URL!;
-const WEBHOOK_SECRET = process.env.BLOG_WEBHOOK_SECRET!;
-const PERPLEXITY_API_KEY = process.env.PERPLEXITY_API_KEY!;
+const WEBHOOK_URL = process.env.BLOG_WEBHOOK_URL;
+const WEBHOOK_SECRET = process.env.BLOG_WEBHOOK_SECRET;
+const PERPLEXITY_API_KEY = process.env.PERPLEXITY_API_KEY;
 
 if (!WEBHOOK_URL || !WEBHOOK_SECRET || !PERPLEXITY_API_KEY) {
   throw new Error("Missing BLOG_WEBHOOK_URL, BLOG_WEBHOOK_SECRET, or PERPLEXITY_API_KEY env vars.");
 }
 
-function formatTitleDate(d = new Date()): string {
+function formatTitleDate(d = new Date()) {
   return d.toLocaleDateString("en-US", {
     year: "numeric",
     month: "long",
@@ -18,7 +18,7 @@ function formatTitleDate(d = new Date()): string {
   });
 }
 
-async function generateReportHtml(): Promise<{ title: string; content: string; excerpt: string }> {
+async function generateReportHtml() {
   const title = `Weekly Freight Report - ${formatTitleDate()}`;
 
   const prompt = `
@@ -70,8 +70,8 @@ Output STRICTLY as HTML (valid inside a div), with clear headings and bullet lis
     throw new Error(`Perplexity API error: ${perplexityRes.status} - ${text}`);
   }
 
-  const data: any = await perplexityRes.json();
-  const htmlContent: string = data.choices[0].message.content;
+  const data = await perplexityRes.json();
+  const htmlContent = data.choices[0].message.content;
 
   const plain = htmlContent.replace(/<[^>]*>/g, "").replace(/\s+/g, " ").trim();
   const excerpt = plain.substring(0, 250) + (plain.length > 250 ? "..." : "");
