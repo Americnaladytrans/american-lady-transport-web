@@ -20,8 +20,8 @@ jobs:
           node-version: "20"
       - name: Install deps
         run: |
-         npm install node-fetch@2
-         npm install tsx @types/node @types/node-fetch@2
+          npm install node-fetch@2
+          npm install tsx @types/node @types/node-fetch@2
       - name: Run weekly report script
         env:
           BLOG_WEBHOOK_URL: ${{ secrets.BLOG_WEBHOOK_URL }}
