@@ -1,9 +1,7 @@
-# Auto-generated weekly freight report workflow
 name: Weekly Freight Report
 
 on:
   schedule:
-    # Every Friday at 18:00 UTC = 12:00 Central
     - cron: "0 18 * * FRI"
   workflow_dispatch:
 
