@@ -28,4 +28,3 @@ jobs:
           BLOG_WEBHOOK_SECRET: ${{ secrets.BLOG_WEBHOOK_SECRET }}
           PERPLEXITY_API_KEY: ${{ secrets.PERPLEXITY_API_KEY }}
         run: npx tsx weekly-report.ts
- 
