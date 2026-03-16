@@ -1,6 +1,7 @@
 import { Phone, Mail, MapPin } from "lucide-react";
 import { Link } from "react-router-dom";
 import logo from "@/assets/logo.png";
+import VisitorCounter from "@/components/VisitorCounter";
 
 const Footer = () => {
   const currentYear = new Date().getFullYear();
