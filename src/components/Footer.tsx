@@ -1,6 +1,7 @@
 import { Phone, Mail, MapPin } from "lucide-react";
 import { Link } from "react-router-dom";
 import logo from "@/assets/logo.png";
+import VisitorCounter from "@/components/VisitorCounter";
 
 const Footer = () => {
   const currentYear = new Date().getFullYear();
@@ -98,7 +99,8 @@ const Footer = () => {
         </div>
 
         {/* Bottom Bar */}
-        <div className="border-t border-primary-foreground/10 mt-12 pt-8 text-center">
+        <div className="border-t border-primary-foreground/10 mt-12 pt-8 flex flex-col items-center gap-2">
+          <VisitorCounter />
           <p className="text-sm text-primary-foreground/60">
             © {currentYear} American Lady Transport. All rights reserved. MC170463.
           </p>

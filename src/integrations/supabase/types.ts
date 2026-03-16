@@ -50,12 +50,30 @@ export type Database = {
         }
         Relationships: []
       }
+      page_views: {
+        Row: {
+          id: string
+          page_path: string
+          view_count: number
+        }
+        Insert: {
+          id?: string
+          page_path: string
+          view_count?: number
+        }
+        Update: {
+          id?: string
+          page_path?: string
+          view_count?: number
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      increment_page_view: { Args: { p_path: string }; Returns: number }
     }
     Enums: {
       [_ in never]: never
