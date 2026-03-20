@@ -29,13 +29,33 @@ const BlogPage = () => {
   const { data: posts, isLoading } = useQuery({
     queryKey: ["blog-posts"],
     queryFn: async () => {
-      const { data, error } = await supabase
+      // Try with post_type column first; fall back to title-based inference
+      let result = await supabase
         .from("blog_posts")
         .select("id, title, slug, excerpt, published_at, post_type")
         .eq("is_published", true)
         .order("published_at", { ascending: false });
-      if (error) throw error;
-      return data as BlogPost[];
+
+      if (result.error?.code === "42703") {
+        // post_type column doesn't exist yet — query without it
+        result = await supabase
+          .from("blog_posts")
+          .select("id, title, slug, excerpt, published_at")
+          .eq("is_published", true)
+          .order("published_at", { ascending: false }) as typeof result;
+      }
+
+      if (result.error) throw result.error;
+
+      return (result.data ?? []).map((p: any) => ({
+        ...p,
+        post_type:
+          p.post_type ??
+          (p.title?.toLowerCase().includes("roundup") ||
+           p.title?.toLowerCase().includes("industry news")
+            ? "industry-news"
+            : "weekly-report"),
+      })) as BlogPost[];
     },
   });
 
