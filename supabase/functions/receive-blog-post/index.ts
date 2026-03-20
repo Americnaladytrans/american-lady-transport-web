@@ -59,7 +59,7 @@ Deno.serve(async (req) => {
     const autoExcerpt =
       excerpt || content.replace(/<[^>]*>/g, "").substring(0, 200) + "...";
 
-    const insertData: Record<string, unknown> = {
+    const baseData: Record<string, unknown> = {
       title,
       slug,
       content,
@@ -68,19 +68,26 @@ Deno.serve(async (req) => {
       published_at: new Date().toISOString(),
     };
 
-    // Include post_type and tags if provided (requires migration)
-    if (post_type) {
-      insertData.post_type = post_type;
-    }
-    if (tags && Array.isArray(tags)) {
-      insertData.tags = tags;
-    }
+    // Try with post_type/tags first; fall back without if columns don't exist yet
+    const fullData = { ...baseData };
+    if (post_type) fullData.post_type = post_type;
+    if (tags && Array.isArray(tags)) fullData.tags = tags;
 
-    const { data, error } = await supabase
+    let { data, error } = await supabase
       .from("blog_posts")
-      .insert(insertData)
+      .insert(fullData)
       .select()
       .single();
+
+    // If columns don't exist (42703), retry without post_type/tags
+    if (error && error.code === "42703") {
+      console.warn("post_type/tags columns not found, inserting without them");
+      ({ data, error } = await supabase
+        .from("blog_posts")
+        .insert(baseData)
+        .select()
+        .single());
+    }
 
     if (error) {
       throw error;
