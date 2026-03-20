@@ -1,4 +1,4 @@
-import { Phone, Mail, MapPin } from "lucide-react";
+import { Phone, Mail, MapPin, Rss } from "lucide-react";
 import { Link } from "react-router-dom";
 import logo from "@/assets/logo.png";
 import VisitorCounter from "@/components/VisitorCounter";
@@ -39,6 +39,15 @@ const Footer = () => {
                 aria-label="Email us"
               >
                 <Mail className="w-5 h-5" />
+              </a>
+              <a
+                href="https://zmyeyyzhuwzdpjinecmg.supabase.co/functions/v1/rss-feed"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="w-10 h-10 rounded-full bg-primary-foreground/10 flex items-center justify-center hover:bg-patriot-red transition-colors"
+                aria-label="RSS Feed"
+              >
+                <Rss className="w-5 h-5" />
               </a>
             </div>
           </div>

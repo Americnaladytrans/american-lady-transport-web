@@ -1,7 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { Link } from "react-router-dom";
-import { Calendar, ArrowRight } from "lucide-react";
+import { Calendar, ArrowRight, Rss } from "lucide-react";
 import { format } from "date-fns";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
@@ -46,6 +46,15 @@ const BlogPage = () => {
             <p className="text-muted-foreground max-w-2xl mx-auto text-lg">
               Weekly reports on freight markets, logistics trends, and industry news.
             </p>
+            <a
+              href="https://zmyeyyzhuwzdpjinecmg.supabase.co/functions/v1/rss-feed"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-2 mt-4 text-sm text-accent hover:text-accent/80 transition-colors"
+              title="Subscribe via RSS"
+            >
+              <Rss className="w-4 h-4" /> Subscribe via RSS
+            </a>
           </div>
 
           {isLoading ? (
