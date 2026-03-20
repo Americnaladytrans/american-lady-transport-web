@@ -12,18 +12,18 @@ jobs:
     steps:
       - name: Generate and post weekly report
         env:
-          BLOG_WEBHOOK_URL: ${{ secrets.BLOG_WEBHOOK_URL }}
-          BLOG_WEBHOOK_SECRET: ${{ secrets.BLOG_WEBHOOK_SECRET }}
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_ANON_KEY: ${{ secrets.SUPABASE_ANON_KEY }}
           PERPLEXITY_API_KEY: ${{ secrets.PERPLEXITY_API_KEY }}
         run: |
           cat << 'SCRIPT' > /tmp/report.mjs
 
-          const WEBHOOK_URL = process.env.BLOG_WEBHOOK_URL;
-          const WEBHOOK_SECRET = process.env.BLOG_WEBHOOK_SECRET;
+          const SUPABASE_URL = process.env.SUPABASE_URL;
+          const SUPABASE_ANON_KEY = process.env.SUPABASE_ANON_KEY;
           const PERPLEXITY_API_KEY = process.env.PERPLEXITY_API_KEY;
 
-          if (!WEBHOOK_URL || !WEBHOOK_SECRET || !PERPLEXITY_API_KEY) {
-            throw new Error("Missing required env vars: BLOG_WEBHOOK_URL, BLOG_WEBHOOK_SECRET, or PERPLEXITY_API_KEY");
+          if (!SUPABASE_URL || !SUPABASE_ANON_KEY || !PERPLEXITY_API_KEY) {
+            throw new Error("Missing required env vars: SUPABASE_URL, SUPABASE_ANON_KEY, or PERPLEXITY_API_KEY");
           }
 
           /* ── helpers ── */
@@ -218,28 +218,38 @@ Output ONLY the HTML content. Nothing else.`;
             return { cleaned, excerpt: plain.substring(0, 250) + (plain.length > 250 ? "..." : "") };
           }
 
-          /* ── post to webhook ── */
-          async function postToWebhook(title, content, excerpt) {
-            const res = await fetch(WEBHOOK_URL, {
+          /* ── post directly to Supabase ── */
+          function slugify(text) {
+            return text.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "").substring(0, 80);
+          }
+
+          async function postToBlog(title, content, excerpt) {
+            const slug = slugify(title) + "-" + Date.now().toString(36);
+
+            const res = await fetch(`${SUPABASE_URL}/rest/v1/blog_posts`, {
               method: "POST",
               headers: {
                 "Content-Type": "application/json",
-                "x-webhook-secret": WEBHOOK_SECRET,
+                "apikey": SUPABASE_ANON_KEY,
+                "Authorization": `Bearer ${SUPABASE_ANON_KEY}`,
+                "Prefer": "return=representation",
               },
               body: JSON.stringify({
                 title,
+                slug,
                 content,
                 excerpt,
-                post_type: "weekly-report",
-                tags: ["weekly-report", "market-pulse", "rates", "fuel", "fraud"],
+                is_published: true,
+                published_at: new Date().toISOString(),
               }),
             });
 
             if (!res.ok) {
               const text = await res.text();
-              throw new Error(`Webhook error: ${res.status} - ${text}`);
+              throw new Error(`Supabase insert error: ${res.status} - ${text}`);
             }
-            console.log("✓ Posted to blog successfully.");
+            const data = await res.json();
+            console.log(`✓ Posted to blog: ${data[0]?.slug}`);
           }
 
           /* ── main ── */
@@ -260,7 +270,7 @@ Output ONLY the HTML content. Nothing else.`;
             const { cleaned, excerpt } = validateArticle(rawHtml);
 
             // Step 4: Post
-            await postToWebhook(title, cleaned, excerpt);
+            await postToBlog(title, cleaned, excerpt);
 
             console.log("Done.");
           }
