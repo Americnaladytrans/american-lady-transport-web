@@ -226,7 +226,13 @@ Output ONLY the HTML content. Nothing else.`;
                 "Content-Type": "application/json",
                 "x-webhook-secret": WEBHOOK_SECRET,
               },
-              body: JSON.stringify({ title, content, excerpt }),
+              body: JSON.stringify({
+                title,
+                content,
+                excerpt,
+                post_type: "weekly-report",
+                tags: ["weekly-report", "market-pulse", "rates", "fuel", "fraud"],
+              }),
             });
 
             if (!res.ok) {

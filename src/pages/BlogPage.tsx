@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { Link } from "react-router-dom";
@@ -13,21 +14,35 @@ interface BlogPost {
   slug: string;
   excerpt: string | null;
   published_at: string;
+  post_type?: string;
 }
 
+const FILTERS = [
+  { label: "All Posts", value: "all" },
+  { label: "Weekly Reports", value: "weekly-report" },
+  { label: "Industry News", value: "industry-news" },
+];
+
 const BlogPage = () => {
+  const [activeFilter, setActiveFilter] = useState("all");
+
   const { data: posts, isLoading } = useQuery({
     queryKey: ["blog-posts"],
     queryFn: async () => {
       const { data, error } = await supabase
         .from("blog_posts")
-        .select("id, title, slug, excerpt, published_at")
+        .select("id, title, slug, excerpt, published_at, post_type")
         .eq("is_published", true)
         .order("published_at", { ascending: false });
       if (error) throw error;
       return data as BlogPost[];
     },
   });
+
+  const filteredPosts =
+    activeFilter === "all"
+      ? posts
+      : posts?.filter((p) => p.post_type === activeFilter);
 
   return (
     <div className="min-h-screen">
@@ -39,7 +54,7 @@ const BlogPage = () => {
       <Header />
       <main className="pt-32 pb-20">
         <div className="container mx-auto px-4">
-          <div className="text-center mb-16">
+          <div className="text-center mb-12">
             <h1 className="font-serif text-4xl md:text-5xl font-bold text-foreground mb-4">
               Industry Insights
             </h1>
@@ -57,6 +72,23 @@ const BlogPage = () => {
             </a>
           </div>
 
+          {/* Filter tabs */}
+          <div className="flex justify-center gap-2 mb-10">
+            {FILTERS.map((f) => (
+              <button
+                key={f.value}
+                onClick={() => setActiveFilter(f.value)}
+                className={`px-4 py-2 rounded-full text-sm font-medium transition-colors ${
+                  activeFilter === f.value
+                    ? "bg-primary text-primary-foreground"
+                    : "bg-secondary text-muted-foreground hover:text-foreground"
+                }`}
+              >
+                {f.label}
+              </button>
+            ))}
+          </div>
+
           {isLoading ? (
             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-6xl mx-auto">
               {[1, 2, 3].map((i) => (
@@ -68,21 +100,32 @@ const BlogPage = () => {
                 </div>
               ))}
             </div>
-          ) : !posts?.length ? (
+          ) : !filteredPosts?.length ? (
             <p className="text-center text-muted-foreground text-lg">
               No posts yet. Check back soon!
             </p>
           ) : (
             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-6xl mx-auto">
-              {posts.map((post) => (
+              {filteredPosts.map((post) => (
                 <Link
                   key={post.id}
                   to={`/blog/${post.slug}`}
                   className="group bg-card rounded-lg p-6 shadow-elegant hover:shadow-lg transition-all duration-300 hover:-translate-y-1"
                 >
-                  <div className="flex items-center gap-2 text-muted-foreground text-sm mb-3">
-                    <Calendar className="w-4 h-4" />
-                    <span>{format(new Date(post.published_at), "MMMM d, yyyy")}</span>
+                  <div className="flex items-center gap-2 mb-3">
+                    <span
+                      className={`text-xs font-medium px-2 py-0.5 rounded-full ${
+                        post.post_type === "industry-news"
+                          ? "bg-blue-100 text-blue-700"
+                          : "bg-amber-100 text-amber-700"
+                      }`}
+                    >
+                      {post.post_type === "industry-news" ? "Industry News" : "Weekly Report"}
+                    </span>
+                    <div className="flex items-center gap-1 text-muted-foreground text-sm">
+                      <Calendar className="w-3.5 h-3.5" />
+                      <span>{format(new Date(post.published_at), "MMMM d, yyyy")}</span>
+                    </div>
                   </div>
                   <h2 className="font-serif text-xl font-bold text-foreground mb-2 group-hover:text-accent transition-colors">
                     {post.title}

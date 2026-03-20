@@ -38,7 +38,7 @@ Deno.serve(async (req) => {
   }
 
   try {
-    const { title, content, excerpt } = await req.json();
+    const { title, content, excerpt, post_type, tags } = await req.json();
 
     if (!title || !content) {
       return new Response(
@@ -59,16 +59,26 @@ Deno.serve(async (req) => {
     const autoExcerpt =
       excerpt || content.replace(/<[^>]*>/g, "").substring(0, 200) + "...";
 
+    const insertData: Record<string, unknown> = {
+      title,
+      slug,
+      content,
+      excerpt: autoExcerpt,
+      is_published: true,
+      published_at: new Date().toISOString(),
+    };
+
+    // Include post_type and tags if provided (requires migration)
+    if (post_type) {
+      insertData.post_type = post_type;
+    }
+    if (tags && Array.isArray(tags)) {
+      insertData.tags = tags;
+    }
+
     const { data, error } = await supabase
       .from("blog_posts")
-      .insert({
-        title,
-        slug,
-        content,
-        excerpt: autoExcerpt,
-        is_published: true,
-        published_at: new Date().toISOString(),
-      })
+      .insert(insertData)
       .select()
       .single();
 
