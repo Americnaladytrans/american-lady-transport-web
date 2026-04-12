@@ -1,11 +1,11 @@
-import { Truck, Package, Layers, Zap, ArrowRight } from "lucide-react";
+import { Truck, Package, Layers, Zap, ArrowRight, Shield } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 
 const services = [
   {
     icon: Truck,
-    title: "Full Truckload (TL)",
+    title: "Full Truckload (FTL)",
     description:
       "Dry van and flatbed capacity across the U.S. and Canada for construction materials, palletized product, and industrial freight.",
   },
@@ -13,13 +13,19 @@ const services = [
     icon: Package,
     title: "Less-Than-Truckload (LTL)",
     description:
-      "Flexible LTL options for palletized shipments with dependable transit times and clear communication.",
+      "Cost-effective shipping for smaller palletized freight through carrier networks with competitive rates and reliable transit times.",
   },
   {
     icon: Layers,
-    title: "Flatbed & Heavy Haul",
+    title: "Partial Truckload",
     description:
-      "Specialized solutions for construction machinery, HVAC duct, sand blasters, and oilfield equipment.",
+      "Ideal for shipments too large for LTL but not enough to fill a full trailer. Your freight stays on one truck — fewer touches, less damage risk, and faster delivery.",
+  },
+  {
+    icon: Shield,
+    title: "Heavy Haul & Oversized",
+    description:
+      "Specialized solutions for construction machinery, HVAC duct, sand blasters, and oilfield equipment requiring step-decks, double drops, or RGN trailers.",
   },
   {
     icon: Zap,
