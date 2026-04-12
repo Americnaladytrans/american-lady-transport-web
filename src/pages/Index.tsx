@@ -6,6 +6,8 @@ import WhyChooseUs from "@/components/WhyChooseUs";
 import LatestPosts from "@/components/LatestPosts";
 import Footer from "@/components/Footer";
 import SEOHead from "@/components/SEOHead";
+import { Link } from "react-router-dom";
+import { ArrowRight, Fuel } from "lucide-react";
 
 const Index = () => {
   return (
@@ -21,6 +23,16 @@ const Index = () => {
         <Services />
         <About />
         <WhyChooseUs />
+        <section className="py-10 bg-background">
+          <div className="container mx-auto px-4 text-center">
+            <Link
+              to="/fuel-surcharge"
+              className="inline-flex items-center gap-2 bg-success text-success-foreground px-8 py-4 rounded-md font-bold text-lg hover:bg-success/90 transition-colors shadow-md"
+            >
+              <Fuel className="w-5 h-5" /> Fuel Surcharge Calculator <ArrowRight className="w-5 h-5" />
+            </Link>
+          </div>
+        </section>
         <LatestPosts />
       </main>
       <Footer />
