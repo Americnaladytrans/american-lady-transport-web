@@ -12,7 +12,7 @@ interface Band {
 }
 
 const DEFAULTS = { currentPrice: 5.643, mpg: 6.5, miles: 1200 };
-const BASELINE = 1.50;
+const BASELINE = 1.5;
 
 const FuelSurchargeCalculator = () => {
   const [currentPrice] = useState(DEFAULTS.currentPrice);
@@ -35,18 +35,20 @@ const FuelSurchargeCalculator = () => {
     const cp = currentPrice || 0;
     const m = Math.max(mpg || 0.1, 0.1);
     const mi = Math.max(miles || 0, 0);
-    // Round up to next 5-cent band
     let normalized = Math.ceil(cp * 20) / 20;
     normalized = +normalized.toFixed(2);
-    let idx = bands.findIndex(b => normalized >= b.low && normalized <= b.high);
+
+    let idx = bands.findIndex((b) => normalized >= b.low && normalized <= b.high);
     if (idx === -1 && normalized > bands[bands.length - 1].high) idx = bands.length - 1;
     if (idx === -1 && normalized < bands[0].low) idx = 0;
     if (idx === -1) idx = 0;
+
     const band = bands[idx] ?? bands[0];
     const delta = Math.max(cp - BASELINE, 0);
     const cpm = delta / m;
     const total = cpm * mi;
-    return { idx, band, delta, cpm, total };
+
+    return { idx, band, cpm, total };
   }, [currentPrice, mpg, miles, bands]);
 
   const money = (n: number, d = 2) => `$${n.toFixed(d)}`;
@@ -63,7 +65,6 @@ const FuelSurchargeCalculator = () => {
 
   return (
     <>
-      {/* Hero Section */}
       <div className="grid md:grid-cols-2 gap-6 mb-10">
         <div className="bg-accent/30 border border-border rounded-xl p-6 shadow-md">
           <span className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-background border border-border text-xs uppercase tracking-widest text-muted-foreground">
@@ -73,7 +74,7 @@ const FuelSurchargeCalculator = () => {
             Rate freight faster with live fuel surcharge logic.
           </h1>
           <p className="mt-4 text-muted-foreground max-w-prose">
-            Uses the federal EIA U.S. on-highway diesel benchmark as the current fuel reference, matches the correct percentage band, and calculates truckload fuel surcharge while keeping the contract baseline logic behind the scenes.
+            Uses the federal EIA U.S. on-highway diesel benchmark as the current fuel reference, matches the correct percentage band, and calculates truckload fuel surcharge with fixed contract logic built in.
           </p>
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 mt-6">
             <div className="p-4 bg-background rounded-lg border border-border">
@@ -91,10 +92,11 @@ const FuelSurchargeCalculator = () => {
           </div>
         </div>
 
-        {/* Calculator */}
         <div className="bg-card border border-border rounded-xl p-6 shadow-md">
           <h2 className="text-xl font-bold font-display">Calculator</h2>
-          <p className="text-sm text-muted-foreground mt-1">The current price follows the federal EIA benchmark shown below. You can adjust MPG and miles, while the app keeps the hidden contract baseline logic in the background.</p>
+          <p className="text-sm text-muted-foreground mt-1">
+            The current price follows the federal EIA benchmark shown below. Adjust MPG and miles to update the cents-per-mile surcharge and trip total instantly.
+          </p>
           <div className="grid gap-4 mt-5">
             <label className="grid gap-1.5 text-sm font-semibold">
               Federal EIA on-highway diesel price ($/gal)
@@ -105,7 +107,7 @@ const FuelSurchargeCalculator = () => {
                 className="w-full px-4 py-3 bg-muted border border-border rounded-lg cursor-not-allowed opacity-75"
               />
             </label>
-            <InputField label="Average MPG" value={mpg} step={0.1} min={0.1} onChange={v => setMpg(Math.max(v, 0.1))} />
+            <InputField label="Average MPG" value={mpg} step={0.1} min={0.1} onChange={(v) => setMpg(Math.max(v, 0.1))} />
             <InputField label="Loaded miles" value={miles} step={1} onChange={setMiles} isInt />
             <div className="flex gap-3 flex-wrap">
               <button onClick={resetDefaults} className="flex items-center gap-2 px-4 py-2.5 rounded-lg bg-primary text-primary-foreground font-bold hover:bg-primary/90 transition-colors">
@@ -119,7 +121,6 @@ const FuelSurchargeCalculator = () => {
         </div>
       </div>
 
-      {/* Results + Table */}
       <div className="grid md:grid-cols-[360px_1fr] gap-6">
         <ResultsPanel results={results} currentPrice={currentPrice} money={money} percent={percent} />
         <ScheduleTable bands={bands} activeIdx={results.idx} activeRowRef={activeRowRef} money={money} percent={percent} />
@@ -128,24 +129,29 @@ const FuelSurchargeCalculator = () => {
   );
 };
 
-/* ── Sub-components ── */
-
 const InputField = ({ label, value, step, min = 0, onChange, isInt }: {
-  label: string; value: number; step: number; min?: number;
-  onChange: (v: number) => void; isInt?: boolean;
+  label: string;
+  value: number;
+  step: number;
+  min?: number;
+  onChange: (v: number) => void;
+  isInt?: boolean;
 }) => (
   <label className="grid gap-1.5 text-sm font-semibold">
     {label}
     <input
-      type="number" min={min} step={step} value={value}
-      onChange={e => onChange(isInt ? parseInt(e.target.value) || 0 : parseFloat(e.target.value) || 0)}
+      type="number"
+      min={min}
+      step={step}
+      value={value}
+      onChange={(e) => onChange(isInt ? parseInt(e.target.value) || 0 : parseFloat(e.target.value) || 0)}
       className="w-full px-4 py-3 bg-background border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary"
     />
   </label>
 );
 
 const ResultsPanel = ({ results, currentPrice, money, percent }: {
-  results: { band: Band; cpm: number; total: number; delta: number };
+  results: { band: Band; cpm: number; total: number };
   currentPrice: number;
   money: (n: number, d?: number) => string;
   percent: (n: number) => string;
@@ -153,24 +159,20 @@ const ResultsPanel = ({ results, currentPrice, money, percent }: {
   <div className="bg-card border border-border rounded-xl p-6 shadow-md space-y-4">
     <div>
       <h2 className="text-xl font-bold font-display">Results</h2>
-      <p className="text-sm text-muted-foreground mt-1">Percentage band results work well for schedules, while cents-per-mile is common in truckload contracts.</p>
+      <p className="text-sm text-muted-foreground mt-1">
+        Percentage band results work well for schedules, while cents-per-mile is common in truckload contracts.
+      </p>
     </div>
     <div className="grid grid-cols-3 gap-3">
       <MetricCard label="Matched FSC %" value={percent(results.band.pct)} />
       <MetricCard label="FSC $ / mile" value={money(results.cpm, 4)} />
       <MetricCard label="Trip FSC total" value={money(results.total)} />
     </div>
-    <div className="space-y-3">
-      <div className="p-4 rounded-lg bg-background border border-border">
-        <strong>Matched price band:</strong> {results.band.label} (rounded up from {money(currentPrice, 3)})
-      </div>
-      <div className="p-4 rounded-lg bg-background border border-border">
-        <strong>Fuel over baseline:</strong> {money(results.delta, 3)} above baseline
-      </div>
+    <div className="p-4 rounded-lg bg-background border border-border">
+      <strong>Matched price band:</strong> {results.band.label} (rounded up from {money(currentPrice, 3)})
     </div>
-    <div className="p-4 rounded-lg bg-orange-50 dark:bg-orange-950/30 border border-orange-200 dark:border-orange-800/40 text-sm">
-      This app uses the federal EIA on-highway diesel price as the current fuel reference and also shows the per-mile formula many trucking contracts use:{" "}
-      <strong>(current fuel price − baseline fuel price) ÷ MPG</strong>.
+    <div className="p-4 rounded-lg bg-accent/40 border border-border text-sm">
+      This app uses the federal EIA on-highway diesel price as the current fuel reference and recalculates the per-mile and trip surcharge totals from the built-in contract logic.
     </div>
   </div>
 );
@@ -183,14 +185,17 @@ const MetricCard = ({ label, value }: { label: string; value: string }) => (
 );
 
 const ScheduleTable = ({ bands, activeIdx, activeRowRef, money, percent }: {
-  bands: Band[]; activeIdx: number;
+  bands: Band[];
+  activeIdx: number;
   activeRowRef: React.RefObject<HTMLTableRowElement>;
   money: (n: number, d?: number) => string;
   percent: (n: number) => string;
 }) => (
   <div className="bg-card border border-border rounded-xl p-6 shadow-md">
     <h2 className="text-xl font-bold font-display">Range Schedule</h2>
-    <p className="text-sm text-muted-foreground mt-1">Extended through $10.00 per gallon using 5-cent bands. For lookup, the app rounds the current diesel price up to the next 5-cent band, so $5.643 maps to the $5.65-$5.69 row.</p>
+    <p className="text-sm text-muted-foreground mt-1">
+      Extended through $10.00 per gallon using 5-cent bands. For lookup, the app rounds the current diesel price up to the next 5-cent band, so $5.643 maps to the $5.65-$5.69 row.
+    </p>
     <div className="mt-5 max-h-[620px] overflow-auto rounded-lg border border-border">
       <table className="w-full border-collapse">
         <thead>
@@ -219,8 +224,6 @@ const ScheduleTable = ({ bands, activeIdx, activeRowRef, money, percent }: {
     </div>
   </div>
 );
-
-/* ── Page wrapper ── */
 
 const FuelSurchargePage = () => (
   <div className="min-h-screen">
