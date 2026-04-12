@@ -178,9 +178,9 @@ const ResultsPanel = ({ results, currentPrice, money, percent }: {
 );
 
 const MetricCard = ({ label, value }: { label: string; value: string }) => (
-  <div className="p-4 rounded-lg bg-background border border-border min-w-0 overflow-hidden">
+  <div className="p-4 rounded-lg bg-background border border-border min-w-0">
     <div className="text-xs uppercase tracking-widest text-muted-foreground">{label}</div>
-    <div className="mt-2 text-xl md:text-2xl font-extrabold font-display tracking-tight break-all">{value}</div>
+    <div className="mt-2 text-lg font-extrabold font-display tracking-tight text-red-600 whitespace-nowrap">{value}</div>
   </div>
 );
 
