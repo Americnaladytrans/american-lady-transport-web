@@ -65,7 +65,13 @@ const LatestPosts = () => {
           ))}
         </div>
 
-        <div className="text-center mt-10">
+        <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mt-10">
+          <Link
+            to="/fuel-surcharge"
+            className="inline-flex items-center gap-2 bg-green-600 text-white px-6 py-3 rounded-md font-medium hover:bg-green-700 transition-colors"
+          >
+            Fuel Surcharge Calculator <ArrowRight className="w-4 h-4" />
+          </Link>
           <Link
             to="/blog"
             className="inline-flex items-center gap-2 bg-primary text-primary-foreground px-6 py-3 rounded-md font-medium hover:bg-navy-light transition-colors"

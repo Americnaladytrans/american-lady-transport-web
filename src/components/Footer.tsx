@@ -62,6 +62,7 @@ const Footer = () => {
                 { href: "/shippers", label: "For Shippers" },
                 { href: "/carriers", label: "For Carriers" },
                 { href: "/about", label: "About Us" },
+                { href: "/fuel-surcharge", label: "Fuel Surcharge" },
                 { href: "/blog", label: "Blog" },
                 { href: "/contact", label: "Contact" },
               ].map((link) => (
