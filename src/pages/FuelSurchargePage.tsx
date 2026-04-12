@@ -35,9 +35,11 @@ const FuelSurchargePage = () => {
     const m = Math.max(mpg || 0.1, 0.1);
     const mi = Math.max(miles || 0, 0);
     let idx = bands.findIndex(b => cp >= b.low && cp <= b.high);
-    if (idx === -1 && cp > bands[bands.length - 1].high) idx = bands.length - 1;
-    if (idx === -1 && cp < bands[0].low) idx = 0;
-    const band = bands[idx];
+    if (idx === -1) {
+      if (cp > bands[bands.length - 1].high) idx = bands.length - 1;
+      else idx = 0;
+    }
+    const band = bands[idx] ?? bands[0];
     const delta = Math.max(cp - bp, 0);
     const cpm = delta / m;
     const total = cpm * mi;
