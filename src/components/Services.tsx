@@ -61,19 +61,6 @@ const Services = () => {
                 {service.title}
               </h3>
               <p className="text-muted-foreground leading-relaxed">{service.description}</p>
-              {service.title === "Less-Than-Truckload (LTL)" && (
-                <Button variant="default" size="sm" className="mt-4 w-full" asChild>
-                  <a
-                    href="https://partialtruckloadratingtool.com"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="group"
-                  >
-                    Partial Truckload Calculator
-                    <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-                  </a>
-                </Button>
-              )}
             </div>
           ))}
         </div>
