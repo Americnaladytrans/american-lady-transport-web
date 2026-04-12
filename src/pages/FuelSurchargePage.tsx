@@ -11,11 +11,11 @@ interface Band {
   label: string;
 }
 
-const DEFAULTS = { currentPrice: 5.643, baselinePrice: 1.25, mpg: 6.5, miles: 1200 };
+const DEFAULTS = { currentPrice: 5.643, mpg: 6.5, miles: 1200 };
+const BASELINE = 1.50;
 
 const FuelSurchargeCalculator = () => {
-  const [currentPrice, setCurrentPrice] = useState(DEFAULTS.currentPrice);
-  const [baselinePrice, setBaselinePrice] = useState(DEFAULTS.baselinePrice);
+  const [currentPrice] = useState(DEFAULTS.currentPrice);
   const [mpg, setMpg] = useState(DEFAULTS.mpg);
   const [miles, setMiles] = useState(DEFAULTS.miles);
   const activeRowRef = useRef<HTMLTableRowElement>(null);
@@ -33,26 +33,26 @@ const FuelSurchargeCalculator = () => {
 
   const results = useMemo(() => {
     const cp = currentPrice || 0;
-    const bp = baselinePrice || 0;
     const m = Math.max(mpg || 0.1, 0.1);
     const mi = Math.max(miles || 0, 0);
-    let idx = bands.findIndex(b => cp >= b.low && cp <= b.high);
-    if (idx === -1 && cp > bands[bands.length - 1].high) idx = bands.length - 1;
-    if (idx === -1 && cp < bands[0].low) idx = 0;
+    // Round up to next 5-cent band
+    let normalized = Math.ceil(cp * 20) / 20;
+    normalized = +normalized.toFixed(2);
+    let idx = bands.findIndex(b => normalized >= b.low && normalized <= b.high);
+    if (idx === -1 && normalized > bands[bands.length - 1].high) idx = bands.length - 1;
+    if (idx === -1 && normalized < bands[0].low) idx = 0;
     if (idx === -1) idx = 0;
     const band = bands[idx] ?? bands[0];
-    const delta = Math.max(cp - bp, 0);
+    const delta = Math.max(cp - BASELINE, 0);
     const cpm = delta / m;
     const total = cpm * mi;
     return { idx, band, delta, cpm, total };
-  }, [currentPrice, baselinePrice, mpg, miles, bands]);
+  }, [currentPrice, mpg, miles, bands]);
 
   const money = (n: number, d = 2) => `$${n.toFixed(d)}`;
   const percent = (n: number) => `${(n * 100).toFixed(1)}%`;
 
   const resetDefaults = () => {
-    setCurrentPrice(DEFAULTS.currentPrice);
-    setBaselinePrice(DEFAULTS.baselinePrice);
     setMpg(DEFAULTS.mpg);
     setMiles(DEFAULTS.miles);
   };
@@ -73,7 +73,7 @@ const FuelSurchargeCalculator = () => {
             Rate freight faster with live fuel surcharge logic.
           </h1>
           <p className="mt-4 text-muted-foreground max-w-prose">
-            Use the DOE/EIA on-highway diesel benchmark as your current fuel price input, match the correct percentage band, and optionally calculate truckload fuel surcharge by the cents-per-mile method your customers or carrier contracts use.
+            Uses the federal EIA U.S. on-highway diesel benchmark as the current fuel reference, matches the correct percentage band, and calculates truckload fuel surcharge while keeping the contract baseline logic behind the scenes.
           </p>
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 mt-6">
             <div className="p-4 bg-background rounded-lg border border-border">
@@ -82,7 +82,7 @@ const FuelSurchargeCalculator = () => {
             </div>
             <div className="p-4 bg-background rounded-lg border border-border">
               <div className="text-lg font-bold font-display">$5.643</div>
-              <div className="text-xs text-muted-foreground mt-1">Prefilled current diesel price</div>
+              <div className="text-xs text-muted-foreground mt-1">Federal EIA current price</div>
             </div>
             <div className="p-4 bg-background rounded-lg border border-border">
               <div className="text-lg font-bold font-display">5¢</div>
@@ -94,15 +94,22 @@ const FuelSurchargeCalculator = () => {
         {/* Calculator */}
         <div className="bg-card border border-border rounded-xl p-6 shadow-md">
           <h2 className="text-xl font-bold font-display">Calculator</h2>
-          <p className="text-sm text-muted-foreground mt-1">Change the current price, baseline, MPG, or miles. The app updates the surcharge band and the per-mile FSC instantly.</p>
+          <p className="text-sm text-muted-foreground mt-1">The current price follows the federal EIA benchmark shown below. You can adjust MPG and miles, while the app keeps the hidden contract baseline logic in the background.</p>
           <div className="grid gap-4 mt-5">
-            <InputField label="Current on-road diesel price ($/gal)" value={currentPrice} step={0.001} onChange={setCurrentPrice} />
-            <InputField label="Baseline fuel price ($/gal)" value={baselinePrice} step={0.01} onChange={setBaselinePrice} />
+            <label className="grid gap-1.5 text-sm font-semibold">
+              Federal EIA on-highway diesel price ($/gal)
+              <input
+                type="number"
+                value={currentPrice}
+                readOnly
+                className="w-full px-4 py-3 bg-muted border border-border rounded-lg cursor-not-allowed opacity-75"
+              />
+            </label>
             <InputField label="Average MPG" value={mpg} step={0.1} min={0.1} onChange={v => setMpg(Math.max(v, 0.1))} />
             <InputField label="Loaded miles" value={miles} step={1} onChange={setMiles} isInt />
             <div className="flex gap-3 flex-wrap">
               <button onClick={resetDefaults} className="flex items-center gap-2 px-4 py-2.5 rounded-lg bg-primary text-primary-foreground font-bold hover:bg-primary/90 transition-colors">
-                <RotateCcw className="w-4 h-4" /> Reset defaults
+                <RotateCcw className="w-4 h-4" /> Reset to federal price
               </button>
               <button onClick={jumpToBand} className="flex items-center gap-2 px-4 py-2.5 rounded-lg bg-background border border-border font-bold hover:bg-accent transition-colors">
                 <ArrowDown className="w-4 h-4" /> Jump to matched band
@@ -114,7 +121,7 @@ const FuelSurchargeCalculator = () => {
 
       {/* Results + Table */}
       <div className="grid md:grid-cols-[360px_1fr] gap-6">
-        <ResultsPanel results={results} money={money} percent={percent} />
+        <ResultsPanel results={results} currentPrice={currentPrice} money={money} percent={percent} />
         <ScheduleTable bands={bands} activeIdx={results.idx} activeRowRef={activeRowRef} money={money} percent={percent} />
       </div>
     </>
@@ -137,8 +144,9 @@ const InputField = ({ label, value, step, min = 0, onChange, isInt }: {
   </label>
 );
 
-const ResultsPanel = ({ results, money, percent }: {
+const ResultsPanel = ({ results, currentPrice, money, percent }: {
   results: { band: Band; cpm: number; total: number; delta: number };
+  currentPrice: number;
   money: (n: number, d?: number) => string;
   percent: (n: number) => string;
 }) => (
@@ -154,14 +162,14 @@ const ResultsPanel = ({ results, money, percent }: {
     </div>
     <div className="space-y-3">
       <div className="p-4 rounded-lg bg-background border border-border">
-        <strong>Matched price band:</strong> {results.band.label}
+        <strong>Matched price band:</strong> {results.band.label} (rounded up from {money(currentPrice, 3)})
       </div>
       <div className="p-4 rounded-lg bg-background border border-border">
         <strong>Fuel over baseline:</strong> {money(results.delta, 3)} above baseline
       </div>
     </div>
     <div className="p-4 rounded-lg bg-orange-50 dark:bg-orange-950/30 border border-orange-200 dark:border-orange-800/40 text-sm">
-      This app starts with a percentage schedule in 5-cent bands and also shows the per-mile formula many trucking contracts use:{" "}
+      This app uses the federal EIA on-highway diesel price as the current fuel reference and also shows the per-mile formula many trucking contracts use:{" "}
       <strong>(current fuel price − baseline fuel price) ÷ MPG</strong>.
     </div>
   </div>
@@ -182,7 +190,7 @@ const ScheduleTable = ({ bands, activeIdx, activeRowRef, money, percent }: {
 }) => (
   <div className="bg-card border border-border rounded-xl p-6 shadow-md">
     <h2 className="text-xl font-bold font-display">Range Schedule</h2>
-    <p className="text-sm text-muted-foreground mt-1">Extended through $10.00 per gallon using 5-cent bands. The highlighted row shows the active price bracket.</p>
+    <p className="text-sm text-muted-foreground mt-1">Extended through $10.00 per gallon using 5-cent bands. For lookup, the app rounds the current diesel price up to the next 5-cent band, so $5.643 maps to the $5.65-$5.69 row.</p>
     <div className="mt-5 max-h-[620px] overflow-auto rounded-lg border border-border">
       <table className="w-full border-collapse">
         <thead>
