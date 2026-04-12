@@ -1,0 +1,263 @@
+
+const SUPABASE_URL = process.env.SUPABASE_URL;
+const SUPABASE_ANON_KEY = process.env.SUPABASE_ANON_KEY;
+const PERPLEXITY_API_KEY = process.env.PERPLEXITY_API_KEY;
+
+if (!SUPABASE_URL || !SUPABASE_ANON_KEY || !PERPLEXITY_API_KEY) {
+  throw new Error("Missing required env vars: SUPABASE_URL, SUPABASE_ANON_KEY, or PERPLEXITY_API_KEY");
+}
+
+/* ── helpers ── */
+function formatTitleDate(d = new Date()) {
+  return d.toLocaleDateString("en-US", {
+    year: "numeric", month: "long", day: "numeric", timeZone: "America/Chicago",
+  });
+}
+
+function getWeekRange() {
+  const end = new Date();
+  const start = new Date(end);
+  start.setDate(start.getDate() - 7);
+  const fmt = (d) => d.toLocaleDateString("en-US", { month: "long", day: "numeric", year: "numeric" });
+  return { startStr: fmt(start), endStr: fmt(end) };
+}
+
+async function callPerplexity(systemPrompt, userPrompt, retries = 2) {
+  for (let attempt = 0; attempt <= retries; attempt++) {
+    try {
+      const res = await fetch("https://api.perplexity.ai/chat/completions", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${PERPLEXITY_API_KEY}`,
+        },
+        body: JSON.stringify({
+          model: "sonar-pro",
+          messages: [
+            { role: "system", content: systemPrompt },
+            { role: "user", content: userPrompt },
+          ],
+          temperature: 0.3,
+        }),
+      });
+      if (!res.ok) {
+        const text = await res.text();
+        throw new Error(`API ${res.status}: ${text}`);
+      }
+      const data = await res.json();
+      return data.choices[0].message.content;
+    } catch (err) {
+      if (attempt === retries) throw err;
+      console.warn(`Attempt ${attempt + 1} failed, retrying in 5s...`);
+      await new Promise((r) => setTimeout(r, 5000));
+    }
+  }
+}
+
+/* ── research phase: 5 parallel topic queries ── */
+async function gatherResearch(weekRange) {
+  const systemPrompt = "You are a freight industry research analyst. Return ONLY factual data points, statistics, and developments with source names. Be specific — include numbers, dates, company names, and regulatory references. If you find limited information for a topic, state what you did find rather than refusing.";
+
+  const topics = [
+    {
+      label: "US Freight Market",
+      prompt: `What are the key US trucking and freight market developments from ${weekRange.startStr} to ${weekRange.endStr}? Include: spot rate trends (dry van, reefer, flatbed), load-to-truck ratios, contract rate movements, tender rejection rates, freight volume indicators, and any major carrier news (bankruptcies, mergers, layoffs). Reference DAT, FreightWaves, Cass Freight Index, or ACT Research data where available.`
+    },
+    {
+      label: "Regulation & Enforcement",
+      prompt: `What FMCSA, DOT, and trucking regulatory developments occurred from ${weekRange.startStr} to ${weekRange.endStr}? Include: new rulemakings or final rules, ELD enforcement or revocations, CDL rule changes, hours-of-service updates, drug & alcohol clearinghouse news, broker bond requirements, state-level trucking legislation (especially Texas), and any Congressional trucking bills. Also check for CVSA enforcement actions.`
+    },
+    {
+      label: "Fraud, Theft & Cross-Border",
+      prompt: `What freight fraud, cargo theft, double-brokering, and cross-border developments occurred from ${weekRange.startStr} to ${weekRange.endStr}? Include: cargo theft incidents or statistics, double-brokering enforcement, CDL fraud or CDL mill crackdowns, USDOT/MC number fraud, FMCSA fraud bulletins, US-Mexico border crossings (Laredo, El Paso), US-Canada trade, USMCA review developments, tariff changes, Mexican SCT regulations, Canadian provincial trucking rules, and CBP enforcement actions.`
+    },
+    {
+      label: "Fuel, Equipment & Operations",
+      prompt: `What are the latest diesel fuel prices, equipment news, and operational developments in trucking from ${weekRange.startStr} to ${weekRange.endStr}? Include: EIA national average diesel price, regional diesel price variations, Class 8 truck order data, used truck market conditions, truck OEM announcements, electric truck news, maintenance cost trends, driver pay updates, truck parking initiatives, and major infrastructure projects.`
+    },
+    {
+      label: "Economic & Geopolitical Impacts",
+      prompt: `What macroeconomic and geopolitical developments from ${weekRange.startStr} to ${weekRange.endStr} are impacting the North American trucking and freight industry? Include: oil price movements, trade policy changes, inflation/CPI data, manufacturing PMI, employment data, weather disruptions affecting freight, military conflicts affecting supply chains, and any produce/agriculture shipping developments.`
+    }
+  ];
+
+  console.log("Starting parallel research across 5 topics...");
+  const results = await Promise.allSettled(
+    topics.map(async (t) => {
+      const data = await callPerplexity(systemPrompt, t.prompt);
+      console.log(`✓ ${t.label}: ${data.length} chars`);
+      return { label: t.label, data };
+    })
+  );
+
+  const research = {};
+  for (const r of results) {
+    if (r.status === "fulfilled") {
+      research[r.value.label] = r.value.data;
+    } else {
+      console.warn(`✗ Research failed: ${r.reason?.message}`);
+    }
+  }
+
+  if (Object.keys(research).length < 3) {
+    throw new Error(`Only ${Object.keys(research).length}/5 research topics succeeded. Aborting to avoid a thin report.`);
+  }
+
+  return research;
+}
+
+/* ── writing phase: compile research into article ── */
+async function writeArticle(research, weekRange) {
+  const researchBlock = Object.entries(research)
+    .map(([label, data]) => `=== ${label} ===\n${data}`)
+    .join("\n\n");
+
+  const systemPrompt = `You are the content writer for American Lady Transportation (usealt.com), a freight brokerage in Willis, TX. You write weekly industry reports that are read by small/mid-sized freight brokers and carriers across North America. Your tone is plain, direct, and actionable — no filler, no hedging, no meta-commentary about the article itself.`;
+
+  const userPrompt = `Using the research data below, write the Weekly Freight Report for the week of ${weekRange.startStr} through ${weekRange.endStr}.
+
+FORMAT: HTML content valid inside a <div>. Use h2, h3, p, ul/li, and strong tags. No html/body/head wrappers. No markdown.
+
+REQUIRED SECTIONS (as h2 headings, in this exact order):
+1. Market Pulse — spot/contract rates, load-to-truck ratios, capacity, volumes. Lead with the most impactful number.
+2. Regulation & Enforcement — FMCSA/DOT rules, ELD, CDL, state regs. Focus on what changed THIS week.
+3. Broker Edge — What brokers specifically need to know or do. Competitive positioning, compliance deadlines, margin tips.
+4. Cross-Border Watchlist — US-Mexico, US-Canada trade, USMCA, tariffs, border operations, produce season.
+5. Fraud & Security — Cargo theft, double-brokering, CDL fraud, impersonation schemes, enforcement tools.
+6. Equipment, Fuel & Ops — Diesel prices, truck orders, OEM news, driver pay, maintenance, infrastructure.
+7. Action Checklist for Brokers — 5-7 concise bullet points of specific actions to take this coming week.
+
+RULES:
+- Use REAL data points from the research (specific numbers, dollar amounts, percentages).
+- Cite sources naturally (e.g., "per DAT data", "according to FreightWaves", "EIA reported").
+- Bold key statistics using <strong> tags.
+- Target 1000-1200 words. Every sentence must carry information or an actionable insight.
+- Do NOT include any introductory preamble, meta-commentary, or "this week we cover..." language. Jump straight into the data.
+- If a section has limited data, write what you have concisely rather than padding with generic statements.
+
+RESEARCH DATA:
+${researchBlock}
+
+Output ONLY the HTML content. Nothing else.`;
+
+  console.log("Writing article from research...");
+  const html = await callPerplexity(systemPrompt, userPrompt);
+  return html;
+}
+
+/* ── validation ── */
+function validateArticle(html) {
+  const plain = html.replace(/<[^>]*>/g, "").replace(/\s+/g, " ").trim();
+  const wordCount = plain.split(/\s+/).length;
+
+  // Check it's not an error/refusal message
+  const refusalPhrases = [
+    "i cannot generate",
+    "i cannot create",
+    "i'm unable to",
+    "i do not have",
+    "search results do not contain",
+    "insufficient information",
+    "i cannot confirm",
+    "to deliver the accurate",
+    "i would require",
+  ];
+  const lowerPlain = plain.toLowerCase();
+  for (const phrase of refusalPhrases) {
+    if (lowerPlain.includes(phrase)) {
+      throw new Error(`Article appears to be a refusal/error message. Found: "${phrase}"`);
+    }
+  }
+
+  // Check minimum length
+  if (wordCount < 400) {
+    throw new Error(`Article too short: ${wordCount} words (minimum 400).`);
+  }
+
+  // Check required sections exist
+  const requiredSections = ["market pulse", "regulation", "broker edge", "cross-border", "fraud", "equipment", "action checklist"];
+  const lowerHtml = html.toLowerCase();
+  const missing = requiredSections.filter((s) => !lowerHtml.includes(s));
+  if (missing.length > 2) {
+    throw new Error(`Article missing ${missing.length} required sections: ${missing.join(", ")}`);
+  }
+
+  // Check it contains HTML tags
+  if (!html.includes("<h2>") && !html.includes("<h2 ")) {
+    throw new Error("Article does not contain expected HTML h2 headings.");
+  }
+
+  // Strip markdown code fences if the model wrapped it
+  let cleaned = html;
+  if (cleaned.startsWith("```html")) {
+    cleaned = cleaned.replace(/^```html\s*\n?/, "").replace(/\n?```\s*$/, "");
+  } else if (cleaned.startsWith("```")) {
+    cleaned = cleaned.replace(/^```\s*\n?/, "").replace(/\n?```\s*$/, "");
+  }
+
+  console.log(`✓ Validation passed: ${wordCount} words, ${7 - missing.length}/7 sections found.`);
+  return { cleaned, excerpt: plain.substring(0, 250) + (plain.length > 250 ? "..." : "") };
+}
+
+/* ── post directly to Supabase ── */
+function slugify(text) {
+  return text.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "").substring(0, 80);
+}
+
+async function postToBlog(title, content, excerpt) {
+  const slug = slugify(title) + "-" + Date.now().toString(36);
+
+  const res = await fetch(`${SUPABASE_URL}/rest/v1/blog_posts`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      "apikey": SUPABASE_ANON_KEY,
+      "Authorization": `Bearer ${SUPABASE_ANON_KEY}`,
+      "Prefer": "return=representation",
+    },
+    body: JSON.stringify({
+      title,
+      slug,
+      content,
+      excerpt,
+      is_published: true,
+      published_at: new Date().toISOString(),
+    }),
+  });
+
+  if (!res.ok) {
+    const text = await res.text();
+    throw new Error(`Supabase insert error: ${res.status} - ${text}`);
+  }
+  const data = await res.json();
+  console.log(`✓ Posted to blog: ${data[0]?.slug}`);
+}
+
+/* ── main ── */
+async function main() {
+  const weekRange = getWeekRange();
+  const title = `Weekly Freight Report - ${formatTitleDate()}`;
+
+  console.log(`Generating: ${title}`);
+  console.log(`Week range: ${weekRange.startStr} – ${weekRange.endStr}`);
+
+  // Step 1: Parallel research
+  const research = await gatherResearch(weekRange);
+
+  // Step 2: Write article from research
+  const rawHtml = await writeArticle(research, weekRange);
+
+  // Step 3: Validate output
+  const { cleaned, excerpt } = validateArticle(rawHtml);
+
+  // Step 4: Post
+  await postToBlog(title, cleaned, excerpt);
+
+  console.log("Done.");
+}
+
+main().catch((err) => {
+  console.error("FATAL:", err.message);
+  process.exit(1);
+});
+
