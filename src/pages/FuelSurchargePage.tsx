@@ -101,7 +101,7 @@ const FuelSurchargePage = () => {
             {/* Calculator */}
             <div className="bg-card border border-border rounded-xl p-6 shadow-md">
               <h2 className="text-xl font-bold font-display">Calculator</h2>
-              <p className="text-sm text-muted-foreground mt-1">Change the current price, baseline, MPG, or miles. Results update instantly.</p>
+              <p className="text-sm text-muted-foreground mt-1">Change the current price, baseline, MPG, or miles. The app updates the surcharge band and the per-mile FSC instantly.</p>
               <div className="grid gap-4 mt-5">
                 <label className="grid gap-1.5 text-sm font-semibold">
                   Current on-road diesel price ($/gal)
@@ -164,7 +164,7 @@ const FuelSurchargePage = () => {
                   <strong>Fuel over baseline:</strong> {money(results.delta, 3)} above baseline
                 </div>
               </div>
-              <div className="p-4 rounded-lg bg-accent border border-border text-sm">
+              <div className="p-4 rounded-lg bg-orange-50 dark:bg-orange-950/30 border border-orange-200 dark:border-orange-800/40 text-sm">
                 This app starts with a percentage schedule in 5-cent bands and also shows the per-mile formula many trucking contracts use:{" "}
                 <strong>(current fuel price − baseline fuel price) ÷ MPG</strong>.
               </div>
