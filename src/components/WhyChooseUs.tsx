@@ -101,26 +101,6 @@ const WhyChooseUs = () => {
           </div>
         </div>
 
-        {/* Partial Truckload Calculator CTA */}
-        <div className="mt-8 bg-card rounded-2xl p-8 text-center border border-border shadow-elegant">
-          <h3 className="font-serif text-xl md:text-2xl font-bold text-foreground mb-3">
-            Partial Truckload Calculator
-          </h3>
-          <p className="text-muted-foreground mb-6 max-w-xl mx-auto">
-            Get an instant estimate for your partial truckload shipment.
-          </p>
-          <Button variant="default" size="lg" asChild>
-            <a
-              href="https://partialtruckloadratingtool.com"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="group"
-            >
-              Calculate Your Rate
-              <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
-            </a>
-          </Button>
-        </div>
       </div>
     </section>
   );
