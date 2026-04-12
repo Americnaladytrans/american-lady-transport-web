@@ -194,16 +194,14 @@ const ScheduleTable = ({ bands, activeIdx, activeRowRef, money, percent }: {
   <div className="bg-card border border-border rounded-xl p-6 shadow-md">
     <h2 className="text-xl font-bold font-display">Range Schedule</h2>
     <p className="text-sm text-muted-foreground mt-1">
-      Extended through $10.00 per gallon using 5-cent bands. For lookup, the app rounds the current diesel price up to the next 5-cent band, so $5.643 maps to the $5.65-$5.69 row.
+      Extended through $10.00 per gallon using 5-cent bands. The table is simplified to show only the diesel band and the matching FSC percentage, and $5.643 maps to the $5.65-$5.69 row.
     </p>
     <div className="mt-5 max-h-[620px] overflow-auto rounded-lg border border-border">
       <table className="w-full border-collapse">
         <thead>
           <tr className="bg-muted">
-            <th className="sticky top-0 bg-muted text-xs uppercase tracking-wider text-muted-foreground p-3 text-left border-b border-border">From</th>
-            <th className="sticky top-0 bg-muted text-xs uppercase tracking-wider text-muted-foreground p-3 text-left border-b border-border">To</th>
-            <th className="sticky top-0 bg-muted text-xs uppercase tracking-wider text-muted-foreground p-3 text-left border-b border-border">FSC %</th>
             <th className="sticky top-0 bg-muted text-xs uppercase tracking-wider text-muted-foreground p-3 text-left border-b border-border">Band</th>
+            <th className="sticky top-0 bg-muted text-xs uppercase tracking-wider text-muted-foreground p-3 text-left border-b border-border">FSC %</th>
           </tr>
         </thead>
         <tbody>
@@ -213,10 +211,8 @@ const ScheduleTable = ({ bands, activeIdx, activeRowRef, money, percent }: {
               ref={i === activeIdx ? activeRowRef : undefined}
               className={`${i === activeIdx ? "bg-primary/10 font-semibold" : ""} border-b border-border/50`}
             >
-              <td className="p-3 tabular-nums">{money(b.low)}</td>
-              <td className="p-3 tabular-nums">{money(b.high)}</td>
-              <td className="p-3 tabular-nums">{percent(b.pct)}</td>
               <td className="p-3">{b.label}</td>
+              <td className="p-3 tabular-nums">{percent(b.pct)}</td>
             </tr>
           ))}
         </tbody>
