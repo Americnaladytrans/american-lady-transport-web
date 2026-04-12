@@ -162,7 +162,7 @@ const FuelSurchargePage = () => {
                   <strong>Fuel over baseline:</strong> {money(results.delta, 3)} above baseline
                 </div>
               </div>
-              <div className="p-4 rounded-lg bg-amber-50 border border-amber-200 text-sm dark:bg-amber-950/30 dark:border-amber-800">
+              <div className="p-4 rounded-lg bg-accent border border-border text-sm">
                 This app starts with a percentage schedule in 5-cent bands and also shows the per-mile formula many trucking contracts use:{" "}
                 <strong>(current fuel price − baseline fuel price) ÷ MPG</strong>.
               </div>
