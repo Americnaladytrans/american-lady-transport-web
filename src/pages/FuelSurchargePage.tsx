@@ -101,7 +101,7 @@ const FuelSurchargePage = () => {
             {/* Calculator */}
             <div className="bg-card border border-border rounded-xl p-6 shadow-md">
               <h2 className="text-xl font-bold font-display">Calculator</h2>
-              <p className="text-sm text-muted-foreground mt-1">Change the current price, baseline, MPG, or miles. Results update instantly.</p>
+              <p className="text-sm text-muted-foreground mt-1">Change the current price, baseline, MPG, or miles. The app updates the surcharge band and the per-mile FSC instantly.</p>
               <div className="grid gap-4 mt-5">
                 <label className="grid gap-1.5 text-sm font-semibold">
                   Current on-road diesel price ($/gal)
