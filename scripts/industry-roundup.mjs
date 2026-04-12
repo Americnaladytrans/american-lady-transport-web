@@ -1,10 +1,27 @@
+/*
+ * Domestic Trucking Industry News Roundup — autonomous blog post generator
+ *
+ * Runs every Friday via GitHub Actions cron.
+ * Posts directly to Supabase REST API.
+ *
+ * Fallback chain: sonar-pro → sonar (same Perplexity API key)
+ * Includes: retry logic, duplicate detection, validation gate
+ *
+ * Required env vars: SUPABASE_URL, SUPABASE_ANON_KEY, PERPLEXITY_API_KEY
+ */
 
 const SUPABASE_URL = process.env.SUPABASE_URL;
 const SUPABASE_ANON_KEY = process.env.SUPABASE_ANON_KEY;
 const PERPLEXITY_API_KEY = process.env.PERPLEXITY_API_KEY;
 
-if (!SUPABASE_URL || !SUPABASE_ANON_KEY || !PERPLEXITY_API_KEY) {
-  throw new Error("Missing required env vars.");
+const missing = [];
+if (!SUPABASE_URL) missing.push("SUPABASE_URL");
+if (!SUPABASE_ANON_KEY) missing.push("SUPABASE_ANON_KEY");
+if (!PERPLEXITY_API_KEY) missing.push("PERPLEXITY_API_KEY");
+if (missing.length) {
+  console.error(`FATAL: Missing env vars: ${missing.join(", ")}`);
+  console.error("Add these as GitHub repository secrets under Settings > Secrets and variables > Actions.");
+  process.exit(1);
 }
 
 /* ── helpers ── */
@@ -14,67 +31,114 @@ function formatTitleDate(d = new Date()) {
   });
 }
 
-async function callPerplexity(systemPrompt, userPrompt, retries = 2) {
-  for (let attempt = 0; attempt <= retries; attempt++) {
-    try {
-      const res = await fetch("https://api.perplexity.ai/chat/completions", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${PERPLEXITY_API_KEY}`,
-        },
-        body: JSON.stringify({
-          model: "sonar-pro",
-          messages: [
-            { role: "system", content: systemPrompt },
-            { role: "user", content: userPrompt },
-          ],
-          temperature: 0.3,
-        }),
-      });
-      if (!res.ok) {
-        const text = await res.text();
-        throw new Error(`API ${res.status}: ${text}`);
-      }
-      const data = await res.json();
-      return data.choices[0].message.content;
-    } catch (err) {
-      if (attempt === retries) throw err;
-      console.warn(`Attempt ${attempt + 1} failed, retrying in 5s...`);
-      await new Promise((r) => setTimeout(r, 5000));
-    }
-  }
+function slugify(text) {
+  return text.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "").substring(0, 80);
 }
 
-/* ── research phase: broad industry intel ── */
+function sleep(ms) {
+  return new Promise((r) => setTimeout(r, ms));
+}
+
+/* ── API call with retries and model fallback ── */
+const MODELS = ["sonar-pro", "sonar"];
+
+async function callPerplexity(systemPrompt, userPrompt) {
+  for (const model of MODELS) {
+    for (let attempt = 0; attempt < 3; attempt++) {
+      try {
+        console.log(`  Trying ${model} (attempt ${attempt + 1}/3)...`);
+        const controller = new AbortController();
+        const timeout = setTimeout(() => controller.abort(), 90000);
+
+        const res = await fetch("https://api.perplexity.ai/chat/completions", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${PERPLEXITY_API_KEY}`,
+          },
+          body: JSON.stringify({
+            model,
+            messages: [
+              { role: "system", content: systemPrompt },
+              { role: "user", content: userPrompt },
+            ],
+            temperature: 0.3,
+          }),
+          signal: controller.signal,
+        });
+
+        clearTimeout(timeout);
+
+        if (res.status === 402 || res.status === 429) {
+          const text = await res.text();
+          console.warn(`  ${model} returned ${res.status}: ${text.substring(0, 200)}`);
+          if (res.status === 402) {
+            console.warn("  Credits exhausted — trying next model...");
+            break;
+          }
+          await sleep(10000 * (attempt + 1));
+          continue;
+        }
+
+        if (!res.ok) {
+          const text = await res.text();
+          throw new Error(`API ${res.status}: ${text.substring(0, 200)}`);
+        }
+
+        const data = await res.json();
+        const content = data.choices?.[0]?.message?.content;
+        if (!content || content.length < 50) {
+          throw new Error("Empty or too-short response from API");
+        }
+        return content;
+      } catch (err) {
+        if (err.name === "AbortError") {
+          console.warn(`  ${model} timed out after 90s`);
+        } else {
+          console.warn(`  ${model} attempt ${attempt + 1} failed: ${err.message}`);
+        }
+        if (attempt < 2) await sleep(5000 * (attempt + 1));
+      }
+    }
+    console.warn(`  All attempts for ${model} exhausted, trying next model...`);
+  }
+  throw new Error("All AI models failed. Check Perplexity API key and credits.");
+}
+
+/* ── research phase: 4 parallel topic queries ── */
 async function gatherResearch() {
   const systemPrompt = "You are a freight industry research analyst. Return factual data points, article summaries, and developments with source names and publication dates. Be specific — include numbers, company names, and regulatory references. Focus on still-relevant items, not just the past 7 days.";
 
   const topics = [
     {
       label: "Structural Trends & Fleet Economics",
-      prompt: `Collect the most important recent articles and analyses on U.S. domestic trucking structural trends. Include: driver shortages and workforce demographics, LTL job shifts and consolidation, fleet failures and carrier attrition rates, trailer and equipment order backlogs, insurance market conditions, and nuclear verdict trends. Focus on items shaping the next 3-12 months. Include source names and dates.`
+      prompt: "Collect the most important recent articles and analyses on U.S. domestic trucking structural trends. Include: driver shortages and workforce demographics, LTL job shifts and consolidation, fleet failures and carrier attrition rates, trailer and equipment order backlogs, insurance market conditions, and nuclear verdict trends. Focus on items shaping the next 3-12 months. Include source names and dates."
     },
     {
       label: "Diesel Economics & Fuel Analysis",
-      prompt: `Collect the most relevant recent articles and deep analyses on diesel fuel economics for U.S. trucking. Include: refinery capacity and utilization, crude oil supply dynamics, Strait of Hormuz and geopolitical impacts on fuel, fuel surcharge methodology debates, alternative fuel adoption (CNG, LNG, electric, hydrogen), renewable diesel supply, and any state fuel tax changes. Focus on analytical pieces, not just price reports. Include source names and dates.`
+      prompt: "Collect the most relevant recent articles and deep analyses on diesel fuel economics for U.S. trucking. Include: refinery capacity and utilization, crude oil supply dynamics, geopolitical impacts on fuel, fuel surcharge methodology debates, alternative fuel adoption (CNG, LNG, electric, hydrogen), renewable diesel supply, and any state fuel tax changes. Focus on analytical pieces, not just price reports. Include source names and dates."
     },
     {
       label: "Fraud, Crime & Enforcement Technology",
-      prompt: `Collect the most relevant recent articles on freight fraud, cargo crime, and technology responses in U.S. domestic trucking. Include: the SAFER Transport Act status, GPS spoofing countermeasures, AI-powered fraud detection tools, carrier identity verification platforms (NMFTA, Highway, Carrier411), double-brokering enforcement trends, CDL mill investigations, chameleon carrier tactics, and cybersecurity threats to fleets. Focus on longform analyses and enforcement strategy pieces. Include source names and dates.`
+      prompt: "Collect the most relevant recent articles on freight fraud, cargo crime, and technology responses in U.S. domestic trucking. Include: the SAFER Transport Act status, GPS spoofing countermeasures, AI-powered fraud detection tools, carrier identity verification platforms, double-brokering enforcement trends, CDL mill investigations, chameleon carrier tactics, and cybersecurity threats to fleets. Include source names and dates."
     },
     {
       label: "Technology, Policy & Industry Outlook",
-      prompt: `Collect the most relevant recent articles on trucking technology, policy developments, and industry outlook for U.S. domestic trucking. Include: autonomous trucking pilots and regulatory status, TMS and visibility platform developments, FMCSA technology initiatives (MOTUS, ELD 2.0), infrastructure bill impacts, truck parking solutions, EPA 2027 engine mandate effects, sustainability and ESG reporting requirements, and major industry conference takeaways. Include source names and dates.`
+      prompt: "Collect the most relevant recent articles on trucking technology, policy developments, and industry outlook for U.S. domestic trucking. Include: autonomous trucking pilots and regulatory status, TMS and visibility platform developments, FMCSA technology initiatives, infrastructure bill impacts, truck parking solutions, EPA 2027 engine mandate effects, and major industry conference takeaways. Include source names and dates."
     }
   ];
 
   console.log("Starting parallel research across 4 topics...");
   const results = await Promise.allSettled(
     topics.map(async (t) => {
-      const data = await callPerplexity(systemPrompt, t.prompt);
-      console.log(`✓ ${t.label}: ${data.length} chars`);
-      return { label: t.label, data };
+      try {
+        const data = await callPerplexity(systemPrompt, t.prompt);
+        console.log(`✓ ${t.label}: ${data.length} chars`);
+        return { label: t.label, data };
+      } catch (err) {
+        console.warn(`✗ ${t.label} failed: ${err.message}`);
+        throw err;
+      }
     })
   );
 
@@ -82,15 +146,14 @@ async function gatherResearch() {
   for (const r of results) {
     if (r.status === "fulfilled") {
       research[r.value.label] = r.value.data;
-    } else {
-      console.warn(`✗ Research failed: ${r.reason?.message}`);
     }
   }
 
   if (Object.keys(research).length < 2) {
-    throw new Error(`Only ${Object.keys(research).length}/4 topics succeeded. Aborting.`);
+    throw new Error(`Only ${Object.keys(research).length}/4 topics succeeded. Need at least 2. Aborting.`);
   }
 
+  console.log(`Research complete: ${Object.keys(research).length}/4 topics succeeded.`);
   return research;
 }
 
@@ -100,28 +163,28 @@ async function writeRoundup(research) {
     .map(([label, data]) => `=== ${label} ===\n${data}`)
     .join("\n\n");
 
-  const systemPrompt = `You are the content writer for American Lady Transportation (usealt.com), a freight brokerage in Willis, TX. You write an Industry News Roundup that covers strategic, longer-term developments in domestic trucking — distinct from the tactical Weekly Freight Report. Your tone is plain, direct, and informative.`;
+  const systemPrompt = "You are the content writer for American Lady Transportation (usealt.com), a freight brokerage in Willis, TX. You write an Industry News Roundup covering strategic, longer-term developments in domestic trucking. Your tone is plain, direct, and informative.";
 
   const userPrompt = `Using the research data below, write the Domestic Trucking Industry News Roundup for ${formatTitleDate()}.
 
 FORMAT: HTML content valid inside a <div>. Use h2, h3, p, ul/li, and strong tags. No html/body/head wrappers. No markdown.
 
 STRUCTURE: Present 10-14 news items organized under these h2 section headings:
-1. Fleet & Market Trends — structural shifts, M&A, carrier economics, workforce
-2. Fuel & Cost Pressures — diesel analysis, refinery issues, surcharge economics, alternative fuels
-3. Fraud & Security Watch — enforcement, technology responses, crime trends, legislation
-4. Technology & Policy — autonomous trucks, TMS platforms, FMCSA initiatives, infrastructure, EPA rules
+1. Fleet & Market Trends
+2. Fuel & Cost Pressures
+3. Fraud & Security Watch
+4. Technology & Policy
 
 For each news item:
 - Use an <h3> tag with a concise headline
 - Write 2-4 sentences summarizing the key insight
-- Cite the source and approximate date naturally (e.g., "per FreightWaves, March 15" or "according to a Transport Topics analysis")
-- Bold the single most important data point in each item with <strong>
+- Cite the source naturally (e.g., "per FreightWaves" or "according to Transport Topics")
+- Bold the most important data point with <strong>
 
 TONE:
-- This is the strategic companion to our Weekly Freight Report
-- Focus on "what's shaping the next 3-12 months" not "what happened this week"
-- Actionable context for brokers and carriers making business decisions
+- Strategic companion to the Weekly Freight Report
+- Focus on what is shaping the next 3-12 months
+- Actionable context for brokers and carriers
 - No filler, no generic statements
 
 End with a brief <h2>Bottom Line</h2> paragraph (3-4 sentences) synthesizing the key themes.
@@ -165,11 +228,7 @@ function validateRoundup(html) {
   return { cleaned, excerpt: plain.substring(0, 250) + (plain.length > 250 ? "..." : "") };
 }
 
-/* ── post directly to Supabase ── */
-function slugify(text) {
-  return text.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "").substring(0, 80);
-}
-
+/* ── post to Supabase ── */
 async function postToBlog(title, content, excerpt) {
   const slug = slugify(title) + "-" + Date.now().toString(36);
 
@@ -199,10 +258,31 @@ async function postToBlog(title, content, excerpt) {
   console.log(`✓ Posted to blog: ${data[0]?.slug}`);
 }
 
+/* ── duplicate check ── */
+async function checkAlreadyPosted(title) {
+  const res = await fetch(
+    `${SUPABASE_URL}/rest/v1/blog_posts?title=eq.${encodeURIComponent(title)}&select=id`,
+    {
+      headers: {
+        "apikey": SUPABASE_ANON_KEY,
+        "Authorization": `Bearer ${SUPABASE_ANON_KEY}`,
+      },
+    }
+  );
+  if (!res.ok) return false;
+  const data = await res.json();
+  return data.length > 0;
+}
+
 /* ── main ── */
 async function main() {
   const title = `Domestic Trucking Industry News Roundup - ${formatTitleDate()}`;
   console.log(`Generating: ${title}`);
+
+  if (await checkAlreadyPosted(title)) {
+    console.log(`Article "${title}" already exists. Skipping.`);
+    return;
+  }
 
   const research = await gatherResearch();
   const rawHtml = await writeRoundup(research);
@@ -213,6 +293,6 @@ async function main() {
 
 main().catch((err) => {
   console.error("FATAL:", err.message);
+  console.error("The workflow will retry on the next scheduled run, or trigger it manually from GitHub Actions.");
   process.exit(1);
 });
-
