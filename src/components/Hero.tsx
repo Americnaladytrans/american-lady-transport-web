@@ -12,7 +12,7 @@ const Hero = () => {
         aria-hidden="true"
         loading="eager"
         decoding="async"
-        className="pointer-events-none absolute left-1/2 top-1/2 w-full max-w-none -translate-x-1/2 -translate-y-1/2 select-none"
+        className="pointer-events-none absolute inset-0 h-full w-full object-contain select-none"
       />
 
       <div className="absolute inset-0 bg-gradient-to-b from-primary/80 via-primary/60 to-primary/50" />
