@@ -17,7 +17,7 @@ const Hero = () => {
           className="pointer-events-none w-full h-auto select-none"
         />
 
-        <div className="absolute inset-0 bg-gradient-to-b from-primary/85 via-primary/40 to-primary/70" />
+        
 
         {/* Buttons just below the header */}
         <div className="absolute left-0 right-0 top-2 z-[60] flex justify-between items-start px-4 md:px-8">
