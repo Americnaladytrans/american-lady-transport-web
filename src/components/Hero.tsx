@@ -21,7 +21,7 @@ const Hero = () => {
 
         {/* Buttons just below the header */}
         <div className="absolute left-0 right-0 top-36 z-30 flex justify-between items-start px-4 md:top-40 md:px-8">
-          <Button variant="hero" size="xl" asChild>
+          <Button variant="hero-outline" size="xl" asChild>
             <Link to="/shippers" className="group">
               Get a Freight Quote
               <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
