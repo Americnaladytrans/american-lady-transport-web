@@ -32,7 +32,7 @@ const Hero = () => {
         </div>
 
         {/* Headline just below buttons */}
-        <div className="absolute left-0 right-0 top-52 z-20 md:top-56">
+        <div className="absolute left-0 right-0 top-60 z-20 md:top-64">
           <div className="container mx-auto px-4">
             <div className="max-w-4xl mx-auto text-center">
               <h1 className="font-serif text-2xl md:text-3xl lg:text-5xl font-bold text-cream animate-fade-up animation-delay-100 leading-tight">
