@@ -5,14 +5,14 @@ import heroBg from "@/assets/hero-bg.png";
 
 const Hero = () => {
   return (
-    <section className="relative min-h-[130vh] flex items-center justify-center overflow-hidden bg-primary">
+    <section className="relative min-h-screen flex items-center justify-center overflow-hidden bg-primary">
       <img
         src={heroBg}
         alt=""
         aria-hidden="true"
         loading="eager"
         decoding="async"
-        className="pointer-events-none absolute inset-0 h-full w-full object-contain select-none"
+        className="pointer-events-none absolute inset-0 h-full w-full object-cover object-center select-none"
       />
 
       <div className="absolute inset-0 bg-gradient-to-b from-primary/80 via-primary/60 to-primary/50" />
