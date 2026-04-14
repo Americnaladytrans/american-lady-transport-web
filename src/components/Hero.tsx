@@ -7,7 +7,7 @@ const Hero = () => {
   return (
     <section className="relative">
       {/* Image with buttons overlay */}
-      <div className="relative w-full bg-primary pb-16">
+      <div className="relative w-full bg-primary">
         <img
           src={heroBg}
           alt=""
