@@ -35,8 +35,8 @@ const Hero = () => {
           </div>
         </div>
 
-        {/* Buttons on left and right sides, vertically centered */}
-        <div className="absolute inset-y-0 left-0 right-0 z-10 flex items-center justify-between px-6 md:px-12 pointer-events-none">
+        {/* Buttons at top of hero, left and right sides */}
+        <div className="absolute top-4 left-0 right-0 z-10 flex justify-between px-4 md:px-8 pointer-events-none">
           <Button variant="hero" size="xl" asChild className="pointer-events-auto">
             <Link to="/shippers" className="group">
               Get a Freight Quote
