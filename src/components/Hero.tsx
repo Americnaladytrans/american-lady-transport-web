@@ -18,6 +18,7 @@ const Hero = () => {
 
         <div className="absolute inset-0 bg-gradient-to-b from-primary/85 via-primary/40 to-primary/70" />
 
+        {/* Main content centered */}
         <div className="absolute inset-0 z-10 flex items-center justify-center">
           <div className="container mx-auto px-4 pt-24">
             <div className="max-w-4xl mx-auto text-center space-y-8">
@@ -42,22 +43,27 @@ const Hero = () => {
                   <Link to="/carriers">Become a Carrier</Link>
                 </Button>
               </div>
+            </div>
+          </div>
+        </div>
 
-              <div className="pt-12 grid grid-cols-2 md:grid-cols-4 gap-8 animate-fade-up animation-delay-400">
-                {[
-                  { value: "40+ Years", label: "In Business" },
-                  { value: "7 Days a Week", label: "Support" },
-                  { value: "All 50 States", label: "& Canada" },
-                  { value: "Vetted Carriers", label: "Safety First" },
-                ].map((stat, index) => (
-                  <div key={index} className="text-center">
-                    <div className="text-3xl md:text-4xl font-serif font-bold text-cream drop-shadow-lg">
-                      {stat.value}
-                    </div>
-                    <div className="text-sm font-medium text-cream/80 mt-1">{stat.label}</div>
+        {/* Stats bar pinned to the bottom of the hero */}
+        <div className="absolute bottom-0 left-0 right-0 z-10">
+          <div className="container mx-auto px-4 pb-16">
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-8 animate-fade-up animation-delay-400">
+              {[
+                { value: "40+ Years", label: "In Business" },
+                { value: "7 Days a Week", label: "Support" },
+                { value: "All 50 States", label: "& Canada" },
+                { value: "Vetted Carriers", label: "Safety First" },
+              ].map((stat, index) => (
+                <div key={index} className="text-center">
+                  <div className="text-3xl md:text-4xl font-serif font-bold text-cream drop-shadow-lg">
+                    {stat.value}
                   </div>
-                ))}
-              </div>
+                  <div className="text-sm font-medium text-cream/80 mt-1">{stat.label}</div>
+                </div>
+              ))}
             </div>
           </div>
         </div>
