@@ -35,7 +35,7 @@ const Hero = () => {
         <div className="absolute left-0 right-0 top-52 z-20 md:top-56">
           <div className="container mx-auto px-4">
             <div className="max-w-4xl mx-auto text-center">
-              <h1 className="font-serif text-4xl md:text-5xl lg:text-7xl font-bold text-cream animate-fade-up animation-delay-100 leading-tight">
+              <h1 className="font-serif text-2xl md:text-3xl lg:text-5xl font-bold text-cream animate-fade-up animation-delay-100 leading-tight">
                 Bridging the Gap Between Shipments and Solutions.
               </h1>
             </div>
