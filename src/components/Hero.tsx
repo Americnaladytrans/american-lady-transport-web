@@ -1,7 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { ArrowRight } from "lucide-react";
 import { Link } from "react-router-dom";
-import heroBg from "@/assets/hero-bg.png";
+import heroBg from "@/assets/hero-bg.jpg";
 
 const Hero = () => {
   return (
@@ -13,7 +13,6 @@ const Hero = () => {
           alt=""
           aria-hidden="true"
           loading="eager"
-          fetchPriority="high"
           decoding="async"
           className="pointer-events-none block w-full h-auto select-none"
         />
