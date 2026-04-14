@@ -18,7 +18,7 @@ const Hero = () => {
 
         <div className="absolute inset-0 bg-gradient-to-b from-primary/85 via-primary/40 to-primary/70" />
 
-        {/* Main content centered */}
+        {/* Headline centered */}
         <div className="absolute inset-0 z-10 flex items-center justify-center">
           <div className="container mx-auto px-4 pt-24">
             <div className="max-w-4xl mx-auto text-center space-y-8">
@@ -31,23 +31,28 @@ const Hero = () => {
                 Connecting shippers with vetted carriers for on-time, hassle-free
                 delivery across the continental U.S. and into Canada.
               </p>
-
-              <div className="flex flex-col sm:flex-row gap-4 justify-center items-center animate-fade-up animation-delay-300">
-                <Button variant="hero" size="xl" asChild>
-                  <Link to="/shippers" className="group">
-                    Get a Freight Quote
-                    <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
-                  </Link>
-                </Button>
-                <Button variant="hero-outline" size="xl" asChild>
-                  <Link to="/carriers">Become a Carrier</Link>
-                </Button>
-              </div>
             </div>
           </div>
         </div>
 
-        {/* Stats bar pinned to the bottom of the hero */}
+        {/* Buttons pinned lower — one on each side */}
+        <div className="absolute bottom-44 left-0 right-0 z-10">
+          <div className="container mx-auto px-4">
+            <div className="flex justify-between items-center max-w-3xl mx-auto animate-fade-up animation-delay-300">
+              <Button variant="hero" size="xl" asChild>
+                <Link to="/shippers" className="group">
+                  Get a Freight Quote
+                  <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+                </Link>
+              </Button>
+              <Button variant="hero-outline" size="xl" asChild>
+                <Link to="/carriers">Become a Carrier</Link>
+              </Button>
+            </div>
+          </div>
+        </div>
+
+        {/* Stats bar at the very bottom */}
         <div className="absolute bottom-0 left-0 right-0 z-10">
           <div className="container mx-auto px-4 pb-16">
             <div className="grid grid-cols-2 md:grid-cols-4 gap-8 animate-fade-up animation-delay-400">
