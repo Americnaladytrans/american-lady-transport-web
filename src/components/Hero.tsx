@@ -34,7 +34,7 @@ const Hero = () => {
       </div>
 
       {/* Text section below the image */}
-      <div className="bg-primary py-12">
+      <div className="bg-primary py-8 -mt-4">
         <div className="container mx-auto px-4">
           <div className="max-w-4xl mx-auto text-center mb-10">
             <h1 className="font-serif text-2xl md:text-3xl lg:text-5xl font-bold text-cream animate-fade-up animation-delay-100 leading-tight">
