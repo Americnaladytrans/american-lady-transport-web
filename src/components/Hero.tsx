@@ -18,28 +18,28 @@ const Hero = () => {
 
         <div className="absolute inset-0 bg-gradient-to-b from-primary/85 via-primary/40 to-primary/70" />
 
-        {/* Headline centered */}
-        <div className="absolute inset-0 z-10 flex items-center justify-center">
-          <div className="container mx-auto px-4 pt-24">
+        {/* Buttons and headline just below the header */}
+        <div className="absolute left-0 right-0 top-24 z-20 flex justify-between items-start px-4 md:px-8">
+          <Button variant="hero" size="xl" asChild>
+            <Link to="/shippers" className="group">
+              Get a Freight Quote
+              <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+            </Link>
+          </Button>
+          <Button variant="hero-outline" size="xl" asChild>
+            <Link to="/carriers">Become a Carrier</Link>
+          </Button>
+        </div>
+
+        {/* Headline just below buttons */}
+        <div className="absolute left-0 right-0 top-44 z-10">
+          <div className="container mx-auto px-4">
             <div className="max-w-4xl mx-auto text-center">
               <h1 className="font-serif text-4xl md:text-5xl lg:text-7xl font-bold text-cream animate-fade-up animation-delay-100 leading-tight">
                 Bridging the Gap Between Shipments and Solutions.
               </h1>
             </div>
           </div>
-        </div>
-
-        {/* Buttons just below the fixed header, left and right sides */}
-        <div className="absolute left-0 right-0 top-40 z-20 flex justify-between px-4 md:px-8 pointer-events-none">
-          <Button variant="hero" size="xl" asChild className="pointer-events-auto">
-            <Link to="/shippers" className="group">
-              Get a Freight Quote
-              <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
-            </Link>
-          </Button>
-          <Button variant="hero-outline" size="xl" asChild className="pointer-events-auto">
-            <Link to="/carriers">Become a Carrier</Link>
-          </Button>
         </div>
 
         {/* Stats bar at the very bottom */}
