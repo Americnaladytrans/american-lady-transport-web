@@ -7,7 +7,7 @@ const Hero = () => {
   return (
     <section className="relative bg-primary">
       {/* Image container preserving natural aspect ratio */}
-      <div className="relative w-full" style={{ aspectRatio: '1920 / 1245', minHeight: '600px' }}>
+      <div className="relative w-full min-h-[100vh]" style={{ aspectRatio: '1920 / 1245' }}>
         <img
           src={heroBg}
           alt=""
