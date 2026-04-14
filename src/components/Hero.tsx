@@ -5,15 +5,18 @@ import heroBg from "@/assets/hero-bg.png";
 
 const Hero = () => {
   return (
-    <section className="relative min-h-screen flex items-center justify-center overflow-hidden bg-primary">
-      <img
-        src={heroBg}
-        alt=""
-        aria-hidden="true"
-        loading="eager"
-        decoding="async"
-        className="pointer-events-none absolute inset-0 h-full w-full object-cover object-center select-none"
-      />
+    <section className="relative flex flex-col items-center justify-center bg-primary">
+      {/* Background image - shown in full without cropping */}
+      <div className="absolute inset-0">
+        <img
+          src={heroBg}
+          alt=""
+          aria-hidden="true"
+          loading="eager"
+          decoding="async"
+          className="pointer-events-none h-full w-full object-cover object-[center_30%] select-none"
+        />
+      </div>
 
       <div className="absolute inset-0 bg-gradient-to-b from-primary/80 via-primary/60 to-primary/50" />
 
