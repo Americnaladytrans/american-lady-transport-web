@@ -21,7 +21,7 @@ const Header = () => {
   return (
     <header className="fixed top-0 left-0 right-0 z-50">
       {/* Top bar with logo */}
-      <div className="bg-primary/95 backdrop-blur-md border-b border-primary-foreground/10">
+      <div className="bg-primary border-b border-primary-foreground/10">
         <div className="container mx-auto px-4">
           <div className="flex items-center justify-center h-36 relative">
             {/* Logo - Centered */}
@@ -43,7 +43,7 @@ const Header = () => {
 
       {/* Dropdown Navigation (all screen sizes) */}
       {isMenuOpen && (
-        <div className="bg-primary/95 backdrop-blur-md py-4 border-b border-primary-foreground/10 animate-fade-in">
+        <div className="bg-primary py-4 border-b border-primary-foreground/10 animate-fade-in">
           <div className="container mx-auto px-4">
             <nav className="flex flex-col gap-4">
               {navLinks.map((link) => (
