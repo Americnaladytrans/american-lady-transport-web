@@ -6,14 +6,14 @@ import heroBg from "@/assets/hero-bg.png";
 const Hero = () => {
   return (
     <section className="relative bg-primary">
-      <div className="relative w-full min-h-[130vh]">
+      <div className="relative w-full">
         <img
           src={heroBg}
           alt=""
           aria-hidden="true"
           loading="eager"
           decoding="async"
-          className="pointer-events-none absolute inset-0 h-full w-full object-cover object-center select-none"
+          className="pointer-events-none w-full h-auto select-none"
         />
 
         <div className="absolute inset-0 bg-gradient-to-b from-primary/85 via-primary/40 to-primary/70" />
