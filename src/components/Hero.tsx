@@ -28,8 +28,7 @@ const Hero = () => {
               </h1>
 
               <p className="text-base md:text-lg text-cream/80 max-w-xl mx-auto animate-fade-up animation-delay-200 leading-relaxed">
-                Connecting shippers with vetted carriers for on-time, hassle-free
-                delivery across the continental U.S. and into Canada.
+                Bridging the Gap Between Shipments and Solutions.
               </p>
             </div>
           </div>
