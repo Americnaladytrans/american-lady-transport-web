@@ -1,30 +1,29 @@
 import { Button } from "@/components/ui/button";
 import { ArrowRight } from "lucide-react";
 import { Link } from "react-router-dom";
-import heroBg from "@/assets/hero-bg.jpg";
+import heroBg from "@/assets/hero-bg.png";
 
 const Hero = () => {
   return (
-    <section className="relative min-h-[130vh] flex items-center justify-center overflow-hidden">
-      {/* Background Image */}
-      <div
-        className="absolute inset-0 bg-cover bg-center bg-no-repeat"
-        style={{ backgroundImage: `url(${heroBg})` }}
+    <section className="relative min-h-[130vh] flex items-center justify-center overflow-hidden bg-primary">
+      <img
+        src={heroBg}
+        alt=""
+        aria-hidden="true"
+        loading="eager"
+        decoding="async"
+        className="pointer-events-none absolute left-1/2 top-1/2 w-full max-w-none -translate-x-1/2 -translate-y-1/2 select-none"
       />
 
-      {/* Overlay */}
       <div className="absolute inset-0 bg-gradient-to-b from-primary/80 via-primary/60 to-primary/50" />
 
-      {/* Content */}
       <div className="container mx-auto px-4 relative z-10 pt-36 py-[145px]">
         <div className="max-w-4xl mx-auto text-center">
-          {/* Main Heading */}
           <h1 className="font-serif text-4xl md:text-5xl lg:text-7xl font-bold text-cream mb-6 animate-fade-up animation-delay-100 leading-tight">
             Trusted Freight Brokerage & 3PL Logistics
             <span className="block text-patriot-red">Across the U.S. and Canada</span>
           </h1>
 
-          {/* Subheading */}
           <p className="text-lg md:text-xl text-cream/80 mb-4 max-w-2xl mx-auto animate-fade-up animation-delay-200 leading-relaxed">
             American Lady Transport is a Texas-based freight brokerage and 3PL logistics
             company connecting shippers with vetted carriers for on-time, hassle-free delivery
@@ -35,7 +34,6 @@ const Hero = () => {
             shipments that demand reliable capacity and clear communication.
           </p>
 
-          {/* CTA Buttons */}
           <div className="flex flex-col sm:flex-row gap-4 justify-center items-center animate-fade-up animation-delay-300">
             <Button variant="hero" size="xl" asChild>
               <Link to="/shippers" className="group">
@@ -48,7 +46,6 @@ const Hero = () => {
             </Button>
           </div>
 
-          {/* Trust Indicators */}
           <div className="mt-16 grid grid-cols-2 md:grid-cols-4 gap-8 animate-fade-up animation-delay-400">
             {[
               { value: "40+ Years", label: "In Business" },
@@ -67,7 +64,6 @@ const Hero = () => {
         </div>
       </div>
 
-      {/* Bottom Gradient */}
       <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-background to-transparent" />
     </section>
   );
