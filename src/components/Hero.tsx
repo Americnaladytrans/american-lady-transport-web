@@ -35,21 +35,17 @@ const Hero = () => {
           </div>
         </div>
 
-        {/* Buttons pinned lower — one on each side */}
-        <div className="absolute bottom-44 left-0 right-0 z-10">
-          <div className="container mx-auto px-4">
-            <div className="flex justify-between items-center max-w-3xl mx-auto animate-fade-up animation-delay-300">
-              <Button variant="hero" size="xl" asChild>
-                <Link to="/shippers" className="group">
-                  Get a Freight Quote
-                  <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
-                </Link>
-              </Button>
-              <Button variant="hero-outline" size="xl" asChild>
-                <Link to="/carriers">Become a Carrier</Link>
-              </Button>
-            </div>
-          </div>
+        {/* Buttons on left and right sides, vertically centered */}
+        <div className="absolute inset-y-0 left-0 right-0 z-10 flex items-center justify-between px-6 md:px-12 pointer-events-none">
+          <Button variant="hero" size="xl" asChild className="pointer-events-auto">
+            <Link to="/shippers" className="group">
+              Get a Freight Quote
+              <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+            </Link>
+          </Button>
+          <Button variant="hero-outline" size="xl" asChild className="pointer-events-auto">
+            <Link to="/carriers">Become a Carrier</Link>
+          </Button>
         </div>
 
         {/* Stats bar at the very bottom */}
