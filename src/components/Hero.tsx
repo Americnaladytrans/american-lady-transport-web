@@ -21,15 +21,10 @@ const Hero = () => {
         {/* Headline centered */}
         <div className="absolute inset-0 z-10 flex items-center justify-center">
           <div className="container mx-auto px-4 pt-24">
-            <div className="max-w-4xl mx-auto text-center space-y-8">
+            <div className="max-w-4xl mx-auto text-center">
               <h1 className="font-serif text-4xl md:text-5xl lg:text-7xl font-bold text-cream animate-fade-up animation-delay-100 leading-tight">
-                Trusted Freight Brokerage & 3PL Logistics
-                <span className="block text-patriot-red mt-2">Across the U.S. and Canada</span>
-              </h1>
-
-              <p className="text-base md:text-lg text-cream/80 max-w-xl mx-auto animate-fade-up animation-delay-200 leading-relaxed">
                 Bridging the Gap Between Shipments and Solutions.
-              </p>
+              </h1>
             </div>
           </div>
         </div>
