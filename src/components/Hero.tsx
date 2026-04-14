@@ -34,10 +34,10 @@ const Hero = () => {
       </div>
 
       {/* Text section below the image */}
-      <div className="bg-background py-12">
+      <div className="bg-primary py-12">
         <div className="container mx-auto px-4">
           <div className="max-w-4xl mx-auto text-center mb-10">
-            <h1 className="font-serif text-2xl md:text-3xl lg:text-5xl font-bold text-primary animate-fade-up animation-delay-100 leading-tight">
+            <h1 className="font-serif text-2xl md:text-3xl lg:text-5xl font-bold text-cream animate-fade-up animation-delay-100 leading-tight">
               Bridging the Gap Between Shipments and Solutions.
             </h1>
           </div>
@@ -50,10 +50,10 @@ const Hero = () => {
               { value: "Vetted Carriers", label: "Safety First" },
             ].map((stat, index) => (
               <div key={index} className="text-center">
-                <div className="text-3xl md:text-4xl font-serif font-bold text-primary">
+                <div className="text-3xl md:text-4xl font-serif font-bold text-cream">
                   {stat.value}
                 </div>
-                <div className="text-sm font-medium text-muted-foreground mt-1">{stat.label}</div>
+                <div className="text-sm font-medium text-cream/80 mt-1">{stat.label}</div>
               </div>
             ))}
           </div>
