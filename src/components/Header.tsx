@@ -23,10 +23,10 @@ const Header = () => {
       {/* Top bar with logo */}
       <div className="bg-primary/95 backdrop-blur-md border-b border-primary-foreground/10">
         <div className="container mx-auto px-4">
-          <div className="flex items-center justify-center h-32 relative">
+          <div className="flex items-center justify-center h-36 relative">
             {/* Logo - Centered */}
             <Link to="/" className="flex items-center">
-              <img src={logo} alt="American Lady Transport LLC" className="h-28 w-auto" />
+              <img src={logo} alt="American Lady Transport LLC" className="h-32 w-auto" />
             </Link>
 
             {/* Menu Button - Right (all screen sizes) */}
