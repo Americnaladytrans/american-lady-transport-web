@@ -50,7 +50,7 @@ const Hero = () => {
               { value: "Vetted Carriers", label: "Safety First" },
             ].map((stat, index) => (
               <div key={index} className="text-center">
-                <div className="text-3xl md:text-4xl font-serif font-bold text-cream">
+                <div className="text-xl md:text-2xl font-serif font-bold text-cream">
                   {stat.value}
                 </div>
                 <div className="text-sm font-medium text-cream/80 mt-1">{stat.label}</div>
