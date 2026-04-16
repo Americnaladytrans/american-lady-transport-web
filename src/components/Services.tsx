@@ -58,10 +58,10 @@ const Services = () => {
           {services.map((service, index) => (
             <div
               key={index}
-              className="group bg-card rounded-xl p-8 shadow-elegant hover:shadow-lg transition-all duration-300 border border-border hover:border-patriot-red/20"
+              className="group bg-card rounded-xl p-8 shadow-elegant hover:shadow-lg transition-all duration-300 border border-border hover:border-patriot-red/20 dark:hover:border-accent/30"
             >
-              <div className="w-14 h-14 rounded-lg bg-primary/10 flex items-center justify-center mb-6 group-hover:bg-patriot-red/10 transition-colors">
-                <service.icon className="w-7 h-7 text-primary group-hover:text-patriot-red transition-colors" />
+              <div className="w-14 h-14 rounded-lg bg-primary/10 dark:bg-accent/10 flex items-center justify-center mb-6 group-hover:bg-patriot-red/10 dark:group-hover:bg-accent/15 transition-colors">
+                <service.icon className="w-7 h-7 text-primary dark:text-accent group-hover:text-patriot-red dark:group-hover:text-accent transition-colors" />
               </div>
               <h3 className="font-serif text-xl font-bold text-foreground mb-3">
                 {service.title}
