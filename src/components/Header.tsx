@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Menu, X, Phone } from "lucide-react";
 import { Link, useLocation } from "react-router-dom";
 import logo from "@/assets/logo-optimized.png";
+import { FuelSurchargeBanner } from "./FuelSurchargeBanner";
 
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -13,7 +14,6 @@ const Header = () => {
     { href: "/shippers", label: "Shippers" },
     { href: "/carriers", label: "Carriers" },
     { href: "/about", label: "About" },
-    { href: "/fuel-surcharge", label: "Fuel Surcharge" },
     { href: "/blog", label: "Blog" },
     { href: "/contact", label: "Contact" },
   ];
@@ -39,6 +39,11 @@ const Header = () => {
             </button>
           </div>
         </div>
+      </div>
+
+      {/* Fuel Surcharge Banner */}
+      <div className="bg-primary/95 pb-2">
+        <FuelSurchargeBanner />
       </div>
 
       {/* Dropdown Navigation (all screen sizes) */}
