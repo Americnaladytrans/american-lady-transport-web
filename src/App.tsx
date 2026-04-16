@@ -13,7 +13,7 @@ import ContactPage from "./pages/ContactPage";
 import BlogPage from "./pages/BlogPage";
 import BlogPostPage from "./pages/BlogPostPage";
 import BlogAdminPage from "./pages/BlogAdminPage";
-
+import FuelSurchargePage from "./pages/FuelSurchargePage";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
