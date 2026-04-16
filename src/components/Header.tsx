@@ -47,12 +47,12 @@ const Header = () => {
               <button
                 onClick={toggleTheme}
                 aria-label="Toggle dark mode"
-                className="inline-flex items-center justify-center h-9 w-9 rounded-full border border-primary-foreground/30 bg-primary-foreground/5 text-primary-foreground hover:bg-primary-foreground/15 transition-colors"
+                className="grid h-[42px] w-[42px] place-items-center rounded-full border border-border bg-card text-foreground shadow-sm transition-colors hover:bg-muted"
               >
-                {isDark ? <Moon className="w-4 h-4" /> : <Sun className="w-4 h-4" />}
+                {isDark ? <Moon className="h-[18px] w-[18px]" strokeWidth={2} /> : <Sun className="h-[18px] w-[18px]" strokeWidth={2} />}
               </button>
               <button
-                className="text-primary-foreground p-2"
+                className="inline-flex h-[42px] w-[42px] items-center justify-center rounded-full border border-primary-foreground/10 bg-primary text-primary-foreground transition-colors hover:bg-navy-light"
                 onClick={() => setIsMenuOpen(!isMenuOpen)}
                 aria-label="Toggle menu"
               >
