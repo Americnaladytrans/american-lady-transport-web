@@ -1,11 +1,27 @@
-import { useState } from "react";
-import { Menu, X, Phone } from "lucide-react";
+import { useEffect, useState } from "react";
+import { Menu, X, Phone, Sun, Moon } from "lucide-react";
 import { Link, useLocation } from "react-router-dom";
 import logo from "@/assets/logo-optimized.png";
 
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isDark, setIsDark] = useState(false);
   const location = useLocation();
+
+  useEffect(() => {
+    const stored = localStorage.getItem("theme");
+    const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
+    const dark = stored ? stored === "dark" : prefersDark;
+    setIsDark(dark);
+    document.documentElement.classList.toggle("dark", dark);
+  }, []);
+
+  const toggleTheme = () => {
+    const next = !isDark;
+    setIsDark(next);
+    document.documentElement.classList.toggle("dark", next);
+    localStorage.setItem("theme", next ? "dark" : "light");
+  };
 
   const navLinks = [
     { href: "/services", label: "Services" },
@@ -27,13 +43,22 @@ const Header = () => {
             <Link to="/" className="flex items-center">
               <img src={logo} alt="American Lady Transport LLC" className="h-32 w-auto" />
             </Link>
-            <button
-              className="text-primary-foreground p-2 absolute right-0"
-              onClick={() => setIsMenuOpen(!isMenuOpen)}
-              aria-label="Toggle menu"
-            >
-              {isMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
-            </button>
+            <div className="absolute right-0 flex flex-col items-end gap-2">
+              <button
+                onClick={toggleTheme}
+                aria-label="Toggle dark mode"
+                className="inline-flex items-center justify-center h-9 w-9 rounded-full border border-primary-foreground/30 bg-primary-foreground/5 text-primary-foreground hover:bg-primary-foreground/15 transition-colors"
+              >
+                {isDark ? <Moon className="w-4 h-4" /> : <Sun className="w-4 h-4" />}
+              </button>
+              <button
+                className="text-primary-foreground p-2"
+                onClick={() => setIsMenuOpen(!isMenuOpen)}
+                aria-label="Toggle menu"
+              >
+                {isMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+              </button>
+            </div>
           </div>
         </div>
       </div>
