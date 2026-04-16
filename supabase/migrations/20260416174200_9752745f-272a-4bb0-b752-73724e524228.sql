@@ -1,0 +1,1 @@
+UPDATE public.page_views SET view_count = 14667 WHERE page_path = '/';
