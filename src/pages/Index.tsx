@@ -8,7 +8,6 @@ import Footer from "@/components/Footer";
 import SEOHead from "@/components/SEOHead";
 import { Link } from "react-router-dom";
 import { ArrowRight, Fuel } from "lucide-react";
-
 const Index = () => {
   return (
     <div className="min-h-screen">
