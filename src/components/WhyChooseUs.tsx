@@ -96,6 +96,9 @@ const WhyChooseUs = () => {
               </Link>
             </Button>
             <Button variant="hero-outline" size="xl" asChild>
+              <Link to="/carriers">Become a Carrier</Link>
+            </Button>
+            <Button variant="hero-outline" size="xl" asChild>
               <Link to="/contact">Contact Us</Link>
             </Button>
           </div>
