@@ -7,6 +7,8 @@ import LatestPosts from "@/components/LatestPosts";
 import Footer from "@/components/Footer";
 import SEOHead from "@/components/SEOHead";
 import { FuelSurchargeBanner } from "@/components/FuelSurchargeBanner";
+import { TetrisLoadSpaceBanner } from "@/components/TetrisLoadSpaceBanner";
+import { PartialRateProBanner } from "@/components/PartialRateProBanner";
 
 const Index = () => {
   return (
@@ -24,6 +26,11 @@ const Index = () => {
         <WhyChooseUs />
         <section className="py-10 bg-background">
           <div className="container mx-auto px-4">
+            <h2 className="text-center text-xs font-bold uppercase tracking-[0.2em] text-muted-foreground mb-4">
+              Partner Apps
+            </h2>
+            <PartialRateProBanner />
+            <TetrisLoadSpaceBanner />
             <FuelSurchargeBanner />
           </div>
         </section>
