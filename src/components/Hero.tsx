@@ -37,7 +37,7 @@ const Hero = () => {
       <div className="bg-gradient-to-b from-primary from-80% to-background pb-16 pt-8">
         <div className="container mx-auto px-4">
           <div className="max-w-5xl mx-auto text-center mb-10">
-            <h1 className="font-serif text-xl md:text-2xl lg:text-4xl font-bold text-cream animate-fade-up animation-delay-100 leading-tight whitespace-nowrap">
+            <h1 className="font-serif text-2xl md:text-3xl lg:text-4xl font-bold text-cream animate-fade-up animation-delay-100 leading-tight">
               Bridging the Gap Between Shipments and Solutions.
             </h1>
           </div>
