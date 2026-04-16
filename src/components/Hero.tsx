@@ -6,21 +6,9 @@ import heroBg from "@/assets/hero-bg.jpg";
 const Hero = () => {
   return (
     <section className="relative">
-      {/* Image with buttons overlay */}
-      <div className="relative w-full">
-        <img
-          src={heroBg}
-          alt=""
-          aria-hidden="true"
-          loading="eager"
-          decoding="async"
-          className="pointer-events-none block w-full h-auto select-none"
-        />
-
-        
-
-        {/* Buttons just below the header */}
-        <div className="absolute left-0 right-0 top-2 z-[60] flex justify-between items-start px-4 md:px-8">
+      {/* CTA buttons above the hero image */}
+      <div className="bg-primary px-4 md:px-8 pt-2 pb-3">
+        <div className="flex justify-between items-center gap-2 md:gap-4">
           <Button variant="hero-outline" size="xl" asChild>
             <Link to="/shippers" className="group">
               Get a Freight Quote
@@ -31,6 +19,18 @@ const Hero = () => {
             <Link to="/carriers">Become a Carrier</Link>
           </Button>
         </div>
+      </div>
+
+      {/* Hero image */}
+      <div className="relative w-full">
+        <img
+          src={heroBg}
+          alt=""
+          aria-hidden="true"
+          loading="eager"
+          decoding="async"
+          className="pointer-events-none block w-full h-auto select-none"
+        />
       </div>
 
       {/* Text section below the image */}
