@@ -2,7 +2,6 @@ import { useState } from "react";
 import { Menu, X, Phone } from "lucide-react";
 import { Link, useLocation } from "react-router-dom";
 import logo from "@/assets/logo-optimized.png";
-import { FuelSurchargeBanner } from "./FuelSurchargeBanner";
 
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -14,6 +13,7 @@ const Header = () => {
     { href: "/shippers", label: "Shippers" },
     { href: "/carriers", label: "Carriers" },
     { href: "/about", label: "About" },
+    { href: "/fuel-surcharge", label: "Fuel Surcharge" },
     { href: "/blog", label: "Blog" },
     { href: "/contact", label: "Contact" },
   ];
@@ -24,12 +24,9 @@ const Header = () => {
       <div className="bg-primary border-b border-primary-foreground/10">
         <div className="container mx-auto px-4">
           <div className="flex items-center justify-center h-36 relative">
-            {/* Logo - Centered */}
             <Link to="/" className="flex items-center">
               <img src={logo} alt="American Lady Transport LLC" className="h-32 w-auto" />
             </Link>
-
-            {/* Menu Button - Right (all screen sizes) */}
             <button
               className="text-primary-foreground p-2 absolute right-0"
               onClick={() => setIsMenuOpen(!isMenuOpen)}
@@ -41,12 +38,6 @@ const Header = () => {
         </div>
       </div>
 
-      {/* Fuel Surcharge Banner */}
-      <div className="bg-primary/95 pb-2">
-        <FuelSurchargeBanner />
-      </div>
-
-      {/* Dropdown Navigation (all screen sizes) */}
       {isMenuOpen && (
         <div className="bg-primary py-4 border-b border-primary-foreground/10 animate-fade-in">
           <div className="container mx-auto px-4">
