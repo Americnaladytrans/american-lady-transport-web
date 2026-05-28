@@ -1,14 +1,24 @@
 /*
  * Domestic Trucking Industry News Roundup — autonomous blog post generator
  *
- * Runs every Friday via GitHub Actions cron.
- * Posts directly to Supabase REST API.
+ * Runs every Friday via GitHub Actions cron. Posts to BOTH:
+ *   1. Supabase (powers dynamic site at usealt.com)
+ *   2. src/data/blog-posts.json (powers static copy site on GitHub Pages)
  *
  * Fallback chain: sonar-pro → sonar (same Perplexity API key)
- * Includes: retry logic, duplicate detection, validation gate
+ * Includes: retry logic, duplicate detection, validation gate.
  *
  * Required env vars: SUPABASE_URL, SUPABASE_ANON_KEY, PERPLEXITY_API_KEY
  */
+
+import {
+  buildPost,
+  supabaseHasTitle,
+  postToSupabase,
+  readJsonPosts,
+  jsonHasTitle,
+  writeJsonPost,
+} from "./lib/blog-store.mjs";
 
 const SUPABASE_URL = process.env.SUPABASE_URL;
 const SUPABASE_ANON_KEY = process.env.SUPABASE_ANON_KEY;
@@ -29,10 +39,6 @@ function formatTitleDate(d = new Date()) {
   return d.toLocaleDateString("en-US", {
     year: "numeric", month: "long", day: "numeric", timeZone: "America/Chicago",
   });
-}
-
-function slugify(text) {
-  return text.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "").substring(0, 80);
 }
 
 function sleep(ms) {
@@ -228,66 +234,45 @@ function validateRoundup(html) {
   return { cleaned, excerpt: plain.substring(0, 250) + (plain.length > 250 ? "..." : "") };
 }
 
-/* ── post to Supabase ── */
-async function postToBlog(title, content, excerpt) {
-  const slug = slugify(title) + "-" + Date.now().toString(36);
-
-  const res = await fetch(`${SUPABASE_URL}/rest/v1/blog_posts`, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      "apikey": SUPABASE_ANON_KEY,
-      "Authorization": `Bearer ${SUPABASE_ANON_KEY}`,
-      "Prefer": "return=representation",
-    },
-    body: JSON.stringify({
-      title,
-      slug,
-      content,
-      excerpt,
-      is_published: true,
-      published_at: new Date().toISOString(),
-    }),
-  });
-
-  if (!res.ok) {
-    const text = await res.text();
-    throw new Error(`Supabase insert error: ${res.status} - ${text}`);
-  }
-  const data = await res.json();
-  console.log(`✓ Posted to blog: ${data[0]?.slug}`);
-}
-
-/* ── duplicate check ── */
-async function checkAlreadyPosted(title) {
-  const res = await fetch(
-    `${SUPABASE_URL}/rest/v1/blog_posts?title=eq.${encodeURIComponent(title)}&select=id`,
-    {
-      headers: {
-        "apikey": SUPABASE_ANON_KEY,
-        "Authorization": `Bearer ${SUPABASE_ANON_KEY}`,
-      },
-    }
-  );
-  if (!res.ok) return false;
-  const data = await res.json();
-  return data.length > 0;
-}
-
 /* ── main ── */
 async function main() {
   const title = `Domestic Trucking Industry News Roundup - ${formatTitleDate()}`;
   console.log(`Generating: ${title}`);
 
-  if (await checkAlreadyPosted(title)) {
-    console.log(`Article "${title}" already exists. Skipping.`);
+  const existingInSupabase = await supabaseHasTitle(title);
+  const existingJson = await readJsonPosts();
+  const existsInJson = jsonHasTitle(existingJson, title);
+
+  if (existingInSupabase && existsInJson) {
+    console.log(`Already posted to both Supabase and JSON. Nothing to do.`);
     return;
   }
 
-  const research = await gatherResearch();
-  const rawHtml = await writeRoundup(research);
-  const { cleaned, excerpt } = validateRoundup(rawHtml);
-  await postToBlog(title, cleaned, excerpt);
+  let post;
+
+  if (existingInSupabase && !existsInJson) {
+    console.log("Supabase has post but JSON does not. Backfilling JSON from Supabase.");
+    post = buildPost({
+      title,
+      content: existingInSupabase.content,
+      excerpt: existingInSupabase.excerpt,
+      publishedAt: existingInSupabase.published_at,
+    });
+  } else {
+    const research = await gatherResearch();
+    const rawHtml = await writeRoundup(research);
+    const { cleaned, excerpt } = validateRoundup(rawHtml);
+    post = buildPost({ title, content: cleaned, excerpt });
+
+    if (!existingInSupabase) {
+      await postToSupabase(post);
+    }
+  }
+
+  if (!existsInJson) {
+    await writeJsonPost(post);
+  }
+
   console.log("Done.");
 }
 

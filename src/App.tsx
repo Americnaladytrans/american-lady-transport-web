@@ -23,7 +23,12 @@ const App = () => (
     <TooltipProvider>
       <Toaster />
       <Sonner />
-      <BrowserRouter>
+      {/*
+        basename uses Vite's BASE_URL so the same code works whether the site
+        is served at root (pplx.app, americanladytrans.com) or under a
+        subpath like /american-lady-transport-web/ (GitHub Pages).
+      */}
+      <BrowserRouter basename={import.meta.env.BASE_URL}>
         <ScrollToTop />
         <Routes>
           <Route path="/" element={<Index />} />

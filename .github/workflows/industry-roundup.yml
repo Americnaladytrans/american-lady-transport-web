@@ -2,13 +2,28 @@ name: Industry News Roundup
 
 on:
   schedule:
-    - cron: "0 17 * * FRI"
+    # 17:30 UTC = 12:30 PM CDT every Friday
+    # Staggered 30 minutes after Weekly Freight Report so the two
+    # workflows do not race on git push or Pages deploy.
+    - cron: "30 17 * * FRI"
   workflow_dispatch:
 
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+
+concurrency:
+  group: "pages"
+  cancel-in-progress: false
+
 jobs:
-  post-industry-roundup:
+  post-and-deploy:
     runs-on: ubuntu-latest
-    timeout-minutes: 10
+    timeout-minutes: 15
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -17,10 +32,49 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: "20"
+          cache: "npm"
 
-      - name: Generate and post industry news roundup
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Generate roundup, post to Supabase, update JSON
         env:
           SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
           SUPABASE_ANON_KEY: ${{ secrets.SUPABASE_ANON_KEY }}
           PERPLEXITY_API_KEY: ${{ secrets.PERPLEXITY_API_KEY }}
         run: node scripts/industry-roundup.mjs
+
+      - name: Commit JSON update
+        run: |
+          if [[ -n "$(git status --porcelain src/data/blog-posts.json)" ]]; then
+            git config user.name "github-actions[bot]"
+            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+            git add src/data/blog-posts.json
+            git commit -m "chore(blog): add Industry News Roundup ($(date -u +%Y-%m-%d))"
+            for i in 1 2 3; do
+              if git push; then break; fi
+              echo "Push failed, pulling latest and retrying..."
+              git pull --rebase origin main
+              sleep 5
+            done
+          else
+            echo "No JSON changes to commit."
+          fi
+
+      - name: Build static site
+        env:
+          # Asset base path for GitHub Pages project site
+          VITE_BASE: /american-lady-transport-web/
+        run: npm run build
+
+      - name: Setup Pages
+        uses: actions/configure-pages@v5
+
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: ./dist
+
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
