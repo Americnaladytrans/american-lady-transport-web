@@ -1,7 +1,6 @@
-import { Phone, Mail, MapPin, Rss } from "lucide-react";
+import { Phone, Mail, MapPin } from "lucide-react";
 import { Link } from "react-router-dom";
 import logo from "@/assets/logo-badge.png";
-import VisitorCounter from "@/components/VisitorCounter";
 
 const Footer = () => {
   const currentYear = new Date().getFullYear();
@@ -40,15 +39,7 @@ const Footer = () => {
               >
                 <Mail className="w-5 h-5" />
               </a>
-              <a
-                href="https://zmyeyyzhuwzdpjinecmg.supabase.co/functions/v1/rss-feed"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="w-10 h-10 rounded-full bg-primary-foreground/10 flex items-center justify-center hover:bg-patriot-red transition-colors"
-                aria-label="RSS Feed"
-              >
-                <Rss className="w-5 h-5" />
-              </a>
+
             </div>
           </div>
 
@@ -110,7 +101,6 @@ const Footer = () => {
 
         {/* Bottom Bar */}
         <div className="border-t border-primary-foreground/10 mt-12 pt-8 flex flex-col items-center gap-2">
-          <VisitorCounter />
           <p className="text-sm text-primary-foreground/60">
             © {currentYear} American Lady Transport. All rights reserved. MC170463.
           </p>

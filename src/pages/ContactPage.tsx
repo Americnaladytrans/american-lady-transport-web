@@ -7,7 +7,6 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/hooks/use-toast";
-import { supabase } from "@/integrations/supabase/client";
 import { z } from "zod";
 
 const contactSchema = z.object({
@@ -60,7 +59,7 @@ const ContactPage = () => {
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     setErrors({});
 
@@ -74,38 +73,27 @@ const ContactPage = () => {
       return;
     }
 
+    // Ignore honeypot-filled submissions silently
+    if (honeypot) return;
+
     setIsSubmitting(true);
-    try {
-      const fullMessage = formData.company
-        ? `Company: ${formData.company}\n\n${formData.message}`
-        : formData.message;
 
-      const { error } = await supabase.functions.invoke("send-contact-email", {
-        body: {
-          name: formData.name,
-          email: formData.email,
-          phone: formData.phone || "",
-          message: fullMessage,
-          _honeypot: honeypot,
-        },
-      });
-      if (error) throw error;
+    const fullMessage = formData.company
+      ? `Company: ${formData.company}\n\n${formData.message}`
+      : formData.message;
 
-      toast({
-        title: "Message Sent!",
-        description: "Thank you for contacting American Lady Transport. We'll be in touch soon.",
-      });
-      setFormData({ name: "", company: "", email: "", phone: "", message: "" });
-    } catch (error: any) {
-      console.error("Error sending message:", error);
-      toast({
-        title: "Error",
-        description: "Failed to send message. Please try again or call us directly.",
-        variant: "destructive",
-      });
-    } finally {
-      setIsSubmitting(false);
-    }
+    const subject = encodeURIComponent(`Freight Inquiry - ${formData.name}`);
+    const body = encodeURIComponent(
+      `Name: ${formData.name}\nEmail: ${formData.email}\nPhone: ${formData.phone || ""}\n\nMessage:\n${fullMessage}`
+    );
+    const mailtoUrl = `mailto:info@usealt.com?subject=${subject}&body=${body}`;
+
+    toast({
+      title: "Opening your email app...",
+      description: "Your email client will open with the message pre-filled.",
+    });
+    window.location.href = mailtoUrl;
+    setIsSubmitting(false);
   };
 
   return (
@@ -217,7 +205,7 @@ const ContactPage = () => {
                     {errors.message && <p className="text-destructive text-sm mt-1">{errors.message}</p>}
                   </div>
                   <Button type="submit" variant="hero" size="xl" className="w-full" disabled={isSubmitting}>
-                    {isSubmitting ? "Sending..." : (
+                    {isSubmitting ? "Opening..." : (
                       <>
                         Send Message
                         <Send className="w-5 h-5" />

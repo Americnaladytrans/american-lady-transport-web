@@ -7,7 +7,6 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/hooks/use-toast";
-import { supabase } from "@/integrations/supabase/client";
 import { z } from "zod";
 
 const carrierSchema = z.object({
@@ -46,7 +45,7 @@ const CarriersPage = () => {
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     setErrors({});
 
@@ -60,47 +59,31 @@ const CarriersPage = () => {
       return;
     }
 
+    // Ignore honeypot-filled submissions silently
+    if (honeypot) return;
+
     setIsSubmitting(true);
-    try {
-      const message = `
-CARRIER SIGNUP REQUEST
+
+    const message = `CARRIER SIGNUP REQUEST
 ----------------------
 Company: ${formData.companyName}
 MC/DOT: ${formData.mcDotNumber}
 Equipment: ${formData.equipmentType}
 Preferred Lanes: ${formData.preferredLanes}
-Insurance: ${formData.insuranceDetails}
-      `.trim();
+Insurance: ${formData.insuranceDetails}`.trim();
 
-      const { error } = await supabase.functions.invoke("send-contact-email", {
-        body: {
-          name: formData.name,
-          email: formData.email,
-          phone: formData.phone,
-          message,
-          _honeypot: honeypot,
-        },
-      });
-      if (error) throw error;
+    const subject = encodeURIComponent(`Carrier Onboarding - ${formData.companyName}`);
+    const body = encodeURIComponent(
+      `Contact Name: ${formData.name}\nEmail: ${formData.email}\nPhone: ${formData.phone}\n\n${message}`
+    );
+    const mailtoUrl = `mailto:info@usealt.com?subject=${subject}&body=${body}`;
 
-      toast({
-        title: "Carrier Application Sent!",
-        description: "Our team will review your information and reach out soon.",
-      });
-      setFormData({
-        name: "", email: "", phone: "", companyName: "", mcDotNumber: "",
-        equipmentType: "", preferredLanes: "", insuranceDetails: "",
-      });
-    } catch (error: any) {
-      console.error("Error sending carrier signup:", error);
-      toast({
-        title: "Error",
-        description: "Failed to send application. Please try again or call us directly.",
-        variant: "destructive",
-      });
-    } finally {
-      setIsSubmitting(false);
-    }
+    toast({
+      title: "Opening your email app...",
+      description: "Your email client will open with the application pre-filled.",
+    });
+    window.location.href = mailtoUrl;
+    setIsSubmitting(false);
   };
 
   return (
@@ -208,7 +191,7 @@ Insurance: ${formData.insuranceDetails}
                     <Textarea maxLength={1000} value={formData.insuranceDetails} onChange={(e) => setFormData({ ...formData, insuranceDetails: e.target.value })} placeholder="Insurance provider, policy number, coverage amounts..." className="min-h-[100px] resize-none" />
                   </div>
                   <Button type="submit" variant="hero" size="xl" className="w-full" disabled={isSubmitting}>
-                    {isSubmitting ? "Sending..." : (
+                    {isSubmitting ? "Opening..." : (
                       <>
                         Submit Carrier Application
                         <Send className="w-5 h-5" />

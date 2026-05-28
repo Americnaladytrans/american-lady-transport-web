@@ -7,7 +7,6 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/hooks/use-toast";
-import { supabase } from "@/integrations/supabase/client";
 import { z } from "zod";
 
 const quoteSchema = z.object({
@@ -48,7 +47,7 @@ const ShippersPage = () => {
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     setErrors({});
 
@@ -62,48 +61,32 @@ const ShippersPage = () => {
       return;
     }
 
+    // Ignore honeypot-filled submissions silently
+    if (honeypot) return;
+
     setIsSubmitting(true);
-    try {
-      const message = `
-FREIGHT QUOTE REQUEST
+
+    const message = `FREIGHT QUOTE REQUEST
 ---------------------
 Pickup: ${formData.pickupLocation}
 Delivery: ${formData.deliveryLocation}
 Freight Type: ${formData.freightType}
 Equipment Needed: ${formData.equipmentNeeded}
 Ready Date: ${formData.readyDate}
-Special Requirements: ${formData.specialRequirements}
-      `.trim();
+Special Requirements: ${formData.specialRequirements}`.trim();
 
-      const { error } = await supabase.functions.invoke("send-contact-email", {
-        body: {
-          name: formData.name,
-          email: formData.email,
-          phone: formData.phone,
-          message,
-          _honeypot: honeypot,
-        },
-      });
-      if (error) throw error;
+    const subject = encodeURIComponent(`Shipper Quote Request - ${formData.name}`);
+    const body = encodeURIComponent(
+      `Name: ${formData.name}\nEmail: ${formData.email}\nPhone: ${formData.phone}\n\n${message}`
+    );
+    const mailtoUrl = `mailto:info@usealt.com?subject=${subject}&body=${body}`;
 
-      toast({
-        title: "Quote Request Sent!",
-        description: "We'll review your freight details and get back to you shortly.",
-      });
-      setFormData({
-        name: "", email: "", phone: "", pickupLocation: "", deliveryLocation: "",
-        freightType: "", equipmentNeeded: "", readyDate: "", specialRequirements: "",
-      });
-    } catch (error: any) {
-      console.error("Error sending quote request:", error);
-      toast({
-        title: "Error",
-        description: "Failed to send request. Please try again or call us directly.",
-        variant: "destructive",
-      });
-    } finally {
-      setIsSubmitting(false);
-    }
+    toast({
+      title: "Opening your email app...",
+      description: "Your email client will open with the quote request pre-filled.",
+    });
+    window.location.href = mailtoUrl;
+    setIsSubmitting(false);
   };
 
   return (
@@ -218,7 +201,7 @@ Special Requirements: ${formData.specialRequirements}
                     <Textarea maxLength={1000} value={formData.specialRequirements} onChange={(e) => setFormData({ ...formData, specialRequirements: e.target.value })} placeholder="Jobsite delivery, crane needed, limited access, etc." className="min-h-[100px] resize-none" />
                   </div>
                   <Button type="submit" variant="hero" size="xl" className="w-full" disabled={isSubmitting}>
-                    {isSubmitting ? "Sending..." : (
+                    {isSubmitting ? "Opening..." : (
                       <>
                         Submit Quote Request
                         <Send className="w-5 h-5" />

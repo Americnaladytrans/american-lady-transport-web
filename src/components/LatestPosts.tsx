@@ -1,8 +1,8 @@
-import { useQuery } from "@tanstack/react-query";
-import { supabase } from "@/integrations/supabase/client";
+import { useMemo } from "react";
 import { Link } from "react-router-dom";
 import { ArrowRight, Calendar } from "lucide-react";
 import { format } from "date-fns";
+import blogPostsData from "@/data/blog-posts.json";
 
 interface BlogPost {
   id: string;
@@ -13,21 +13,13 @@ interface BlogPost {
 }
 
 const LatestPosts = () => {
-  const { data: posts, isLoading } = useQuery({
-    queryKey: ["latest-posts"],
-    queryFn: async () => {
-      const { data, error } = await supabase
-        .from("blog_posts")
-        .select("id, title, slug, excerpt, published_at")
-        .eq("is_published", true)
-        .order("published_at", { ascending: false })
-        .limit(3);
-      if (error) throw error;
-      return data as BlogPost[];
-    },
-  });
+  const posts = useMemo(() => {
+    return [...(blogPostsData as BlogPost[])]
+      .sort((a, b) => new Date(b.published_at).getTime() - new Date(a.published_at).getTime())
+      .slice(0, 3);
+  }, []);
 
-  if (isLoading || !posts?.length) return null;
+  if (!posts.length) return null;
 
   return (
     <section className="py-20 bg-secondary">
