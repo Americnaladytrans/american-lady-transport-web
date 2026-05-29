@@ -24,11 +24,15 @@ const App = () => (
       <Toaster />
       <Sonner />
       {/*
-        basename uses Vite's BASE_URL so the same code works whether the site
-        is served at root (pplx.app, americanladytrans.com) or under a
-        subpath like /american-lady-transport-web/ (GitHub Pages).
+        basename normalizes Vite's BASE_URL so the same code works whether the site
+        is served at root (pplx.app, americanladytrans.com — base is "./" or "/")
+        or under a subpath like /american-lady-transport-web/ (GitHub Pages).
       */}
-      <BrowserRouter basename={import.meta.env.BASE_URL}>
+      <BrowserRouter basename={(() => {
+        const raw = import.meta.env.BASE_URL;
+        if (!raw || raw === "./" || raw === "/") return "/";
+        return raw.replace(/\/$/, "");
+      })()}>
         <ScrollToTop />
         <Routes>
           <Route path="/" element={<Index />} />
