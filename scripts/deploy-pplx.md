@@ -11,6 +11,25 @@ This file is referenced by the weekly recurring task that updates `american-lady
 
 ## Exact steps for the cron task
 
+### Pre-step: If GitHub's scheduled run was skipped
+
+Before touching the repo, check whether today's Friday workflows already ran:
+
+```bash
+gh run list --repo Americnaladytrans/american-lady-transport-web \
+  --workflow=weekly-report.yml --limit 1 \
+  --json createdAt --jq '.[0].createdAt'
+# Compare to today's date — if older than today, manually trigger BOTH workflows:
+gh workflow run weekly-report.yml --ref main
+sleep 120  # stagger by 2 minutes to avoid git push race + concurrency-lock collision
+gh workflow run industry-roundup.yml --ref main
+# Then wait for both to finish before continuing.
+```
+
+Do NOT trigger them back-to-back — GitHub Actions has a known race where two workflow_dispatch calls within the same second can both bypass the shared `concurrency: pages` lock, causing one to fail at the git push step.
+
+### Main steps
+
 1. **Ensure repo present and up to date:**
    ```bash
    if [ ! -d /home/user/workspace/alt-web-new ]; then
