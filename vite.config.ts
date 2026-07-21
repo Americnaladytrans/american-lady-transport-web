@@ -29,7 +29,7 @@ export default defineConfig(() => ({
         assetFileNames: "assets/[hash].[ext]",
       },
     },
-    minify: "terser",
+    minify: "terser" as const,
     terserOptions: {
       compress: {
         drop_console: true,
