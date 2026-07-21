@@ -203,6 +203,94 @@ Insurance: ${formData.insuranceDetails}`.trim();
             </div>
           </div>
         </section>
+
+        {/* Compliance Requirements */}
+        <section className="py-24 bg-secondary/30">
+          <div className="container mx-auto px-4">
+            <div className="max-w-4xl mx-auto">
+              <span className="text-patriot-red font-semibold text-sm tracking-wider uppercase">
+                Zero-Tolerance Policy
+              </span>
+              <h2 className="font-serif text-3xl md:text-4xl font-bold text-foreground mt-3 mb-6">
+                Carrier Approval & Compliance Requirements
+              </h2>
+              <p className="text-muted-foreground leading-relaxed mb-10">
+                To protect our shippers and maintain the integrity of our network, we enforce a strict
+                zero-tolerance policy regarding carrier compliance and fraud. To onboard or book freight
+                with us, carriers must meet the following baseline parameters:
+              </p>
+
+              <div className="space-y-5">
+                {[
+                  {
+                    title: "Active Authority",
+                    body: "Must hold active FMCSA interstate operating authority for a minimum of 6 consecutive months. \"Chameleon\" authorities or recently reinstated authorities will not be accepted.",
+                  },
+                  {
+                    title: "Safety Rating",
+                    body: "Must have an FMCSA safety rating of \"Satisfactory\" or \"None\" (unrated). Carriers with a \"Conditional\" or \"Unsatisfactory\" rating are strictly blocked.",
+                  },
+                  {
+                    title: "Auto Liability",
+                    body: "Minimum of $1,000,000 in commercial auto liability coverage.",
+                  },
+                  {
+                    title: "Cargo Insurance",
+                    body: "Minimum of $100,000 in motor truck cargo insurance. Policies must not contain exclusions for general freight commodities or unattended vehicles.",
+                  },
+                  {
+                    title: "Onboarding Documents",
+                    body: "A valid W-9 form (signed within the current calendar year) and a fully executed Broker-Carrier Agreement must be on file.",
+                  },
+                  {
+                    title: "Certificate of Insurance (COI)",
+                    body: "Your insurance agent must issue a COI naming our brokerage as an additional insured and certificate holder. We do not accept carrier-submitted PDF certificates.",
+                  },
+                  {
+                    title: "Domestic Operations",
+                    body: "All dispatching, tracking, and operational communications must be US-based. We do not work with offshore dispatch agencies or foreign call centers.",
+                  },
+                  {
+                    title: "No Double-Brokering",
+                    body: "The carrier that books the load must physically haul the load using their own scheduled equipment and drivers. Re-brokering, trip-leasing, or co-brokering our freight will result in immediate termination, forfeiture of payment, and reporting to Fraud Prevention databases.",
+                  },
+                  {
+                    title: "Active Inspection History",
+                    body: "For hotshot and box truck operations, carriers must have at least one roadside inspection recorded in the FMCSA SMS system within the last 12 months to verify active, legitimate operations.",
+                  },
+                  {
+                    title: "Industry Report Cleared",
+                    body: "Carriers must have a clean industry record. You will be permanently blocked from onboarding or deactivated from our network if you have any active reports or flags on Carrier411 (FreightGuard), MyCarrierPackets (MCP), CarrierAssure, or the TIA Watchdog.",
+                  },
+                ].map((item, idx) => (
+                  <div
+                    key={idx}
+                    className="bg-card border border-border rounded-xl p-6 shadow-sm"
+                  >
+                    <div className="flex items-start gap-4">
+                      <CheckCircle className="w-5 h-5 text-patriot-red mt-1 flex-shrink-0" />
+                      <div>
+                        <h3 className="font-serif text-xl font-bold text-foreground mb-2">
+                          {item.title}
+                        </h3>
+                        <p className="text-muted-foreground leading-relaxed">{item.body}</p>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+
+              <div className="mt-10 border-l-4 border-patriot-red bg-card rounded-r-xl p-6 shadow-sm">
+                <p className="text-foreground font-semibold leading-relaxed">
+                  Failure to maintain any of these standards at any point will result in immediate
+                  removal from the load, deactivation from active use, and permanent blocking from our
+                  network.
+                </p>
+              </div>
+            </div>
+          </div>
+        </section>
+
       </main>
       <Footer />
     </div>
