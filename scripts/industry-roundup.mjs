@@ -18,6 +18,7 @@ import {
   readJsonPosts,
   jsonHasTitle,
   writeJsonPost,
+  decodeHtmlEntities,
 } from "./lib/blog-store.mjs";
 
 const SUPABASE_URL = process.env.SUPABASE_URL;
@@ -206,7 +207,7 @@ Output ONLY HTML. Nothing else.`;
 
 /* ── validation ── */
 function validateRoundup(html) {
-  const plain = html.replace(/<[^>]*>/g, "").replace(/\s+/g, " ").trim();
+  const plain = decodeHtmlEntities(html.replace(/<[^>]*>/g, "").replace(/\s+/g, " ").trim());
   const wordCount = plain.split(/\s+/).length;
 
   const refusalPhrases = [

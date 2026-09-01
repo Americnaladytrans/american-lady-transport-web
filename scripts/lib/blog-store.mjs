@@ -19,6 +19,24 @@ const SUPABASE_ANON_KEY = process.env.SUPABASE_ANON_KEY;
 
 export const BLOG_JSON_RELATIVE_PATH = "src/data/blog-posts.json";
 
+/**
+ * Decode the common HTML entities that show up in LLM-generated HTML.
+ * Used to produce a human-readable plain-text excerpt from an HTML article.
+ * NOTE: `&amp;` must be decoded LAST so we don't double-decode `&amp;lt;` → `<`.
+ */
+export function decodeHtmlEntities(str) {
+  if (!str) return str;
+  return str
+    .replace(/&#(\d+);/g, (_, n) => String.fromCharCode(Number(n)))
+    .replace(/&#x([0-9a-fA-F]+);/g, (_, n) => String.fromCharCode(parseInt(n, 16)))
+    .replace(/&nbsp;/g, " ")
+    .replace(/&quot;/g, '"')
+    .replace(/&apos;/g, "'")
+    .replace(/&lt;/g, "<")
+    .replace(/&gt;/g, ">")
+    .replace(/&amp;/g, "&");
+}
+
 function slugify(text) {
   return text
     .toLowerCase()
