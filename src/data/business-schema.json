@@ -1,0 +1,88 @@
+{
+  "@context": "https://schema.org",
+  "@type": "LocalBusiness",
+  "name": "American Lady Transport",
+  "alternateName": "American Lady Transportation LLC",
+  "description": "Freight brokerage and 3PL logistics company based in Willis, Texas. Over 40 years connecting shippers with reliable carriers for FTL, LTL, flatbed, heavy haul, and expedited freight across all 48 states and Canada.",
+  "url": "https://usealt.com",
+  "address": {
+    "@type": "PostalAddress",
+    "addressLocality": "Willis",
+    "addressRegion": "TX",
+    "addressCountry": "US"
+  },
+  "areaServed": [
+    {
+      "@type": "Country",
+      "name": "United States"
+    },
+    {
+      "@type": "Country",
+      "name": "Canada"
+    }
+  ],
+  "telephone": "+1-817-249-2990",
+  "email": "info@usealt.com",
+  "openingHours": "Mo-Su 00:00-23:59",
+  "priceRange": "$$",
+  "foundingDate": "1984",
+  "knowsAbout": [
+    "Freight Brokerage",
+    "3PL Logistics",
+    "FTL Shipping",
+    "LTL Shipping",
+    "Flatbed Freight",
+    "Heavy Haul",
+    "Expedited Freight",
+    "Cross-Border Shipping",
+    "Construction Materials Shipping",
+    "Oilfield Equipment Freight"
+  ],
+  "hasOfferCatalog": {
+    "@type": "OfferCatalog",
+    "name": "Freight Brokerage Services",
+    "itemListElement": [
+      {
+        "@type": "Offer",
+        "itemOffered": {
+          "@type": "Service",
+          "name": "Full Truckload (FTL) Freight",
+          "description": "Dry van and flatbed FTL freight services across all 48 states and Canada"
+        }
+      },
+      {
+        "@type": "Offer",
+        "itemOffered": {
+          "@type": "Service",
+          "name": "Less-Than-Truckload (LTL) Freight",
+          "description": "Flexible LTL shipping for palletized freight with dependable transit times"
+        }
+      },
+      {
+        "@type": "Offer",
+        "itemOffered": {
+          "@type": "Service",
+          "name": "Flatbed & Heavy Haul",
+          "description": "Specialized flatbed freight for construction machinery, HVAC, and oilfield equipment"
+        }
+      },
+      {
+        "@type": "Offer",
+        "itemOffered": {
+          "@type": "Service",
+          "name": "Expedited & Hotshot Freight",
+          "description": "Time-critical expedited freight and hotshot trucking services"
+        }
+      },
+      {
+        "@type": "Offer",
+        "itemOffered": {
+          "@type": "Service",
+          "name": "Cross-Border Freight (U.S.–Canada)",
+          "description": "Cross-border shipping between the U.S. and Canada with customs coordination"
+        }
+      }
+    ]
+  },
+  "image": "https://usealt.com/social-card.png"
+}

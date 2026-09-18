@@ -2,7 +2,7 @@ import { useMemo } from "react";
 import { Link } from "react-router-dom";
 import { ArrowRight, Calendar } from "lucide-react";
 import { format } from "date-fns";
-import blogPostsData from "@/data/blog-posts.json";
+import blogPostsData from "@/data/blog-summaries.json";
 
 interface BlogPost {
   id: string;

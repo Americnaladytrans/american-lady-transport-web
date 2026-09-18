@@ -104,7 +104,7 @@ const ContactPage = () => {
         canonicalPath="/contact"
       />
       <Header />
-      <main>
+      <main id="main-content" tabIndex={-1}>
         {/* Hero */}
         <section className="pt-40 pb-20 bg-primary">
           <div className="container mx-auto px-4 text-center">
@@ -148,8 +148,8 @@ const ContactPage = () => {
 
                   <div className="grid sm:grid-cols-2 gap-4">
                     <div>
-                      <label className="block text-sm font-medium text-foreground mb-2">Name *</label>
-                      <Input
+                      <label htmlFor="field-name" className="block text-sm font-medium text-foreground mb-2">Name *</label>
+                      <Input id="field-name" required
                         maxLength={100}
                         value={formData.name}
                         onChange={(e) => setFormData({ ...formData, name: e.target.value })}
@@ -159,8 +159,8 @@ const ContactPage = () => {
                       {errors.name && <p className="text-destructive text-sm mt-1">{errors.name}</p>}
                     </div>
                     <div>
-                      <label className="block text-sm font-medium text-foreground mb-2">Company</label>
-                      <Input
+                      <label htmlFor="field-company" className="block text-sm font-medium text-foreground mb-2">Company</label>
+                      <Input id="field-company"
                         maxLength={100}
                         value={formData.company}
                         onChange={(e) => setFormData({ ...formData, company: e.target.value })}
@@ -171,8 +171,8 @@ const ContactPage = () => {
                   </div>
                   <div className="grid sm:grid-cols-2 gap-4">
                     <div>
-                      <label className="block text-sm font-medium text-foreground mb-2">Email *</label>
-                      <Input
+                      <label htmlFor="field-email" className="block text-sm font-medium text-foreground mb-2">Email *</label>
+                      <Input id="field-email" required
                         type="email"
                         maxLength={255}
                         value={formData.email}
@@ -183,8 +183,8 @@ const ContactPage = () => {
                       {errors.email && <p className="text-destructive text-sm mt-1">{errors.email}</p>}
                     </div>
                     <div>
-                      <label className="block text-sm font-medium text-foreground mb-2">Phone</label>
-                      <Input
+                      <label htmlFor="field-phone" className="block text-sm font-medium text-foreground mb-2">Phone</label>
+                      <Input id="field-phone"
                         maxLength={20}
                         value={formData.phone}
                         onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
@@ -194,8 +194,8 @@ const ContactPage = () => {
                     </div>
                   </div>
                   <div>
-                    <label className="block text-sm font-medium text-foreground mb-2">Message *</label>
-                    <Textarea
+                    <label htmlFor="field-message" className="block text-sm font-medium text-foreground mb-2">Message *</label>
+                    <Textarea id="field-message" required
                       maxLength={2000}
                       value={formData.message}
                       onChange={(e) => setFormData({ ...formData, message: e.target.value })}

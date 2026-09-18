@@ -8,7 +8,7 @@ const Hero = () => {
     <section className="relative">
       {/* CTA buttons above the hero image */}
       <div className="bg-primary px-4 md:px-8 pt-2 pb-3">
-        <div className="flex justify-between items-center gap-2 md:gap-4">
+        <div className="flex flex-col items-stretch gap-2 sm:flex-row sm:justify-between sm:items-center md:gap-4">
           <Button variant="hero-outline" size="xl" asChild>
             <Link to="/shippers" className="group">
               Get a Freight Quote
@@ -46,7 +46,7 @@ const Hero = () => {
             {[
               { value: "40+ Years", label: "In Business" },
               { value: "7 Days a Week", label: "Support" },
-              { value: "All 50 States", label: "& Canada" },
+              { value: "U.S.", label: "& Canada" },
               { value: "Vetted Carriers", label: "Safety First" },
             ].map((stat, index) => (
               <div key={index} className="text-center">

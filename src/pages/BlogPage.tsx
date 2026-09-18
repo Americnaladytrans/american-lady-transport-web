@@ -5,7 +5,7 @@ import { format } from "date-fns";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import SEOHead from "@/components/SEOHead";
-import blogPostsData from "@/data/blog-posts.json";
+import blogPostsData from "@/data/blog-summaries.json";
 
 interface BlogPost {
   id: string;
@@ -52,7 +52,7 @@ const BlogPage = () => {
         canonicalPath="/blog"
       />
       <Header />
-      <main className="pt-40 pb-20">
+      <main id="main-content" tabIndex={-1} className="pt-40 pb-20">
         <div className="container mx-auto px-4">
           <div className="text-center mb-12">
             <h1 className="font-serif text-4xl md:text-5xl font-bold text-foreground mb-4">

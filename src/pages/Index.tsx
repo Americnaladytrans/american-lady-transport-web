@@ -19,7 +19,7 @@ const Index = () => {
         canonicalPath="/"
       />
       <Header />
-      <main>
+      <main id="main-content" tabIndex={-1} className="pt-36">
         <Hero />
         <Services />
         <About />

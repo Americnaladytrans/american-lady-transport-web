@@ -36,6 +36,12 @@ const Header = () => {
 
   return (
     <header className="fixed top-0 left-0 right-0 z-50">
+      <nav aria-label="Primary navigation" onKeyDown={(event) => {
+        if (event.key === "Escape") {
+          setIsMenuOpen(false);
+          document.querySelector<HTMLButtonElement>('button[aria-controls="primary-menu"]')?.focus();
+        }
+      }}>
       {/* Top bar with logo */}
       <div className="bg-primary border-b border-primary-foreground/10">
         <div className="container mx-auto px-4">
@@ -55,6 +61,8 @@ const Header = () => {
                 className="inline-flex h-[42px] w-[42px] items-center justify-center rounded-full border border-primary-foreground/10 bg-primary text-primary-foreground transition-colors hover:bg-navy-light"
                 onClick={() => setIsMenuOpen(!isMenuOpen)}
                 aria-label="Toggle menu"
+                aria-expanded={isMenuOpen}
+                aria-controls="primary-menu"
               >
                 {isMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
               </button>
@@ -66,7 +74,7 @@ const Header = () => {
       {isMenuOpen && (
         <div className="bg-primary py-4 border-b border-primary-foreground/10 animate-fade-in">
           <div className="container mx-auto px-4">
-            <nav className="flex flex-col gap-4">
+            <div id="primary-menu" className="flex flex-col gap-4">
               {navLinks.map((link) => (
                 <Link
                   key={link.href}
@@ -88,10 +96,11 @@ const Header = () => {
                 <Phone className="w-4 h-4" />
                 <span className="font-medium">(817) 249-2990</span>
               </a>
-            </nav>
+            </div>
           </div>
         </div>
       )}
+      </nav>
     </header>
   );
 };

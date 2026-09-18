@@ -11,8 +11,9 @@ const FuelSurchargePage = () => (
       canonicalPath="/fuel-surcharge"
     />
     <Header />
-    <main className="flex-1 pt-44 pb-16 flex items-center justify-center bg-muted">
+    <main id="main-content" tabIndex={-1} className="flex-1 pt-44 pb-16 flex items-center justify-center bg-muted">
       <div className="container mx-auto px-4">
+        <h1 className="mb-6 text-center font-serif text-3xl font-bold">Fuel Surcharge Calculator</h1>
         <FuelSurchargeBanner />
       </div>
     </main>

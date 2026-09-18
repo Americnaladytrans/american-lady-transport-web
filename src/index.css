@@ -317,3 +317,13 @@ html {
   background: color-mix(in oklab, var(--fsc-primary) 10%, var(--fsc-surface-2));
   font-weight: 600;
 }
+
+
+/* Audit remediation: keyboard access and reduced-motion readable content. */
+.skip-link { position:fixed; top:8px; left:8px; z-index:9999; padding:12px 18px; background:#fff; color:#111; transform:translateY(-160%); }
+.skip-link:focus { transform:translateY(0); outline:3px solid #ba8c2a; }
+html { scroll-padding-top:160px; }
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration:0.01ms !important; animation-delay:0ms !important; transition-duration:0.01ms !important; scroll-behavior:auto !important; }
+  [style*="animation"] { opacity:1 !important; transform:none !important; }
+}

@@ -61,7 +61,7 @@ const ServicesPage = () => {
         }}
       />
       <Header />
-      <main>
+      <main id="main-content" tabIndex={-1}>
         {/* Hero */}
         <section className="pt-40 pb-20 bg-primary">
           <div className="container mx-auto px-4 text-center">

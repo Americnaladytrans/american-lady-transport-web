@@ -9,7 +9,7 @@ import path from "path";
 //   - GitHub Pages copy site: base = "/american-lady-transport-web/"
 //     (set by .github/workflows/*.yml so SPA assets resolve correctly)
 export default defineConfig(() => ({
-  base: process.env.VITE_BASE || "./",
+  base: process.env.VITE_BASE || "/",
   server: {
     host: "::",
     port: 8080,

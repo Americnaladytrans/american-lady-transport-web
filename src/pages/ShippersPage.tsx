@@ -97,7 +97,7 @@ Special Requirements: ${formData.specialRequirements}`.trim();
         canonicalPath="/shippers"
       />
       <Header />
-      <main>
+      <main id="main-content" tabIndex={-1}>
         {/* Hero */}
         <section className="pt-40 pb-20 bg-primary">
           <div className="container mx-auto px-4 text-center">
@@ -155,50 +155,50 @@ Special Requirements: ${formData.specialRequirements}`.trim();
 
                   <div className="grid sm:grid-cols-2 gap-4">
                     <div>
-                      <label className="block text-sm font-medium text-foreground mb-2">Full Name *</label>
-                      <Input maxLength={100} value={formData.name} onChange={(e) => setFormData({ ...formData, name: e.target.value })} placeholder="John Smith" className="h-12" />
+                      <label htmlFor="field-name" className="block text-sm font-medium text-foreground mb-2">Full Name *</label>
+                      <Input id="field-name" required maxLength={100} value={formData.name} onChange={(e) => setFormData({ ...formData, name: e.target.value })} placeholder="John Smith" className="h-12" />
                       {errors.name && <p className="text-destructive text-sm mt-1">{errors.name}</p>}
                     </div>
                     <div>
-                      <label className="block text-sm font-medium text-foreground mb-2">Phone *</label>
-                      <Input maxLength={20} value={formData.phone} onChange={(e) => setFormData({ ...formData, phone: e.target.value })} placeholder="(555) 123-4567" className="h-12" />
+                      <label htmlFor="field-phone" className="block text-sm font-medium text-foreground mb-2">Phone *</label>
+                      <Input id="field-phone" required maxLength={20} value={formData.phone} onChange={(e) => setFormData({ ...formData, phone: e.target.value })} placeholder="(555) 123-4567" className="h-12" />
                       {errors.phone && <p className="text-destructive text-sm mt-1">{errors.phone}</p>}
                     </div>
                   </div>
                   <div>
-                    <label className="block text-sm font-medium text-foreground mb-2">Email *</label>
-                    <Input type="email" maxLength={255} value={formData.email} onChange={(e) => setFormData({ ...formData, email: e.target.value })} placeholder="john@company.com" className="h-12" />
+                    <label htmlFor="field-email" className="block text-sm font-medium text-foreground mb-2">Email *</label>
+                    <Input id="field-email" required type="email" maxLength={255} value={formData.email} onChange={(e) => setFormData({ ...formData, email: e.target.value })} placeholder="john@company.com" className="h-12" />
                     {errors.email && <p className="text-destructive text-sm mt-1">{errors.email}</p>}
                   </div>
                   <div className="grid sm:grid-cols-2 gap-4">
                     <div>
-                      <label className="block text-sm font-medium text-foreground mb-2">Pickup City/State/ZIP *</label>
-                      <Input value={formData.pickupLocation} onChange={(e) => setFormData({ ...formData, pickupLocation: e.target.value })} placeholder="Houston, TX 77001" className="h-12" />
+                      <label htmlFor="field-pickupLocation" className="block text-sm font-medium text-foreground mb-2">Pickup City/State/ZIP *</label>
+                      <Input id="field-pickupLocation" required value={formData.pickupLocation} onChange={(e) => setFormData({ ...formData, pickupLocation: e.target.value })} placeholder="Houston, TX 77001" className="h-12" />
                       {errors.pickupLocation && <p className="text-destructive text-sm mt-1">{errors.pickupLocation}</p>}
                     </div>
                     <div>
-                      <label className="block text-sm font-medium text-foreground mb-2">Delivery City/State/ZIP *</label>
-                      <Input value={formData.deliveryLocation} onChange={(e) => setFormData({ ...formData, deliveryLocation: e.target.value })} placeholder="Toronto, ON M5V" className="h-12" />
+                      <label htmlFor="field-deliveryLocation" className="block text-sm font-medium text-foreground mb-2">Delivery City/State/ZIP *</label>
+                      <Input id="field-deliveryLocation" required value={formData.deliveryLocation} onChange={(e) => setFormData({ ...formData, deliveryLocation: e.target.value })} placeholder="Toronto, ON M5V" className="h-12" />
                       {errors.deliveryLocation && <p className="text-destructive text-sm mt-1">{errors.deliveryLocation}</p>}
                     </div>
                   </div>
                   <div className="grid sm:grid-cols-2 gap-4">
                     <div>
-                      <label className="block text-sm font-medium text-foreground mb-2">Freight Type & Weight</label>
-                      <Input value={formData.freightType} onChange={(e) => setFormData({ ...formData, freightType: e.target.value })} placeholder="Construction machinery, 45,000 lbs" className="h-12" />
+                      <label htmlFor="field-freightType" className="block text-sm font-medium text-foreground mb-2">Freight Type & Weight</label>
+                      <Input id="field-freightType" value={formData.freightType} onChange={(e) => setFormData({ ...formData, freightType: e.target.value })} placeholder="Construction machinery, 45,000 lbs" className="h-12" />
                     </div>
                     <div>
-                      <label className="block text-sm font-medium text-foreground mb-2">Equipment Needed</label>
-                      <Input value={formData.equipmentNeeded} onChange={(e) => setFormData({ ...formData, equipmentNeeded: e.target.value })} placeholder="Flatbed, step-deck, etc." className="h-12" />
+                      <label htmlFor="field-equipmentNeeded" className="block text-sm font-medium text-foreground mb-2">Equipment Needed</label>
+                      <Input id="field-equipmentNeeded" value={formData.equipmentNeeded} onChange={(e) => setFormData({ ...formData, equipmentNeeded: e.target.value })} placeholder="Flatbed, step-deck, etc." className="h-12" />
                     </div>
                   </div>
                   <div>
-                    <label className="block text-sm font-medium text-foreground mb-2">Ready Date</label>
-                    <Input type="date" value={formData.readyDate} onChange={(e) => setFormData({ ...formData, readyDate: e.target.value })} className="h-12" />
+                    <label htmlFor="field-readyDate" className="block text-sm font-medium text-foreground mb-2">Ready Date</label>
+                    <Input id="field-readyDate" type="date" value={formData.readyDate} onChange={(e) => setFormData({ ...formData, readyDate: e.target.value })} className="h-12" />
                   </div>
                   <div>
-                    <label className="block text-sm font-medium text-foreground mb-2">Special Requirements</label>
-                    <Textarea maxLength={1000} value={formData.specialRequirements} onChange={(e) => setFormData({ ...formData, specialRequirements: e.target.value })} placeholder="Jobsite delivery, crane needed, limited access, etc." className="min-h-[100px] resize-none" />
+                    <label htmlFor="field-specialRequirements" className="block text-sm font-medium text-foreground mb-2">Special Requirements</label>
+                    <Textarea id="field-specialRequirements" maxLength={1000} value={formData.specialRequirements} onChange={(e) => setFormData({ ...formData, specialRequirements: e.target.value })} placeholder="Jobsite delivery, crane needed, limited access, etc." className="min-h-[100px] resize-none" />
                   </div>
                   <Button type="submit" variant="hero" size="xl" className="w-full" disabled={isSubmitting}>
                     {isSubmitting ? "Opening..." : (

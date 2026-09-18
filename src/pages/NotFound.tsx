@@ -5,11 +5,16 @@ const NotFound = () => {
   const location = useLocation();
 
   useEffect(() => {
+    document.title = "Page Not Found";
+    document.querySelectorAll('link[rel="canonical"],script[type="application/ld+json"]').forEach(node => node.remove());
+    let robots = document.querySelector('meta[name="robots"]');
+    if (!robots) { robots = document.createElement("meta"); robots.setAttribute("name", "robots"); document.head.appendChild(robots); }
+    robots.setAttribute("content", "noindex, follow");
     console.error("404 Error: User attempted to access non-existent route:", location.pathname);
   }, [location.pathname]);
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-muted">
+    <main id="main-content" tabIndex={-1} className="flex min-h-screen items-center justify-center bg-muted">
       <div className="text-center">
         <h1 className="mb-4 text-4xl font-bold">404</h1>
         <p className="mb-4 text-xl text-muted-foreground">Oops! Page not found</p>
@@ -17,7 +22,7 @@ const NotFound = () => {
           Return to Home
         </a>
       </div>
-    </div>
+    </main>
   );
 };
 

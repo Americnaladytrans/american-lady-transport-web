@@ -94,7 +94,7 @@ Insurance: ${formData.insuranceDetails}`.trim();
         canonicalPath="/carriers"
       />
       <Header />
-      <main>
+      <main id="main-content" tabIndex={-1}>
         {/* Hero */}
         <section className="pt-40 pb-20 bg-primary">
           <div className="container mx-auto px-4 text-center">
@@ -240,44 +240,44 @@ Insurance: ${formData.insuranceDetails}`.trim();
 
                 <div className="grid sm:grid-cols-2 gap-4">
                   <div>
-                    <label className="block text-sm font-medium text-foreground mb-2">Contact Name *</label>
-                    <Input maxLength={100} value={formData.name} onChange={(e) => setFormData({ ...formData, name: e.target.value })} placeholder="Jane Doe" className="h-12" />
+                    <label htmlFor="carrier-name" className="block text-sm font-medium text-foreground mb-2">Contact Name *</label>
+                    <Input id="carrier-name" required maxLength={100} value={formData.name} onChange={(e) => setFormData({ ...formData, name: e.target.value })} placeholder="Jane Doe" className="h-12" />
                     {errors.name && <p className="text-destructive text-sm mt-1">{errors.name}</p>}
                   </div>
                   <div>
-                    <label className="block text-sm font-medium text-foreground mb-2">Phone *</label>
-                    <Input maxLength={20} value={formData.phone} onChange={(e) => setFormData({ ...formData, phone: e.target.value })} placeholder="(555) 123-4567" className="h-12" />
+                    <label htmlFor="carrier-phone" className="block text-sm font-medium text-foreground mb-2">Phone *</label>
+                    <Input id="carrier-phone" required type="tel" maxLength={20} value={formData.phone} onChange={(e) => setFormData({ ...formData, phone: e.target.value })} placeholder="(555) 123-4567" className="h-12" />
                     {errors.phone && <p className="text-destructive text-sm mt-1">{errors.phone}</p>}
                   </div>
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-foreground mb-2">Email *</label>
-                  <Input type="email" maxLength={255} value={formData.email} onChange={(e) => setFormData({ ...formData, email: e.target.value })} placeholder="dispatch@carrier.com" className="h-12" />
+                  <label htmlFor="carrier-email" className="block text-sm font-medium text-foreground mb-2">Email *</label>
+                  <Input id="carrier-email" required type="email" maxLength={255} value={formData.email} onChange={(e) => setFormData({ ...formData, email: e.target.value })} placeholder="dispatch@carrier.com" className="h-12" />
                   {errors.email && <p className="text-destructive text-sm mt-1">{errors.email}</p>}
                 </div>
                 <div className="grid sm:grid-cols-2 gap-4">
                   <div>
-                    <label className="block text-sm font-medium text-foreground mb-2">Company Name *</label>
-                    <Input value={formData.companyName} onChange={(e) => setFormData({ ...formData, companyName: e.target.value })} placeholder="ABC Trucking LLC" className="h-12" />
+                    <label htmlFor="carrier-company" className="block text-sm font-medium text-foreground mb-2">Company Name *</label>
+                    <Input id="carrier-company" required value={formData.companyName} onChange={(e) => setFormData({ ...formData, companyName: e.target.value })} placeholder="ABC Trucking LLC" className="h-12" />
                     {errors.companyName && <p className="text-destructive text-sm mt-1">{errors.companyName}</p>}
                   </div>
                   <div>
-                    <label className="block text-sm font-medium text-foreground mb-2">MC/DOT Number *</label>
-                    <Input value={formData.mcDotNumber} onChange={(e) => setFormData({ ...formData, mcDotNumber: e.target.value })} placeholder="MC-123456" className="h-12" />
+                    <label htmlFor="carrier-mc" className="block text-sm font-medium text-foreground mb-2">MC/DOT Number *</label>
+                    <Input id="carrier-mc" required value={formData.mcDotNumber} onChange={(e) => setFormData({ ...formData, mcDotNumber: e.target.value })} placeholder="MC-123456" className="h-12" />
                     {errors.mcDotNumber && <p className="text-destructive text-sm mt-1">{errors.mcDotNumber}</p>}
                   </div>
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-foreground mb-2">Equipment Type</label>
-                  <Input value={formData.equipmentType} onChange={(e) => setFormData({ ...formData, equipmentType: e.target.value })} placeholder="Van, flatbed, step-deck, RGN, etc." className="h-12" />
+                  <label htmlFor="carrier-equipment" className="block text-sm font-medium text-foreground mb-2">Equipment Type</label>
+                  <Input id="carrier-equipment" value={formData.equipmentType} onChange={(e) => setFormData({ ...formData, equipmentType: e.target.value })} placeholder="Van, flatbed, step-deck, RGN, etc." className="h-12" />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-foreground mb-2">Preferred Lanes & Regions</label>
-                  <Input value={formData.preferredLanes} onChange={(e) => setFormData({ ...formData, preferredLanes: e.target.value })} placeholder="TX to Midwest, Southeast, cross-border, etc." className="h-12" />
+                  <label htmlFor="carrier-lanes" className="block text-sm font-medium text-foreground mb-2">Preferred Lanes & Regions</label>
+                  <Input id="carrier-lanes" value={formData.preferredLanes} onChange={(e) => setFormData({ ...formData, preferredLanes: e.target.value })} placeholder="TX to Midwest, Southeast, cross-border, etc." className="h-12" />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-foreground mb-2">Insurance Details</label>
-                  <Textarea maxLength={1000} value={formData.insuranceDetails} onChange={(e) => setFormData({ ...formData, insuranceDetails: e.target.value })} placeholder="Insurance provider, policy number, coverage amounts..." className="min-h-[100px] resize-none" />
+                  <label htmlFor="carrier-insurance" className="block text-sm font-medium text-foreground mb-2">Insurance Details</label>
+                  <Textarea id="carrier-insurance" maxLength={1000} value={formData.insuranceDetails} onChange={(e) => setFormData({ ...formData, insuranceDetails: e.target.value })} placeholder="Insurance provider, policy number, coverage amounts..." className="min-h-[100px] resize-none" />
                 </div>
                 <Button type="submit" variant="hero" size="xl" className="w-full" disabled={isSubmitting}>
                   {isSubmitting ? "Opening..." : (

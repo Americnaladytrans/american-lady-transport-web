@@ -29,9 +29,19 @@ const BlogPostPage = () => {
         title={post ? `${post.title} | American Lady Transport Blog` : "Blog Post"}
         description={post?.excerpt || "Read the latest from American Lady Transport."}
         canonicalPath={`/blog/${slug}`}
+        schemaMarkup={post ? {
+          "@context": "https://schema.org",
+          "@type": "BlogPosting",
+          headline: post.title,
+          description: post.excerpt,
+          datePublished: post.published_at,
+          url: `https://usealt.com/blog/${post.slug}`,
+          mainEntityOfPage: `https://usealt.com/blog/${post.slug}`,
+          publisher: { "@type": "Organization", name: "American Lady Transport", url: "https://usealt.com/" },
+        } : undefined}
       />
       <Header />
-      <main className="pt-40 pb-20">
+      <main id="main-content" tabIndex={-1} className="pt-40 pb-20">
         <div className="container mx-auto px-4 max-w-3xl">
           <Link
             to="/blog"

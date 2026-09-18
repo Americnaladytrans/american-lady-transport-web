@@ -47,6 +47,9 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
+      - name: Install build-time renderer
+        run: npx playwright install --with-deps chromium
+
       - name: Build static site
         env:
           VITE_BASE: /american-lady-transport-web/

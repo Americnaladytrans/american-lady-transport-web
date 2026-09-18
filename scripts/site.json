@@ -1,0 +1,6 @@
+{
+  "domain": "https://usealt.com",
+  "routes": ["/", "/services", "/us-canada-cross-border-freight", "/shippers", "/carriers", "/about", "/contact", "/blog", "/fuel-surcharge"],
+  "blog": "src/data/blog-posts.json",
+  "redirects": { "/quote": "/shippers", "/become-a-carrier": "/carriers" }
+}

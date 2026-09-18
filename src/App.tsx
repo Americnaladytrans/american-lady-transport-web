@@ -3,6 +3,7 @@ import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { lazy, Suspense } from "react";
 import ScrollToTop from "./components/ScrollToTop";
 import Index from "./pages/Index";
 import ServicesPage from "./pages/ServicesPage";
@@ -12,7 +13,7 @@ import CarriersPage from "./pages/CarriersPage";
 import AboutPage from "./pages/AboutPage";
 import ContactPage from "./pages/ContactPage";
 import BlogPage from "./pages/BlogPage";
-import BlogPostPage from "./pages/BlogPostPage";
+const BlogPostPage = lazy(() => import("./pages/BlogPostPage"));
 import FuelSurchargePage from "./pages/FuelSurchargePage";
 import NotFound from "./pages/NotFound";
 
@@ -34,6 +35,8 @@ const App = () => (
         return raw.replace(/\/$/, "");
       })()}>
         <ScrollToTop />
+        <a href="#main-content" className="skip-link">Skip to main content</a>
+        <Suspense fallback={<main id="main-content" className="pt-44 p-8" aria-busy="true">Loading article...</main>}>
         <Routes>
           <Route path="/" element={<Index />} />
           <Route path="/services" element={<ServicesPage />} />
@@ -48,6 +51,7 @@ const App = () => (
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>
+        </Suspense>
       </BrowserRouter>
     </TooltipProvider>
   </QueryClientProvider>
