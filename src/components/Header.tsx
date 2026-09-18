@@ -9,7 +9,8 @@ const Header = () => {
   const location = useLocation();
 
   useEffect(() => {
-    const stored = localStorage.getItem("theme");
+    let stored: string | null = null;
+    try { stored = localStorage.getItem("theme"); } catch { /* Storage may be blocked. */ }
     const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
     const dark = stored ? stored === "dark" : prefersDark;
     setIsDark(dark);
@@ -20,7 +21,7 @@ const Header = () => {
     const next = !isDark;
     setIsDark(next);
     document.documentElement.classList.toggle("dark", next);
-    localStorage.setItem("theme", next ? "dark" : "light");
+    try { localStorage.setItem("theme", next ? "dark" : "light"); } catch { /* Theme still works for this visit. */ }
   };
 
   const navLinks = [
