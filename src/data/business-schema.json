@@ -1,8 +1,9 @@
 {
   "@context": "https://schema.org",
   "@type": "LocalBusiness",
-  "name": "American Lady Transport",
-  "alternateName": "American Lady Transportation LLC",
+  "@id": "https://usealt.com/#business",
+  "name": "American Lady Transport LLC",
+  "alternateName": "American Lady Transport",
   "description": "Freight brokerage and 3PL logistics company based in Willis, Texas. Over 40 years connecting shippers with reliable carriers for FTL, LTL, flatbed, heavy haul, and expedited freight across all 48 states and Canada.",
   "url": "https://usealt.com",
   "address": {
@@ -23,7 +24,6 @@
   ],
   "telephone": "+1-817-249-2990",
   "email": "info@usealt.com",
-  "openingHours": "Mo-Su 00:00-23:59",
   "priceRange": "$$",
   "foundingDate": "1984",
   "knowsAbout": [

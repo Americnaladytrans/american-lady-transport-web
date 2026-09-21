@@ -38,8 +38,13 @@ const Hero = () => {
         <div className="container mx-auto px-4">
           <div className="max-w-5xl mx-auto text-center mb-10">
             <h1 className="font-serif text-2xl md:text-3xl lg:text-4xl font-bold text-cream animate-fade-up animation-delay-100 leading-tight">
-              Bridging the Gap Between Shipments and Solutions.
+              Texas Freight Brokerage for Flatbed, Heavy Haul &amp; More
             </h1>
+            <p className="mx-auto mt-5 max-w-3xl text-base leading-relaxed text-cream/90 md:text-lg">
+              Based in Willis, Texas, American Lady Transport connects shippers with vetted carriers
+              for construction materials, machinery and industrial freight across the lower 48 states
+              and Canada. Request a quote for flatbed, step-deck, heavy haul, full truckload or LTL shipping.
+            </p>
           </div>
 
           <div className="grid grid-cols-2 md:grid-cols-4 gap-8 animate-fade-up animation-delay-400">
