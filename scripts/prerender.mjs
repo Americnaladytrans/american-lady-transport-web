@@ -15,7 +15,7 @@ if (config.blog) {
   const posts = JSON.parse(await fs.readFile(path.join(root, config.blog), "utf8"));
   routes.push(...posts.map(post => `/blog/${post.slug}`));
 }
-const mime = {".js":"text/javascript",".css":"text/css",".html":"text/html",".png":"image/png",".jpg":"image/jpeg",".svg":"image/svg+xml",".woff2":"font/woff2",".json":"application/json"};
+const mime = {".js":"text/javascript",".css":"text/css",".html":"text/html",".png":"image/png",".jpg":"image/jpeg",".webp":"image/webp",".svg":"image/svg+xml",".woff2":"font/woff2",".json":"application/json"};
 const server = http.createServer(async (req,res) => {
   const route = decodeURIComponent(new URL(req.url,"http://localhost").pathname).replace(prefix,"");
   const file = path.join(dist,route);

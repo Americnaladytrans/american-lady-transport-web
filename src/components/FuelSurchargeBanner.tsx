@@ -24,7 +24,7 @@ export function FuelSurchargeBanner() {
             <div className="w-px h-5 bg-white/20" />
 
             <div className="flex items-center gap-2">
-              <img src={fuelLogo} alt="Fuel Surcharge App" className="h-6 w-6 rounded" />
+              <img loading="lazy" decoding="async" width={48} height={48} src={fuelLogo} alt="Fuel Surcharge App" className="h-6 w-6 rounded object-contain" />
               <span className="text-sm font-extrabold tracking-tight">
                 Fuel Surcharge App
               </span>

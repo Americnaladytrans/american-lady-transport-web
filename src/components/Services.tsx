@@ -73,6 +73,7 @@ const Services = () => {
 
         {/* CTA */}
         <div className="text-center mt-12">
+          <p className="mb-6 text-muted-foreground"><Link className="underline" to="/texas-flatbed-freight">Explore Texas flatbed freight</Link>{" · "}<Link className="underline" to="/freight-quote-checklist">Prepare your freight quote details</Link></p>
           <Button variant="default" size="lg" asChild>
             <Link to="/services" className="group">
               View All Services

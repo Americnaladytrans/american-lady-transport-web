@@ -1,7 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { ArrowRight } from "lucide-react";
 import { Link } from "react-router-dom";
-import heroBg from "@/assets/hero-bg.jpg";
+import heroBg from "@/assets/hero-bg.jpg.webp";
 
 const Hero = () => {
   return (
@@ -28,6 +28,9 @@ const Hero = () => {
           alt=""
           aria-hidden="true"
           loading="eager"
+          fetchPriority="high"
+          width={1600}
+          height={1038}
           decoding="async"
           className="pointer-events-none block w-full h-auto select-none"
         />

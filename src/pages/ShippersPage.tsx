@@ -8,6 +8,7 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/hooks/use-toast";
 import { z } from "zod";
+import { Link } from "react-router-dom";
 
 const quoteSchema = z.object({
   name: z.string().trim().min(1, "Name is required").max(100),
@@ -17,6 +18,8 @@ const quoteSchema = z.object({
   deliveryLocation: z.string().trim().min(1, "Delivery location is required"),
   freightType: z.string().max(200).optional(),
   equipmentNeeded: z.string().max(200).optional(),
+  dimensions: z.string().max(200).optional(),
+  deliveryDate: z.string().optional(),
   readyDate: z.string().optional(),
   specialRequirements: z.string().max(1000).optional(),
 });
@@ -40,6 +43,8 @@ const ShippersPage = () => {
     deliveryLocation: "",
     freightType: "",
     equipmentNeeded: "",
+    dimensions: "",
+    deliveryDate: "",
     readyDate: "",
     specialRequirements: "",
   });
@@ -72,7 +77,9 @@ Pickup: ${formData.pickupLocation}
 Delivery: ${formData.deliveryLocation}
 Freight Type: ${formData.freightType}
 Equipment Needed: ${formData.equipmentNeeded}
+Dimensions and Piece Count: ${formData.dimensions}
 Ready Date: ${formData.readyDate}
+Requested Delivery Date: ${formData.deliveryDate}
 Special Requirements: ${formData.specialRequirements}`.trim();
 
     const subject = encodeURIComponent(`Shipper Quote Request - ${formData.name}`);
@@ -147,6 +154,7 @@ Special Requirements: ${formData.specialRequirements}`.trim();
                   Request a Free Freight Quote
                 </h3>
                 <form onSubmit={handleSubmit} className="space-y-5">
+                  <p className="text-sm text-muted-foreground">Need help with the details? Use our <Link className="underline" to="/freight-quote-checklist">freight quote checklist</Link>. This form opens your email app; you must review and send the email to complete the request.</p>
                   {/* Honeypot */}
                   <div className="absolute -left-[9999px]" aria-hidden="true">
                     <label htmlFor="hp_website">Website</label>
@@ -197,13 +205,21 @@ Special Requirements: ${formData.specialRequirements}`.trim();
                     <Input id="field-readyDate" type="date" value={formData.readyDate} onChange={(e) => setFormData({ ...formData, readyDate: e.target.value })} className="h-12" />
                   </div>
                   <div>
+                    <label htmlFor="field-dimensions" className="block text-sm font-medium text-foreground mb-2">Piece Count & Dimensions (include units)</label>
+                    <Input id="field-dimensions" maxLength={200} value={formData.dimensions} onChange={(e) => setFormData({ ...formData, dimensions: e.target.value })} placeholder="4 pieces, each 96 × 48 × 60 inches" className="h-12" />
+                  </div>
+                  <div>
+                    <label htmlFor="field-deliveryDate" className="block text-sm font-medium text-foreground mb-2">Requested Delivery Date</label>
+                    <Input id="field-deliveryDate" type="date" value={formData.deliveryDate} onChange={(e) => setFormData({ ...formData, deliveryDate: e.target.value })} className="h-12" />
+                  </div>
+                  <div>
                     <label htmlFor="field-specialRequirements" className="block text-sm font-medium text-foreground mb-2">Special Requirements</label>
                     <Textarea id="field-specialRequirements" maxLength={1000} value={formData.specialRequirements} onChange={(e) => setFormData({ ...formData, specialRequirements: e.target.value })} placeholder="Jobsite delivery, crane needed, limited access, etc." className="min-h-[100px] resize-none" />
                   </div>
                   <Button type="submit" variant="hero" size="xl" className="w-full" disabled={isSubmitting}>
                     {isSubmitting ? "Opening..." : (
                       <>
-                        Submit Quote Request
+                        Open Email Quote Request
                         <Send className="w-5 h-5" />
                       </>
                     )}

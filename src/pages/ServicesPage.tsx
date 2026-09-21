@@ -105,6 +105,16 @@ const ServicesPage = () => {
           </div>
         </section>
 
+        <section className="py-16 bg-background">
+          <div className="container mx-auto px-4 max-w-4xl">
+            <h2 className="font-serif text-3xl font-bold mb-5">Plan the right shipment</h2>
+            <p className="text-muted-foreground leading-relaxed mb-5">Based in Willis, we help shippers describe the freight, equipment and site requirements before a move is arranged. Use these guides to prepare for a quote rather than relying on a generic per-mile estimate.</p>
+            <ul className="space-y-4 underline text-primary dark:text-foreground">
+              <li><Link to="/texas-flatbed-freight">Texas flatbed and open-deck freight: equipment and loading requirements</Link></li>
+              <li><Link to="/freight-quote-checklist">Freight quote checklist: dimensions, weight, dates and access</Link></li>
+            </ul>
+          </div>
+        </section>
         {/* Key Benefits */}
         <section className="py-20 bg-secondary">
           <div className="container mx-auto px-4 max-w-4xl">

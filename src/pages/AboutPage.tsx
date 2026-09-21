@@ -2,7 +2,7 @@ import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import SEOHead from "@/components/SEOHead";
 import { CheckCircle } from "lucide-react";
-import logoBadge from "@/assets/logo-badge.png";
+import logoBadge from "@/assets/logo-badge.png.webp";
 
 const trustPoints = [
   "Licensed freight broker operating under federal regulations (MC 170463)",

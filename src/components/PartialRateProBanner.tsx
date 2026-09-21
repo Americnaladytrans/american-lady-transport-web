@@ -19,7 +19,7 @@ export function PartialRateProBanner() {
             </div>
             <div className="w-px h-5 bg-white/20" />
             <div className="flex items-center gap-2">
-              <img src={partialLogo} alt="Partial Rate Pro" className="h-6 w-6 rounded" />
+              <img loading="lazy" decoding="async" width={48} height={48} src={partialLogo} alt="Partial Rate Pro" className="h-6 w-6 rounded object-contain" />
               <span className="text-sm font-extrabold tracking-tight">Partial Rate Pro</span>
               <span className="hidden sm:inline text-xs text-white/80">— The Ultimate LTL Rating Tool</span>
             </div>

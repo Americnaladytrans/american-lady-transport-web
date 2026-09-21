@@ -19,7 +19,7 @@ export function TetrisLoadSpaceBanner() {
             </div>
             <div className="w-px h-5 bg-white/20" />
             <div className="flex items-center gap-2">
-              <img src={tetrisLogo} alt="Tetris LoadSpace" className="h-6 w-6 rounded" />
+              <img loading="lazy" decoding="async" width={48} height={48} src={tetrisLogo} alt="Tetris LoadSpace" className="h-6 w-6 rounded object-contain" />
               <span className="text-sm font-extrabold tracking-tight">Tetris LoadSpace</span>
               <span className="hidden sm:inline text-xs text-white/80">— Smart Trailer Loading Tool</span>
             </div>

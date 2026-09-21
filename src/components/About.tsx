@@ -1,7 +1,7 @@
 import { CheckCircle, ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
-import logoBadge from "@/assets/logo-badge.png";
+import logoBadge from "@/assets/logo-badge.png.webp";
 
 const features = [
   "Licensed and bonded freight broker (MC170463)",
@@ -74,7 +74,7 @@ const About = () => {
                 American Lady Transport
               </h3>
               <p className="text-primary-foreground/70 mb-2">Willis, Texas</p>
-              <p className="text-primary-foreground/50 text-sm mb-6">MC170463</p>
+              <p className="text-primary-foreground/70 text-sm mb-6">MC170463</p>
               <div className="flex justify-center gap-2">
                 <div className="w-16 h-1 bg-patriot-red rounded"></div>
                 <div className="w-4 h-1 bg-cream/30 rounded"></div>

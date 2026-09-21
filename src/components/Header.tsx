@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { Menu, X, Phone, Sun, Moon } from "lucide-react";
 import { Link, useLocation } from "react-router-dom";
-import logo from "@/assets/logo-badge.png";
+import logo from "@/assets/logo-badge.png.webp";
 
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -48,7 +48,7 @@ const Header = () => {
         <div className="container mx-auto px-4">
           <div className="flex items-center justify-center h-36 relative">
             <Link to="/" className="flex items-center">
-              <img src={logo} alt="American Lady Transport LLC" className="h-32 w-auto" />
+              <img src={logo} alt="American Lady Transport LLC" width={596} height={640} className="h-32 w-auto" />
             </Link>
             <div className="absolute right-0 flex flex-col items-end gap-2">
               <button

@@ -1,6 +1,6 @@
 import { Phone, Mail, MapPin } from "lucide-react";
 import { Link } from "react-router-dom";
-import logo from "@/assets/logo-badge.png";
+import logo from "@/assets/logo-badge.png.webp";
 
 const Footer = () => {
   const currentYear = new Date().getFullYear();

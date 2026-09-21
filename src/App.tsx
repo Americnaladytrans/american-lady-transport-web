@@ -7,6 +7,7 @@ import { lazy, Suspense } from "react";
 import ScrollToTop from "./components/ScrollToTop";
 import Index from "./pages/Index";
 import ServicesPage from "./pages/ServicesPage";
+import FreightGuide from "./pages/FreightGuide";
 import CrossBorderPage from "./pages/CrossBorderPage";
 import ShippersPage from "./pages/ShippersPage";
 import CarriersPage from "./pages/CarriersPage";
@@ -40,6 +41,8 @@ const App = () => (
         <Routes>
           <Route path="/" element={<Index />} />
           <Route path="/services" element={<ServicesPage />} />
+          <Route path="/texas-flatbed-freight" element={<FreightGuide />} />
+          <Route path="/freight-quote-checklist" element={<FreightGuide />} />
           <Route path="/us-canada-cross-border-freight" element={<CrossBorderPage />} />
           <Route path="/shippers" element={<ShippersPage />} />
           <Route path="/carriers" element={<CarriersPage />} />
