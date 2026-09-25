@@ -1,35 +1,26 @@
 /*
  * Weekly Freight Report — autonomous blog post generator
  *
- * Runs every Friday via GitHub Actions cron. Posts to BOTH:
- *   1. Supabase (powers dynamic site at usealt.com)
- *   2. src/data/blog-posts.json (powers static copy site on GitHub Pages)
+ * Runs every Friday via GitHub Actions. Saves authoritative JSON for
+ * usealt.com and GitHub Pages; optional legacy database mirroring is opt-in.
  *
  * Fallback chain:
  *   1. Perplexity sonar-pro  (web-search-enabled research + writing)
  *   2. Perplexity sonar      (cheaper model, same API)
  *   3. Graceful exit with clear error (GitHub Actions sends email alert)
  *
- * Required env vars: SUPABASE_URL, SUPABASE_ANON_KEY, PERPLEXITY_API_KEY
+ * Required env var: PERPLEXITY_API_KEY
  */
 
 import {
-  buildPost,
-  supabaseHasTitle,
-  postToSupabase,
-  readJsonPosts,
-  jsonHasTitle,
-  writeJsonPost,
   decodeHtmlEntities,
+  ensurePost,
+  titleDate,
 } from "./lib/blog-store.mjs";
 
-const SUPABASE_URL = process.env.SUPABASE_URL;
-const SUPABASE_ANON_KEY = process.env.SUPABASE_ANON_KEY;
 const PERPLEXITY_API_KEY = process.env.PERPLEXITY_API_KEY;
 
 const missing = [];
-if (!SUPABASE_URL) missing.push("SUPABASE_URL");
-if (!SUPABASE_ANON_KEY) missing.push("SUPABASE_ANON_KEY");
 if (!PERPLEXITY_API_KEY) missing.push("PERPLEXITY_API_KEY");
 if (missing.length) {
   console.error(`FATAL: Missing env vars: ${missing.join(", ")}`);
@@ -39,9 +30,7 @@ if (missing.length) {
 
 /* ── helpers ── */
 function formatTitleDate(d = new Date()) {
-  return d.toLocaleDateString("en-US", {
-    year: "numeric", month: "long", day: "numeric", timeZone: "America/Chicago",
-  });
+  return titleDate(d);
 }
 
 function getWeekRange() {
@@ -265,49 +254,19 @@ async function main() {
   console.log(`Generating: ${title}`);
   console.log(`Week range: ${weekRange.startStr} – ${weekRange.endStr}`);
 
-  // Check both stores independently for idempotency.
-  const existingInSupabase = await supabaseHasTitle(title);
-  const existingJson = await readJsonPosts();
-  const existsInJson = jsonHasTitle(existingJson, title);
-
-  if (existingInSupabase && existsInJson) {
-    console.log(`Already posted to both Supabase and JSON. Nothing to do.`);
-    return;
-  }
-
-  let post;
-
-  if (existingInSupabase && !existsInJson) {
-    // Recovery path: Supabase already has it from a previous run that failed
-    // before the JSON write. Reuse the same content.
-    console.log("Supabase has post but JSON does not. Backfilling JSON from Supabase.");
-    post = buildPost({
-      title,
-      content: existingInSupabase.content,
-      excerpt: existingInSupabase.excerpt,
-      publishedAt: existingInSupabase.published_at,
-    });
-  } else {
-    // Normal path: generate fresh.
+  await ensurePost(title, async () => {
     const research = await gatherResearch(weekRange);
     const rawHtml = await writeArticle(research, weekRange);
     const { cleaned, excerpt } = validateArticle(rawHtml);
-    post = buildPost({ title, content: cleaned, excerpt });
-
-    if (!existingInSupabase) {
-      await postToSupabase(post);
-    }
-  }
-
-  if (!existsInJson) {
-    await writeJsonPost(post);
-  }
+    return { content: cleaned, excerpt };
+  });
 
   console.log("Done.");
 }
 
 main().catch((err) => {
   console.error("FATAL:", err.message);
+  if (err.cause?.code) console.error("Connection error code:", err.cause.code);
   console.error("The workflow will retry on the next scheduled run, or trigger it manually from GitHub Actions.");
   process.exit(1);
 });

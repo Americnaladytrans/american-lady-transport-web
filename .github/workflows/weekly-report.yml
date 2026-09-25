@@ -21,7 +21,7 @@ concurrency:
 jobs:
   post-and-deploy:
     runs-on: ubuntu-latest
-    timeout-minutes: 15
+    timeout-minutes: 30
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
@@ -32,16 +32,21 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: "20"
+          node-version: "22"
           cache: "npm"
 
       - name: Install dependencies
         run: npm ci
 
-      - name: Generate article, post to Supabase, update JSON
+      - name: Test blog storage and safety
+        run: node --test scripts/lib/*.test.mjs
+
+      - name: Install build-time renderer
+        run: npx playwright install --with-deps chromium
+
+      - name: Generate article and update authoritative JSON
         env:
-          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
-          SUPABASE_ANON_KEY: ${{ secrets.SUPABASE_ANON_KEY }}
+          BLOG_STORAGE_MODE: json
           PERPLEXITY_API_KEY: ${{ secrets.PERPLEXITY_API_KEY }}
         run: node scripts/weekly-report.mjs
 
@@ -54,16 +59,34 @@ jobs:
             git commit -m "chore(blog): add Weekly Freight Report ($(date -u +%Y-%m-%d))"
             # Retry push in case industry-roundup pushed concurrently.
             # 6 attempts, jittered backoff (handles GitHub's flaky concurrency lock).
+            pushed=false
             for i in 1 2 3 4 5 6; do
-              if git push; then break; fi
+              if git push; then pushed=true; break; fi
               echo "Push attempt $i failed, pulling latest and retrying..."
               git fetch origin main
               git pull --rebase origin main || git rebase --abort
               sleep $((10 + RANDOM % 10))
             done
+            if [[ "$pushed" != true ]]; then echo "::error::Failed to preserve article in GitHub"; exit 1; fi
           else
             echo "No JSON changes to commit."
           fi
+
+      - name: Build canonical usealt.com release
+        env:
+          VITE_BASE: /
+        run: |
+          npm run build
+          node scripts/write-release-manifest.mjs
+
+      - name: Save canonical release for Cloudflare publishing
+        uses: actions/upload-artifact@v4
+        with:
+          name: usealt-production
+          path: dist/
+          retention-days: 14
+          if-no-files-found: error
+          include-hidden-files: true
 
       - name: Build static site
         env:

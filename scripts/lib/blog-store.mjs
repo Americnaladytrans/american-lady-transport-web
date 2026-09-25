@@ -2,8 +2,8 @@
  * Shared blog post storage helpers used by both the Weekly Freight Report
  * and the Domestic Trucking Industry News Roundup scripts.
  *
- * - Supabase writes power the live dynamic site at usealt.com.
- * - JSON file writes power the static copy site at src/data/blog-posts.json.
+ * - JSON is the authoritative source for usealt.com and its static mirrors.
+ * - Supabase mirroring is retained only for explicit legacy opt-in.
  *
  * Each post is written to BOTH so the two sites stay in sync, but the script
  * is idempotent: if a post for `title` already exists in a store, that store
@@ -13,11 +13,32 @@
 import { promises as fs } from "node:fs";
 import { randomUUID } from "node:crypto";
 import path from "node:path";
+import sanitizeHtml from "sanitize-html";
 
 const SUPABASE_URL = process.env.SUPABASE_URL;
 const SUPABASE_ANON_KEY = process.env.SUPABASE_ANON_KEY;
 
 export const BLOG_JSON_RELATIVE_PATH = "src/data/blog-posts.json";
+// The current live site renders checked-in JSON, not the retired database.
+// Database mirroring is an explicit opt-in for older deployments.
+export function usesDatabaseMirror() {
+  return process.env.BLOG_STORAGE_MODE === "both";
+}
+
+export function cleanArticleHtml(html) {
+  return sanitizeHtml(html, {
+    allowedTags: ["h2", "h3", "h4", "p", "ul", "ol", "li", "strong", "em", "b", "i", "a", "blockquote", "br", "table", "thead", "tbody", "tr", "th", "td"],
+    allowedAttributes: { a: ["href", "title"] },
+    allowedSchemes: ["https"],
+    allowProtocolRelative: false,
+  });
+}
+
+export function titleDate(date = new Date()) {
+  return date.toLocaleDateString("en-US", {
+    year: "numeric", month: "long", day: "numeric", timeZone: "America/Chicago",
+  });
+}
 
 /**
  * Decode the common HTML entities that show up in LLM-generated HTML.
@@ -51,7 +72,7 @@ export function buildPost({ title, content, excerpt, publishedAt }) {
     title,
     slug: slugify(title),
     excerpt,
-    content,
+    content: cleanArticleHtml(content),
     published_at: publishedAt || new Date().toISOString(),
   };
 }
@@ -59,7 +80,8 @@ export function buildPost({ title, content, excerpt, publishedAt }) {
 /* ─── Supabase (powers dynamic usealt.com) ─── */
 
 export async function supabaseHasTitle(title) {
-  if (!SUPABASE_URL || !SUPABASE_ANON_KEY) return false;
+  if (!usesDatabaseMirror()) return false;
+  if (!SUPABASE_URL || !SUPABASE_ANON_KEY) throw new Error("Database mirror configuration is missing.");
   const res = await fetch(
     `${SUPABASE_URL}/rest/v1/blog_posts?title=eq.${encodeURIComponent(title)}&select=id,content,excerpt,slug,published_at`,
     {
@@ -69,12 +91,13 @@ export async function supabaseHasTitle(title) {
       },
     },
   );
-  if (!res.ok) return false;
+  if (!res.ok) throw new Error(`Database duplicate check failed (HTTP ${res.status}); refusing to assume the article is absent.`);
   const data = await res.json();
   return data.length > 0 ? data[0] : false;
 }
 
 export async function postToSupabase(post) {
+  if (!usesDatabaseMirror()) return;
   // Supabase historically uses a timestamped slug to avoid collisions across
   // workflow re-runs. We preserve that behavior here for the live site.
   const supabaseSlug = `${post.slug}-${Date.now().toString(36)}`;
@@ -102,6 +125,29 @@ export async function postToSupabase(post) {
   const data = await res.json();
   console.log(`✓ Supabase post created: ${data[0]?.slug}`);
   return data[0];
+}
+
+/** Reuse stored content on reruns instead of spending again or creating duplicates. */
+export async function ensurePost(title, generate, stores = {}) {
+  const read = stores.read || readJsonPosts;
+  const write = stores.write || writeJsonPost;
+  const lookup = stores.lookup || supabaseHasTitle;
+  const mirror = stores.mirror || postToSupabase;
+  const posts = await read();
+  const existing = posts.find(post => post.title === title);
+  if (existing) {
+    console.log(`JSON already contains "${title}". Reusing saved article.`);
+    if (usesDatabaseMirror() && !(await lookup(title))) await mirror(existing);
+    return { post: existing, created: false };
+  }
+  const databasePost = await lookup(title);
+  const post = databasePost
+    ? buildPost({ title, content: databasePost.content, excerpt: databasePost.excerpt, publishedAt: databasePost.published_at })
+    : buildPost({ title, ...await generate() });
+  // Save authoritative source first so later deployment failures never lose it.
+  await write(post);
+  if (!databasePost) await mirror(post);
+  return { post, created: true };
 }
 
 /* ─── Static JSON (powers static copy site) ─── */
